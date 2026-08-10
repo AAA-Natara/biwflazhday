@@ -1,0 +1,267 @@
+/* biwflazhday.online — admin
+   Same palette as the guest site, but a working tool rather than a keepsake:
+   denser spacing, plain labels, no ribbon, no motion. */
+
+:root {
+  --paper: #FDFBF7;
+  --paper-2: #F7F2E9;
+  --nude: #E5D3C2;
+  --nude-deep: #D9C3AE;
+  --nude-bg: #F4E9DD;
+  --sky: #AEC6DA;
+  --rose: #D6A2AC;
+  --ink: #5E2730;
+  --ink-soft: #8E6B70;
+  --ink-faint: #B09A9C;
+  --ok: #4C6B52;
+  --warn: #9A5B3E;
+
+  --display: 'Fraunces', Georgia, serif;
+  --ui: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --thai: 'Trirong', Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper-2);
+  color: var(--ink);
+  font-family: var(--thai);
+  font-weight: 300;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; }
+
+/* --- login gate --------------------------------------------------- */
+
+.gate { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+.gate__card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--paper);
+  border: 0.5px solid var(--nude);
+  border-radius: 4px;
+  padding: 34px 30px;
+}
+.gate__card h1 { font-size: 26px; }
+.gate__sub {
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--ink-faint);
+  margin: 10px 0 26px;
+}
+.gate__card .btn { width: 100%; margin-top: 26px; }
+
+/* --- shell -------------------------------------------------------- */
+
+.topbar { position: sticky; top: 0; z-index: 4; background: var(--paper); border-bottom: 0.5px solid var(--nude); }
+.topbar__in {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 14px clamp(16px, 4vw, 28px);
+}
+.topbar__right { display: flex; gap: 6px; }
+.brand { font-family: var(--display); font-weight: 600; font-size: 17px; }
+
+.tabs { display: flex; gap: 2px; overflow-x: auto; padding: 0 clamp(10px, 3vw, 22px); }
+.tabs button {
+  border: 0;
+  background: none;
+  padding: 12px 14px;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink-faint);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+.tabs button.on { color: var(--ink); border-bottom-color: var(--sky); }
+
+.sheet { max-width: 760px; margin: 0 auto; padding: 26px clamp(16px, 4vw, 28px) 140px; }
+.lede { font-size: 15px; color: var(--ink-soft); margin: 0 0 22px; line-height: 1.85; }
+.note { font-size: 14px; color: var(--warn); margin-top: 22px; line-height: 1.8; }
+.dim { color: var(--ink-faint); font-size: 14px; }
+.stack { display: grid; gap: 14px; }
+
+/* --- cards -------------------------------------------------------- */
+
+.group {
+  background: var(--paper);
+  border: 0.5px solid var(--nude);
+  border-radius: 4px;
+  padding: 20px;
+}
+.group > h2 { font-size: 19px; margin-bottom: 4px; }
+.group__hint {
+  font-family: var(--ui);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  margin: 0 0 18px;
+}
+
+.field { margin-bottom: 18px; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: block;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  margin-bottom: 7px;
+}
+.field .key { font-family: var(--ui); font-weight: 400; font-size: 11px; color: var(--ink-faint); }
+
+input[type=text], input[type=email], input[type=password], input[type=datetime-local], textarea {
+  width: 100%;
+  border: 0.5px solid var(--nude-deep);
+  border-radius: 3px;
+  background: var(--paper);
+  font-family: var(--thai);
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--ink);
+  padding: 11px 12px;
+  transition: border-color .2s;
+}
+input:focus, textarea:focus { outline: none; border-color: var(--sky); }
+textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
+.changed input, .changed textarea { border-color: var(--sky); background: #FBFDFE; }
+
+/* --- toggles ------------------------------------------------------ */
+
+.toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: var(--paper);
+  border: 0.5px solid var(--nude);
+  border-radius: 4px;
+  padding: 16px 18px;
+}
+.toggle p { margin: 0; font-size: 15px; }
+.toggle small { display: block; font-family: var(--ui); font-size: 12px; color: var(--ink-faint); margin-top: 4px; }
+.switch {
+  flex: none;
+  width: 50px;
+  height: 28px;
+  border-radius: 14px;
+  border: 0.5px solid var(--nude-deep);
+  background: var(--nude-bg);
+  position: relative;
+  cursor: pointer;
+  transition: background .25s, border-color .25s;
+}
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 21px; height: 21px;
+  border-radius: 50%;
+  background: var(--paper);
+  transition: transform .25s;
+}
+.switch[aria-pressed=true] { background: var(--sky); border-color: var(--sky); }
+.switch[aria-pressed=true]::after { transform: translateX(22px); }
+
+/* --- buttons ------------------------------------------------------ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: 0.5px solid var(--nude-deep);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+}
+.btn:hover { background: var(--nude-bg); border-color: var(--sky); }
+.btn--solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn--solid:hover { background: #4A1D24; border-color: #4A1D24; }
+.btn[disabled] { opacity: .5; pointer-events: none; }
+
+.ghost {
+  border: 0;
+  background: none;
+  padding: 8px 10px;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 3px;
+}
+.ghost:hover { background: var(--nude-bg); color: var(--ink); }
+.ghost--danger { color: var(--warn); }
+
+/* --- save bar ----------------------------------------------------- */
+
+.savebar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  background: var(--paper);
+  border-top: 0.5px solid var(--nude-deep);
+  padding: 13px clamp(16px, 4vw, 28px);
+}
+.savebar span { font-family: var(--ui); font-weight: 700; font-size: 13px; color: var(--ink-soft); }
+.savebar div { display: flex; gap: 8px; align-items: center; }
+
+/* --- gallery ------------------------------------------------------ */
+
+.uploader { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; flex-wrap: wrap; }
+.thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; }
+.thumb { background: var(--paper); border: 0.5px solid var(--nude); border-radius: 4px; overflow: hidden; }
+.thumb img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+.thumb__bar { display: flex; justify-content: space-between; align-items: center; padding: 5px 6px; }
+
+/* --- wishes ------------------------------------------------------- */
+
+.wish { background: var(--paper); border: 0.5px solid var(--nude); border-radius: 4px; padding: 16px 18px; }
+.wish.pending { border-left: 3px solid var(--rose); }
+.wish__who { font-family: var(--ui); font-weight: 700; font-size: 13px; letter-spacing: 0.06em; }
+.wish__when { font-family: var(--ui); font-size: 12px; color: var(--ink-faint); margin-left: 8px; }
+.wish__msg { font-size: 15px; line-height: 1.9; margin: 10px 0 14px; color: var(--ink-soft); }
+.wish__act { display: flex; gap: 6px; }
+
+/* --- messages ----------------------------------------------------- */
+
+.msg { font-family: var(--ui); font-size: 13px; color: var(--warn); margin: 16px 0 0; min-height: 18px; }
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 86px;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 11px 20px;
+  border-radius: 3px;
+  margin: 0;
+  z-index: 6;
+}
