@@ -8,11 +8,13 @@ Static front end on GitHub Pages, Supabase for content, guests, RSVP and wishes.
 ## Layout
 
     index.html              landing page (all copy present as defaults)
+    admin/                  copy, settings, gallery, wishes
     card/                   per-guest invitation card  (next)
-    admin/                  content, gallery, guests, RSVP  (next)
     assets/css/style.css    palette, type scale, components
     assets/js/ribbon.js     generates the bow + side bands at runtime
-    assets/js/main.js       countdown, reveal, RSVP, wishes
+    assets/js/main.js       countdown, motion, map, wishes
+    assets/js/admin.js      the whole admin panel
+    assets/lib/image-resize.js  shrinks photos before upload
     sql/schema.sql          tables, RLS, RPC, seed content
 
 ## Previewing locally

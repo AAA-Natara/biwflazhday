@@ -227,6 +227,7 @@ revoke all on function public.submit_rsvp(text, boolean, int, text) from public;
 revoke all on function public.submit_wish(text, text, text) from public;
 revoke all on function public.log_card_view(text) from public;
 
+grant execute on function public.is_admin() to authenticated;
 grant execute on function public.get_guest_by_slug(text) to anon, authenticated;
 grant execute on function public.submit_rsvp(text, boolean, int, text) to anon, authenticated;
 grant execute on function public.submit_wish(text, text, text) to anon, authenticated;
@@ -304,3 +305,19 @@ insert into public.site_content (key, value_th, field_type, section, sort_order)
   ('footer.apology',  '( ขออภัยหากมิได้มาเรียนเชิญด้วยตัวเอง )', 'text', 'footer', 10),
   ('footer.signoff',  'Worawan & Chat · 21.11.2026', 'text',     'footer',   20)
 on conflict (key) do nothing;
+
+-- ---------------------------------------------------------------
+-- 6. Storage policies for the wedding-media bucket
+-- Create the bucket first (Storage -> New bucket -> wedding-media, public).
+-- ---------------------------------------------------------------
+
+create policy "wedding media readable" on storage.objects
+  for select using (bucket_id = 'wedding-media');
+
+create policy "wedding media writable by admin" on storage.objects
+  for insert to authenticated
+  with check (bucket_id = 'wedding-media' and public.is_admin());
+
+create policy "wedding media removable by admin" on storage.objects
+  for delete to authenticated
+  using (bucket_id = 'wedding-media' and public.is_admin());
