@@ -276,3 +276,30 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   margin: 0;
   z-index: 6;
 }
+
+/* --- guests -------------------------------------------------------- */
+
+.guest {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px 14px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 0.5px solid var(--nude);
+}
+.guest:last-child { border-bottom: 0; }
+.guest__name { font-family: var(--thai); font-weight: 400; font-size: 16px; }
+.guest__meta { font-family: var(--thai); font-size: 13px; color: var(--ink-faint); margin-top: 3px; }
+.guest__act { display: flex; gap: 4px; }
+
+.pill {
+  display: inline-block;
+  font-family: var(--thai);
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: 11px;
+  margin-left: 7px;
+}
+.pill--yes { background: #E4EDE5; color: var(--ok); }
+.pill--no  { background: var(--nude-bg); color: var(--warn); }
+.pill--wait{ background: var(--paper-2); color: var(--ink-faint); }

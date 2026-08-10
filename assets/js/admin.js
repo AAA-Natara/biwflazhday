@@ -117,6 +117,7 @@ function enterApp() {
   window.scrollTo(0, 0);
   loadContent();
   loadSettings();
+  loadGuests();
   loadGallery('hero');
   loadGallery('gallery');
   loadWishes();
@@ -277,6 +278,128 @@ async function loadSettings() {
       card.appendChild(input);
     }
     box.appendChild(card);
+  }
+}
+
+/* ================= guests ================= */
+
+// The slug is what protects a guest's card: it lives in a public URL, so a
+// predictable one would let anyone walk the list. Name plus four random
+// characters keeps links readable without making them guessable.
+function makeSlug(nameEn, nameTh) {
+  const base = (nameEn || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const stem = base || 'guest';
+  const tail = Math.random().toString(36).slice(2, 6);
+  return `${stem}-${tail}`;
+}
+
+const cardLink = slug => `${location.origin}${location.pathname.replace(/admin\/?$/, '')}card/?g=${slug}`;
+
+$('guest-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg = $('guest-msg');
+  const name_th = $('g-name').value.trim();
+  if (!name_th) { msg.textContent = 'กรุณาใส่ชื่อ'; return; }
+
+  const seats = Math.max(1, parseInt($('g-seats').value, 10) || 1);
+  const row = {
+    slug: makeSlug($('g-name-en').value.trim(), name_th),
+    name_th,
+    name_en: $('g-name-en').value.trim() || null,
+    title: $('g-title').value.trim() || null,
+    seats,
+    group_tag: $('g-group').value.trim() || null
+  };
+
+  msg.textContent = 'กำลังบันทึก…';
+  const { error } = await sb.from('guests').insert(row);
+  if (error) { msg.textContent = 'บันทึกไม่สำเร็จ ' + error.message; return; }
+
+  msg.textContent = '';
+  $('g-name').value = '';
+  $('g-name-en').value = '';
+  $('g-group').value = '';
+  $('g-seats').value = '1';
+  toast('เพิ่มรายชื่อแล้ว');
+  loadGuests();
+});
+
+async function loadGuests() {
+  const box = $('guest-list');
+  const { data, error } = await sb.from('guests')
+    .select('id,slug,name_th,title,seats,group_tag,rsvp(attending,party_size,note)')
+    .order('created_at', { ascending: false });
+
+  if (error) { box.innerHTML = '<p class="dim">โหลดรายชื่อไม่สำเร็จ</p>'; return; }
+  if (!data || !data.length) {
+    box.innerHTML = '<p class="dim">ยังไม่มีรายชื่อ</p>';
+    $('guest-summary').textContent = '';
+    return;
+  }
+
+  let yes = 0, no = 0, seats = 0;
+  for (const g of data) {
+    const r = Array.isArray(g.rsvp) ? g.rsvp[0] : g.rsvp;
+    if (r?.attending) { yes++; seats += r.party_size || 1; }
+    else if (r) no++;
+  }
+  $('guest-summary').textContent =
+    `เชิญ ${data.length} รายชื่อ · ตอบรับ ${yes} · ไม่สะดวก ${no} · รอตอบ ${data.length - yes - no} · รวมผู้ร่วมงาน ${seats} คน`;
+
+  box.innerHTML = '';
+  for (const g of data) {
+    const r = Array.isArray(g.rsvp) ? g.rsvp[0] : g.rsvp;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'guest';
+
+    const left = document.createElement('div');
+    const name = document.createElement('div');
+    name.className = 'guest__name';
+    name.textContent = [g.title, g.name_th].filter(Boolean).join(' ');
+
+    const pill = document.createElement('span');
+    pill.className = 'pill ' + (r ? (r.attending ? 'pill--yes' : 'pill--no') : 'pill--wait');
+    pill.textContent = r ? (r.attending ? `มา ${r.party_size} คน` : 'ไม่สะดวก') : 'รอตอบ';
+    name.appendChild(pill);
+
+    const meta = document.createElement('div');
+    meta.className = 'guest__meta';
+    meta.textContent = [`${g.seats} ที่นั่ง`, g.group_tag, r?.note].filter(Boolean).join(' · ');
+
+    left.append(name, meta);
+
+    const act = document.createElement('div');
+    act.className = 'guest__act';
+
+    const copy = document.createElement('button');
+    copy.className = 'btn';
+    copy.textContent = 'คัดลอกลิงก์';
+    copy.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(cardLink(g.slug)); toast('คัดลอกลิงก์แล้ว'); }
+      catch { prompt('คัดลอกลิงก์นี้', cardLink(g.slug)); }
+    });
+
+    const open = document.createElement('a');
+    open.className = 'ghost';
+    open.textContent = 'เปิด';
+    open.target = '_blank';
+    open.rel = 'noopener';
+    open.href = cardLink(g.slug);
+
+    const del = document.createElement('button');
+    del.className = 'ghost ghost--danger';
+    del.textContent = 'ลบ';
+    del.addEventListener('click', async () => {
+      if (!confirm(`ลบ ${g.name_th} ถาวรใช่ไหม การตอบรับของคนนี้จะหายไปด้วย`)) return;
+      await sb.from('guests').delete().eq('id', g.id);
+      toast('ลบแล้ว');
+      loadGuests();
+    });
+
+    act.append(copy, open, del);
+    wrap.append(left, act);
+    box.appendChild(wrap);
   }
 }
 

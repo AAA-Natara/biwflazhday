@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>การ์ดเชิญ · Worawan &amp; Chat</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="การ์ดเชิญงานสมรส วรวรรณ และ ชาติ วันเสาร์ที่ 21 พฤศจิกายน 2569">
+<meta name="theme-color" content="#FDFBF7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=DM+Sans:wght@500;700&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/card.css">
+</head>
+<body>
+
+<main class="page">
+
+  <!-- ============ THE CARD ============ -->
+  <div class="card" id="card">
+    <svg class="card__frame" viewBox="0 0 400 600" preserveAspectRatio="none" aria-hidden="true">
+      <rect x="14" y="14" width="372" height="572" rx="2" fill="none" stroke="var(--nude)" stroke-width="0.6"/>
+    </svg>
+
+    <svg class="card__bow" viewBox="0 0 200 130" fill="none" stroke="var(--sky)" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M92 46C74 70 66 98 72 116L84 106L94 118C98 98 100 70 98 50Z" fill="var(--paper)"/>
+      <path d="M108 46C126 70 134 98 128 116L116 106L106 118C102 98 100 70 102 50Z" fill="var(--paper)"/>
+      <path d="M94 38C72 -6 32 -14 12 0C-11 16 -6 52 30 64C54 72 84 60 94 38Z" fill="var(--paper)"/>
+      <path d="M106 38C128 -6 168 -14 188 0C211 16 206 52 170 64C146 72 116 60 106 38Z" fill="var(--paper)"/>
+      <path d="M88 34C60 12 32 4 12 8" stroke="var(--sky-light)" stroke-width="0.8"/>
+      <path d="M112 34C140 12 168 4 188 8" stroke="var(--sky-light)" stroke-width="0.8"/>
+      <ellipse cx="100" cy="42" rx="12" ry="10" fill="var(--paper)"/>
+    </svg>
+
+    <p class="card__eyebrow">the wedding of</p>
+    <p class="card__name">WORAWAN</p>
+    <p class="card__amp">and</p>
+    <p class="card__name">CHAT</p>
+
+    <div class="card__guest">
+      <span class="card__to">เรียน</span>
+      <span class="card__who" id="guest-name">ผู้มีเกียรติ</span>
+    </div>
+
+    <div class="card__meta">
+      <p class="card__date">วันเสาร์ที่ 21 พฤศจิกายน 2569</p>
+      <p class="card__venue">คริสตจักรเมืองทอง</p>
+      <p class="card__time">พิธีสมรส เวลา 14:00 น.</p>
+    </div>
+
+    <p class="card__foot">( ขออภัยหากมิได้มาเรียนเชิญด้วยตัวเอง )</p>
+  </div>
+
+  <div class="row">
+    <button type="button" class="btn" id="save-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11.5m0 0 4-4m-4 4-4-4"/><path d="M4 16.5v2.2a1.8 1.8 0 0 0 1.8 1.8h12.4a1.8 1.8 0 0 0 1.8-1.8v-2.2"/></svg>
+      <span>บันทึกการ์ด</span>
+    </button>
+    <a class="btn" href="../">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2"/><path d="M6.2 10.4V19a1 1 0 0 0 1 1h9.6a1 1 0 0 0 1-1v-8.6"/></svg>
+      <span>รายละเอียดงาน</span>
+    </a>
+  </div>
+
+  <!-- ============ RSVP ============ -->
+  <section class="rsvp" id="rsvp">
+    <h2>ตอบรับคำเชิญ</h2>
+    <p class="rsvp__sub" id="rsvp-sub">กรุณาตอบรับภายในวันที่ 7 พฤศจิกายน 2569</p>
+
+    <form id="rsvp-form" novalidate>
+      <fieldset>
+        <legend>จะมาร่วมงานหรือไม่</legend>
+        <div class="choice">
+          <button type="button" data-attending="yes" aria-pressed="false">มาร่วมงาน</button>
+          <button type="button" data-attending="no" aria-pressed="false">ไม่สะดวก</button>
+        </div>
+      </fieldset>
+
+      <div id="party-field" hidden>
+        <label for="party-size">จำนวนผู้ร่วมงาน</label>
+        <div class="stepper">
+          <button type="button" id="minus" aria-label="ลดจำนวน">−</button>
+          <output id="party-size" for="minus plus">1</output>
+          <button type="button" id="plus" aria-label="เพิ่มจำนวน">+</button>
+        </div>
+        <p class="hint" id="seat-hint"></p>
+      </div>
+
+      <label for="rsvp-note">ข้อความถึงเจ้าภาพ</label>
+      <textarea id="rsvp-note" maxlength="400" placeholder="ข้อจำกัดด้านอาหาร หรือข้อความอื่น ๆ"></textarea>
+
+      <button type="submit" class="btn btn--solid" id="rsvp-submit">ส่งคำตอบ</button>
+      <p class="status" id="rsvp-status" role="status"></p>
+    </form>
+  </section>
+
+</main>
+
+<script type="module" src="../assets/js/card.js"></script>
+</body>
+</html>
