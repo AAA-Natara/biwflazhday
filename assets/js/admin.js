@@ -294,19 +294,7 @@ async function loadSettings() {
 
 /* ================= guests ================= */
 
-// The slug is exactly what gets typed — no generated suffix. A collision is
-// caught by the unique index on guests.slug and reported on save.
-function makeSlug(nameEn) {
-  return (nameEn || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-}
-
 const cardLink = slug => `${location.origin}${location.pathname.replace(/admin\/?$/, '')}card/?g=${slug}`;
-
-$('g-name-en')?.addEventListener('input', () => {
-  const slugField = $('g-slug');
-  if (slugField && !slugField.dataset.touched) slugField.value = makeSlug($('g-name-en').value.trim());
-});
-$('g-slug')?.addEventListener('input', () => { $('g-slug').dataset.touched = '1'; });
 
 $('guest-form').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -314,9 +302,9 @@ $('guest-form').addEventListener('submit', async (e) => {
   const name_th = $('g-name').value.trim();
   if (!name_th) { msg.textContent = 'กรุณาใส่ชื่อ'; return; }
 
-  const typed = $('g-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '')
-    || makeSlug($('g-name-en').value.trim());
-  if (!typed) { msg.textContent = 'กรุณาใส่ชื่ออังกฤษหรือลิงก์'; return; }
+  // Exactly what was typed, lowercased. Nothing is generated or appended.
+  const typed = $('g-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+  if (!typed) { msg.textContent = 'กรุณาใส่ลิงก์'; return; }
 
   const row = {
     slug: typed,
@@ -338,7 +326,6 @@ $('guest-form').addEventListener('submit', async (e) => {
 
   msg.textContent = '';
   for (const id of ['g-name', 'g-name-en', 'g-group', 'g-msg', 'g-slug']) $(id).value = '';
-  delete $('g-slug').dataset.touched;
   toast('เพิ่มรายชื่อแล้ว');
   loadGuests();
 });

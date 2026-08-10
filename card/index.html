@@ -58,6 +58,11 @@
 <section class="stage" id="stage" hidden>
 
   <article class="card" id="card">
+    <svg class="card__frame" viewBox="0 0 400 600" preserveAspectRatio="none" aria-hidden="true">
+      <rect x="11" y="11" width="378" height="578" fill="none" stroke="var(--nude)" stroke-width="0.7"/>
+      <rect x="16" y="16" width="368" height="568" fill="none" stroke="var(--nude)" stroke-width="0.5" opacity=".55"/>
+    </svg>
+
     <svg class="card__bow" viewBox="-108 -78 216 164" fill="var(--paper)" stroke="var(--sky)" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
       <path d="M-8 6C-26 30 -34 58 -28 76L-16 66L-6 78C-2 58 0 30 -2 10Z"/>
       <path d="M8 6C26 30 34 58 28 76L16 66L6 78C2 58 0 30 2 10Z"/>
@@ -73,15 +78,22 @@
     <p class="c-amp">and</p>
     <p class="c-name">CHAT</p>
 
+    <div class="c-div" aria-hidden="true"><span></span><i></i><span></span></div>
+
     <p class="c-to" data-key="card.to">เรียน</p>
     <p class="c-who" id="guest-name">ผู้มีเกียรติ</p>
     <p class="c-msg" id="guest-msg" hidden></p>
 
-    <span class="c-rule" aria-hidden="true"></span>
+    <svg class="c-rings" viewBox="0 0 46 24" fill="none" stroke="var(--sky)" stroke-width="1" aria-hidden="true">
+      <circle cx="17" cy="12" r="9.4"/>
+      <circle cx="29" cy="12" r="9.4"/>
+    </svg>
 
     <p class="c-date">วันเสาร์ที่ 21 พฤศจิกายน 2569</p>
     <p class="c-venue">คริสตจักรเมืองทอง</p>
     <p class="c-time">พิธีสมรส เวลา 14:00 น.</p>
+
+    <p class="c-foot-in" data-key="footer.apology">( ขออภัยหากมิได้มาเรียนเชิญด้วยตัวเอง )</p>
   </article>
 
   <div class="c-actions">
@@ -119,8 +131,6 @@
       <p class="status" id="rsvp-status" role="status"></p>
     </form>
   </section>
-
-  <p class="c-foot" data-key="footer.apology">( ขออภัยหากมิได้มาเรียนเชิญด้วยตัวเอง )</p>
 
 </section>
 

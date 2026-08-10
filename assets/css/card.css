@@ -215,12 +215,15 @@ body {
 .stage { padding-top: 8px; }
 
 .card {
+  position: relative;
   background: var(--paper);
-  border-radius: 3px;
-  padding: clamp(38px, 9vw, 56px) clamp(26px, 8vw, 44px) clamp(34px, 8vw, 48px);
+  border-radius: 2px;
+  padding: clamp(46px, 11vw, 66px) clamp(30px, 9vw, 48px) clamp(34px, 8vw, 46px);
   text-align: center;
-  box-shadow: 0 0 0 0.5px var(--nude);
+  box-shadow: 0 0 0 0.5px var(--nude-deep);
 }
+.card__frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.card > *:not(.card__frame) { position: relative; }
 
 .card__bow { width: clamp(96px, 30vw, 132px); display: block; margin: 0 auto clamp(20px, 5vw, 30px); }
 
@@ -236,7 +239,7 @@ body {
 }
 .c-amp { font-family: var(--script); font-size: clamp(19px, 5.4vw, 24px); color: var(--rose); margin: 8px 0 6px; }
 
-.c-to { font-family: var(--thai); font-size: 14px; color: var(--ink-faint); margin: clamp(30px, 8vw, 44px) 0 8px; }
+.c-to { font-family: var(--thai); font-size: 14px; color: var(--ink-faint); margin: 0 0 9px; }
 .c-who {
   font-family: var(--thai);
   font-weight: 400;
@@ -254,12 +257,24 @@ body {
   max-width: 30ch;
 }
 
-.c-rule {
-  display: block;
-  width: 1px;
-  height: 46px;
-  margin: clamp(28px, 7vw, 40px) auto;
-  background: linear-gradient(var(--nude), transparent);
+/* line · pearl · line, echoing the ribbon divider on the printed card */
+.c-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: clamp(30px, 7vw, 42px) 0 clamp(26px, 6vw, 34px);
+}
+.c-div span { display: block; width: clamp(48px, 16vw, 78px); height: 0.5px; background: var(--nude-deep); }
+.c-div i { display: block; width: 5px; height: 5px; border-radius: 50%; border: 0.5px solid var(--sky); }
+
+.c-rings { width: 46px; display: block; margin: clamp(28px, 7vw, 40px) auto clamp(20px, 5vw, 28px); }
+
+.c-foot-in {
+  font-family: var(--thai);
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin: clamp(30px, 7vw, 42px) 0 0;
 }
 
 .c-date  { font-family: var(--thai); font-weight: 400; font-size: 17px; margin: 0 0 8px; }
