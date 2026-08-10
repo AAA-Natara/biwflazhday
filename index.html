@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Worawan &amp; Chat · 21 พฤศจิกายน 2569</title>
+<meta name="description" content="งานสมรส วรวรรณ และ ชาติ วันเสาร์ที่ 21 พฤศจิกายน 2569 ณ คริสตจักรเมืองทอง">
+<meta property="og:title" content="Worawan &amp; Chat">
+<meta property="og:description" content="วันเสาร์ที่ 21 พฤศจิกายน 2569 · คริสตจักรเมืองทอง">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://biwflazhday.online/">
+<meta name="theme-color" content="#FDFBF7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<svg id="ribbon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
+
+<main class="page">
+
+  <section id="hero">
+    <h1 class="sr-only">งานสมรสของวรวรรณ สงทองธรรม และ ชาติ ลีสกุล</h1>
+    <p class="eyebrow" data-key="hero.eyebrow">the wedding of</p>
+    <p class="name" data-key="hero.bride_first">WORAWAN</p>
+    <p class="surname" data-key="hero.bride_last">SONGTHONGTHAM</p>
+    <p class="amp">and</p>
+    <p class="name" data-key="hero.groom_first">CHAT</p>
+    <p class="surname" data-key="hero.groom_last">LEESAKUL</p>
+
+    <div class="countdown" id="countdown">
+      <div data-unit="days"><span class="n">—</span><span class="u">DAYS</span></div>
+      <div data-unit="hours"><span class="n">—</span><span class="u">HOURS</span></div>
+      <div data-unit="mins"><span class="n">—</span><span class="u">MINUTES</span></div>
+    </div>
+  </section>
+
+  <section id="event" class="reveal">
+    <p class="lead" data-key="event.date">วันเสาร์ที่ 21 พฤศจิกายน 2569</p>
+    <p class="detail" data-key="event.venue">คริสตจักรเมืองทอง</p>
+    <p class="muted" data-key="event.time">พิธีสมรส เวลา 14:00 น.</p>
+    <p style="margin-top:26px">
+      <a class="link" data-key="event.map_url" href="https://maps.google.com/?q=คริสตจักรเมืองทอง" target="_blank" rel="noopener">MAP</a>
+    </p>
+  </section>
+
+  <section id="theme" class="reveal">
+    <p class="label" data-key="theme.label">theme</p>
+    <div class="swatches" role="img" aria-label="สีของงาน ฟ้าอ่อน ครีม ชมพูนวล และแดงเลือดหมู">
+      <span style="background:#AEC6DA"></span>
+      <span style="background:#E5D3C2"></span>
+      <span style="background:#D6A2AC"></span>
+      <span style="background:#5E2730"></span>
+    </div>
+  </section>
+
+  <section id="story" class="reveal" hidden>
+    <p class="label">our story</p>
+    <p class="body" data-key="story.body">เรื่องราวของเราเริ่มต้นในวันที่ธรรมดาที่สุด และค่อย ๆ กลายเป็นสิ่งที่เราไม่อาจอธิบายได้ด้วยคำใดคำหนึ่ง</p>
+  </section>
+
+  <section id="gallery" class="reveal" hidden>
+    <p class="label">gallery</p>
+    <div class="grid"></div>
+  </section>
+
+  <section id="rsvp" class="reveal">
+    <p class="label" data-key="rsvp.heading">ตอบรับคำเชิญ</p>
+    <form id="rsvp-form" novalidate>
+      <label id="attend-label">จะมาร่วมงานหรือไม่</label>
+      <div class="choice" role="group" aria-labelledby="attend-label">
+        <button type="button" data-attending="yes" aria-pressed="false">มาร่วมงาน</button>
+        <button type="button" data-attending="no" aria-pressed="false">ไม่สะดวก</button>
+      </div>
+
+      <div id="party-field" hidden>
+        <label for="party-size">จำนวนผู้ร่วมงาน</label>
+        <input type="number" id="party-size" min="1" max="10" value="1" inputmode="numeric">
+      </div>
+
+      <label for="rsvp-note">ข้อความถึงเจ้าภาพ</label>
+      <textarea id="rsvp-note" maxlength="400" placeholder="ข้อจำกัดด้านอาหาร หรือข้อความอื่น ๆ"></textarea>
+
+      <div class="actions">
+        <button type="submit" class="link">SEND</button>
+      </div>
+      <p class="status" id="rsvp-status" role="status"></p>
+    </form>
+    <p class="muted" data-key="rsvp.note" style="margin-top:22px">กรุณาตอบรับภายในวันที่ 7 พฤศจิกายน 2569</p>
+  </section>
+
+  <section id="wishes" class="reveal">
+    <p class="label" data-key="wishes.heading">คำอวยพร</p>
+    <ul class="wish-list" id="wish-list"></ul>
+    <form id="wish-form" novalidate>
+      <label for="wish-name">ชื่อของคุณ</label>
+      <input type="text" id="wish-name" maxlength="60" required>
+      <label for="wish-message">คำอวยพร</label>
+      <textarea id="wish-message" maxlength="600" required></textarea>
+      <div class="actions">
+        <button type="submit" class="link">SEND</button>
+      </div>
+      <p class="status" id="wish-status" role="status"></p>
+    </form>
+  </section>
+
+  <footer class="reveal">
+    <p data-key="footer.apology">( ขออภัยหากมิได้มาเรียนเชิญด้วยตัวเอง )</p>
+  </footer>
+
+</main>
+
+<script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
