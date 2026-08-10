@@ -10,7 +10,6 @@ const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let guest = null;
 let attending = null;
-let party = 1;
 let opened = false;
 
 /* ---------- the opening ------------------------------------------- */
@@ -49,6 +48,47 @@ function burst(originX, originY, count = 34) {
   }
 }
 
+const BALLOON_TINTS = [
+  ['#AEC6DA', '#93B0C9'],   // sky
+  ['#D6A2AC', '#C08D97'],   // rose
+  ['#E5D3C2', '#D0B79E'],   // nude
+];
+
+// Balloons drawn rather than imaged: a body, a pinched knot, and a slack
+// string. Each gets its own speed and sway so the group never moves as one.
+function releaseBalloons(count = 13) {
+  if (reduce) return;
+  const layer = document.createElement('div');
+  layer.className = 'balloons';
+  layer.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(layer);
+
+  for (let i = 0; i < count; i++) {
+    const [body, shade] = BALLOON_TINTS[i % BALLOON_TINTS.length];
+    const w = 34 + Math.random() * 34;
+
+    const b = document.createElement('div');
+    b.className = 'balloon';
+    b.style.width = `${w.toFixed(0)}px`;
+    b.style.left = `${(4 + Math.random() * 88).toFixed(1)}%`;
+    b.style.setProperty('--dur', `${(7.5 + Math.random() * 5).toFixed(1)}s`);
+    b.style.setProperty('--wait', `${(Math.random() * 1.6).toFixed(2)}s`);
+    b.style.setProperty('--swayDur', `${(2.6 + Math.random() * 2).toFixed(1)}s`);
+
+    b.innerHTML = `
+      <svg viewBox="0 0 60 116" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="30" cy="36" rx="27" ry="34" fill="${body}"/>
+        <path d="M14 20C18 12 25 8 32 8" stroke="#FDFBF7" stroke-width="3" stroke-linecap="round" fill="none" opacity=".55"/>
+        <path d="M30 70l-6 8h12l-6-8Z" fill="${shade}"/>
+        <path d="M30 78C36 88 24 96 30 106C34 112 30 114 28 116" stroke="${shade}" stroke-width="1" fill="none" stroke-linecap="round"/>
+      </svg>`;
+    layer.appendChild(b);
+  }
+
+  // The whole layer removes itself once the slowest balloon has left.
+  setTimeout(() => layer.remove(), 16000);
+}
+
 function openEnvelope() {
   if (opened) return;
   opened = true;
@@ -64,29 +104,37 @@ function openEnvelope() {
   const r = env.getBoundingClientRect();
   // Two waves: one as the flap lifts, a fuller one as the card clears the top.
   setTimeout(() => burst(r.left + r.width / 2, r.top + r.height * 0.34, 20), 340);
+  setTimeout(releaseBalloons, 620);
   setTimeout(() => burst(r.left + r.width / 2, r.top + r.height * 0.18, 34), 900);
 
   setTimeout(() => {
     scene.hidden = true;
     stage.hidden = false;
-    fitName($('guest-name'));
     window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
   }, reduce ? 0 : 1750);
 }
 
 /* ---------- copy from the database -------------------------------- */
 
-const COPY_KEYS = ['event.date', 'event.venue', 'event.time', 'footer.apology',
-                   'hero.bride_first', 'hero.groom_first'];
-
+// Everything visible on this page is editable from the admin panel. Rather
+// than list the fields twice, the markup carries data-key and this walks it.
 async function loadCopy(sb) {
   if (!sb) return {};
+
+  const shared = ['event.date', 'event.venue', 'event.time', 'footer.apology',
+                  'hero.bride_first', 'hero.groom_first'];
+  const keys = [...document.querySelectorAll('[data-key]')].map(el => el.dataset.key).concat(shared);
   const [{ data: content }, { data: config }] = await Promise.all([
-    sb.from('site_content').select('key,value_th').in('key', COPY_KEYS),
+    sb.from('site_content').select('key,value_th').in('key', [...new Set(keys)]),
     sb.from('site_settings').select('key,value')
   ]);
 
   const map = Object.fromEntries((content || []).map(r => [r.key, r.value_th]));
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const v = map[el.dataset.key];
+    if (v) el.textContent = v;
+  });
+
   const set = (sel, key) => {
     const el = document.querySelector(sel);
     if (el && map[key]) el.textContent = map[key];
@@ -96,29 +144,19 @@ async function loadCopy(sb) {
   set('.card__time', 'event.time');
   set('.card__foot', 'footer.apology');
 
-  const names = document.querySelectorAll('.card__name');
+  // The couple's names live under the landing-page keys; the card borrows them.
+  const names = document.querySelectorAll('.c-name');
   if (names[0] && map['hero.bride_first']) names[0].textContent = map['hero.bride_first'];
   if (names[1] && map['hero.groom_first']) names[1].textContent = map['hero.groom_first'];
+  const mini = document.querySelector('.mini__names');
+  if (mini && map['hero.bride_first'] && map['hero.groom_first']) {
+    mini.textContent = `${map['hero.bride_first']} & ${map['hero.groom_first']}`;
+  }
 
   return Object.fromEntries((config || []).map(r => [r.key, r.value]));
 }
 
 /* ---------- guest ------------------------------------------------- */
-
-// Thai names vary wildly in length: "คุณเอ" against "ครอบครัวสงทองธรรม" is a
-// four-fold difference. Rather than wrap or truncate, shrink until it fits.
-function fitName(el) {
-  const box = el.parentElement;
-  // While scene 2 is still hidden the box has no width, so there is nothing
-  // to measure against; the caller re-runs this once the card is on screen.
-  if (!box.clientWidth) return;
-  let size = 22;
-  el.style.fontSize = size + 'px';
-  while (el.scrollWidth > box.clientWidth - 8 && size > 12) {
-    size -= 0.5;
-    el.style.fontSize = size + 'px';
-  }
-}
 
 function showBlank(message) {
   const dust = $('dust');
@@ -139,42 +177,19 @@ function showBlank(message) {
 /* ---------- rsvp -------------------------------------------------- */
 
 function bindRsvp(sb, config) {
-  const open = config.rsvp_open !== 'false';
-  const sub = $('rsvp-sub');
-  if (config.rsvp_deadline && sub) {
-    sub.textContent = `กรุณาตอบรับภายในวันที่ ${config.rsvp_deadline}`;
-  }
-
-  if (!open) {
-    $('rsvp-form').hidden = true;
-    if (sub) sub.textContent = 'ปิดรับคำตอบแล้ว หากมีข้อสงสัยกรุณาติดต่อเจ้าภาพโดยตรง';
-    return;
-  }
-
-  const seats = Math.max(1, guest?.seats || 1);
-  $('seat-hint').textContent = seats > 1
-    ? `เชิญไว้ ${seats} ที่นั่ง` : 'เชิญไว้ 1 ที่นั่ง';
-
-  const paint = () => {
-    $('party-size').textContent = party;
-    $('minus').disabled = party <= 1;
-    $('plus').disabled = party >= seats;
+  const buttons = [...document.querySelectorAll('.choice button')];
+  const select = (btn) => {
+    attending = btn.dataset.attending === 'yes';
+    buttons.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
   };
-  $('minus').addEventListener('click', () => { party = Math.max(1, party - 1); paint(); });
-  $('plus').addEventListener('click', () => { party = Math.min(seats, party + 1); paint(); });
-  paint();
+  buttons.forEach(btn => btn.addEventListener('click', () => select(btn)));
 
-  document.querySelectorAll('.choice button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      attending = btn.dataset.attending === 'yes';
-      document.querySelectorAll('.choice button')
-        .forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
-      $('party-field').hidden = !attending;
-    });
-  });
-
+  // Someone who already answered should see their own choice waiting for
+  // them, not a blank form that makes them wonder if it saved.
   if (guest?.has_replied) {
-    $('rsvp-status').textContent = 'คุณตอบรับไว้แล้ว ส่งใหม่อีกครั้งเพื่อแก้ไขคำตอบเดิมได้';
+    const prev = buttons.find(b => (b.dataset.attending === 'yes') === !!guest.attending);
+    if (prev) select(prev);
+    $('rsvp-status').textContent = 'คุณตอบไว้แล้ว เปลี่ยนคำตอบได้โดยส่งใหม่อีกครั้ง';
   }
 
   $('rsvp-form').addEventListener('submit', async (e) => {
@@ -189,19 +204,15 @@ function bindRsvp(sb, config) {
     const { error } = await sb.rpc('submit_rsvp', {
       p_slug: slug,
       p_attending: attending,
-      p_party_size: party,
+      p_party_size: 1,
       p_note: $('rsvp-note').value || ''
     });
 
     btn.disabled = false;
     if (error) {
-      const map = {
-        rsvp_closed: 'ปิดรับคำตอบแล้ว',
-        guest_not_found: 'ไม่พบรายชื่อสำหรับลิงก์นี้',
-        party_size_out_of_range: 'จำนวนผู้ร่วมงานเกินที่นั่งที่เชิญไว้'
-      };
-      const key = Object.keys(map).find(k => error.message.includes(k));
-      status.textContent = map[key] || 'บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง';
+      status.textContent = error.message.includes('guest_not_found')
+        ? 'ไม่พบรายชื่อสำหรับลิงก์นี้'
+        : 'บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง';
       return;
     }
     status.textContent = attending
@@ -281,17 +292,26 @@ $('save-btn').addEventListener('click', async (e) => {
     return;
   }
 
-  const full = [guest.title, guest.name_th].filter(Boolean).join(' ');
+  const full = guest.name_th;
 
   const envName = $('env-name');
   if (envName) envName.textContent = full;
 
+  const msgEl = $('guest-msg');
+  if (msgEl && guest.message) {
+    msgEl.textContent = guest.message;
+    msgEl.hidden = false;
+  }
+
   const nameEl = $('guest-name');
   nameEl.textContent = full;
   if (document.fonts) await document.fonts.ready;
-  fitName(nameEl);
 
   $('envelope').addEventListener('click', openEnvelope);
+
+  import('./sparkles.js')
+    .then(mod => mod.startSparkles())
+    .catch(err => console.warn('sparkles unavailable', err));
   bindRsvp(sb, config);
   sb.rpc('log_card_view', { p_slug: slug }).catch(() => {});
 })();

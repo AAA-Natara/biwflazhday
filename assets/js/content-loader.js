@@ -10,7 +10,6 @@ export const settings = {
   show_story: false,
   show_gallery: false,
   show_wishes: true,
-  rsvp_open: true,
   event_datetime: '2026-11-21T14:00:00+07:00'
 };
 
@@ -18,9 +17,8 @@ export const settings = {
 // that controls nothing is worse than no toggle: it teaches the couple that
 // the panel lies. Gallery is handled separately because it also needs photos.
 const SECTION_TOGGLES = {
-  'story':     'show_story',
-  'wishes':    'show_wishes',
-  'rsvp-note': 'rsvp_open'
+  'story':  'show_story',
+  'wishes': 'show_wishes'
 };
 
 function toggle(id, on) {

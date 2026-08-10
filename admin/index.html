@@ -66,23 +66,23 @@
 
       <div class="group">
         <h2>เพิ่มรายชื่อ</h2>
-        <p class="group__hint">ชื่ออังกฤษใช้สร้างลิงก์เท่านั้น ไม่ขึ้นบนการ์ด</p>
+        <p class="group__hint">ข้อความเชิญจะขึ้นใต้ชื่อบนการ์ดของคนนั้นคนเดียว เว้นว่างไว้ได้</p>
         <form id="guest-form">
-          <div class="field">
-            <label for="g-title">คำนำหน้า</label>
-            <input type="text" id="g-title" value="คุณ" placeholder="คุณ / พี่ / ศจ. / ครอบครัว">
-          </div>
           <div class="field">
             <label for="g-name">ชื่อที่จะขึ้นบนการ์ด</label>
             <input type="text" id="g-name" required placeholder="ณธารา ธวัฒน์ธารา">
           </div>
           <div class="field">
-            <label for="g-name-en">ชื่ออังกฤษ สำหรับสร้างลิงก์</label>
+            <label for="g-msg">ข้อความเชิญเฉพาะคนนี้</label>
+            <textarea id="g-msg" maxlength="300" placeholder="ขอบคุณที่อยู่ข้างกันมาตลอด อยากให้มาร่วมเป็นส่วนหนึ่งของวันสำคัญนี้"></textarea>
+          </div>
+          <div class="field">
+            <label for="g-name-en">ชื่ออังกฤษ ใช้สร้างลิงก์</label>
             <input type="text" id="g-name-en" placeholder="natara">
           </div>
           <div class="field">
-            <label for="g-seats">จำนวนที่นั่งที่เชิญ</label>
-            <input type="text" id="g-seats" value="1" inputmode="numeric">
+            <label for="g-slug">ลิงก์ <span class="key">แก้ได้ ตัวสุ่มท้ายชื่อมีไว้กันคนเดาลิงก์คนอื่น</span></label>
+            <input type="text" id="g-slug" placeholder="พิมพ์ชื่ออังกฤษแล้วระบบจะเติมให้">
           </div>
           <div class="field">
             <label for="g-group">กลุ่ม</label>

@@ -15,10 +15,22 @@ const SECTION_TITLES = {
   travel:   ['การเดินทาง',    'ที่จอดรถและรถสาธารณะ'],
   story:    ['เรื่องราวของเรา', 'เปิดการแสดงผลได้ที่แท็บตั้งค่า'],
   rsvp:     ['การตอบรับ',     'ข้อความชี้แจงบนหน้าแรก'],
+  card:     ['การ์ดเชิญส่วนตัว', 'ข้อความบนหน้าการ์ดที่ส่งให้แขกรายคน'],
   footer:   ['ท้ายหน้า',      'บรรทัดปิดท้าย']
 };
 
 const FIELD_LABELS = {
+  'card.hint': 'ข้อความบนซองก่อนเปิด',
+  'card.to': 'คำขึ้นต้นก่อนชื่อแขก',
+  'card.save': 'ปุ่มบันทึกการ์ด',
+  'card.home': 'ปุ่มไปหน้ารายละเอียด',
+  'card.rsvp_heading': 'หัวข้อส่วนตอบรับ',
+  'card.deadline': 'บรรทัดกำหนดตอบรับ',
+  'card.question': 'คำถาม',
+  'card.yes': 'ปุ่มตอบว่ามา',
+  'card.no': 'ปุ่มตอบว่าไม่สะดวก',
+  'card.note_label': 'ป้ายช่องข้อความถึงบ่าวสาว',
+  'card.submit': 'ปุ่มส่งคำตอบ',
   'hero.eyebrow': 'คำนำเหนือชื่อ',
   'hero.bride_first': 'ชื่อเจ้าสาว', 'hero.bride_last': 'นามสกุลเจ้าสาว',
   'hero.groom_first': 'ชื่อเจ้าบ่าว', 'hero.groom_last': 'นามสกุลเจ้าบ่าว',
@@ -33,13 +45,12 @@ const FIELD_LABELS = {
 
 // Order matters here: the list follows the order the sections appear on the
 // page, not the alphabet, so the panel reads like the site.
-const SETTING_ORDER = ['event_datetime', 'show_story', 'show_gallery', 'rsvp_open', 'rsvp_deadline', 'show_wishes'];
+const SETTING_ORDER = ['event_datetime', 'show_story', 'show_gallery', 'rsvp_deadline', 'show_wishes'];
 
 const SETTING_LABELS = {
   event_datetime:['วันเวลาจัดงาน',        'ใช้กับนาฬิกานับถอยหลังและปุ่มบันทึกลงปฏิทิน'],
   show_story:    ['แสดงเรื่องราวของเรา',   'ส่วน Our Story บนหน้าแรก เปิดเมื่อเขียนเนื้อหาเสร็จแล้ว'],
   show_gallery:  ['แสดงแกลเลอรี',         'ส่วน Gallery บนหน้าแรก ต้องมีรูปในแท็บรูปภาพอย่างน้อยหนึ่งรูป'],
-  rsvp_open:     ['เปิดรับการตอบรับ',      'ปิดแล้วส่วน RSVP จะหายจากหน้าแรก และการ์ดจะไม่รับคำตอบอีก'],
   rsvp_deadline: ['กำหนดตอบรับ',           'รูปแบบ ปี-เดือน-วัน เช่น 2026-11-07'],
   show_wishes:   ['แสดงคำอวยพร',          'ส่วนรับคำอวยพรบนหน้าแรก']
 };
@@ -295,31 +306,40 @@ function makeSlug(nameEn, nameTh) {
 
 const cardLink = slug => `${location.origin}${location.pathname.replace(/admin\/?$/, '')}card/?g=${slug}`;
 
+$('g-name-en')?.addEventListener('input', () => {
+  const slugField = $('g-slug');
+  if (slugField && !slugField.dataset.touched) slugField.value = makeSlug($('g-name-en').value.trim());
+});
+$('g-slug')?.addEventListener('input', () => { $('g-slug').dataset.touched = '1'; });
+
 $('guest-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const msg = $('guest-msg');
   const name_th = $('g-name').value.trim();
   if (!name_th) { msg.textContent = 'กรุณาใส่ชื่อ'; return; }
 
-  const seats = Math.max(1, parseInt($('g-seats').value, 10) || 1);
+  const typed = $('g-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
   const row = {
-    slug: makeSlug($('g-name-en').value.trim(), name_th),
+    slug: typed || makeSlug($('g-name-en').value.trim()),
     name_th,
     name_en: $('g-name-en').value.trim() || null,
-    title: $('g-title').value.trim() || null,
-    seats,
+    message: $('g-msg').value.trim() || null,
+    seats: 1,
     group_tag: $('g-group').value.trim() || null
   };
 
   msg.textContent = 'กำลังบันทึก…';
   const { error } = await sb.from('guests').insert(row);
-  if (error) { msg.textContent = 'บันทึกไม่สำเร็จ ' + error.message; return; }
+  if (error) {
+    msg.textContent = error.message.includes('duplicate')
+      ? 'ลิงก์นี้ถูกใช้ไปแล้ว กรุณาเปลี่ยนเป็นชื่ออื่น'
+      : 'บันทึกไม่สำเร็จ ' + error.message;
+    return;
+  }
 
   msg.textContent = '';
-  $('g-name').value = '';
-  $('g-name-en').value = '';
-  $('g-group').value = '';
-  $('g-seats').value = '1';
+  for (const id of ['g-name', 'g-name-en', 'g-group', 'g-msg', 'g-slug']) $(id).value = '';
+  delete $('g-slug').dataset.touched;
   toast('เพิ่มรายชื่อแล้ว');
   loadGuests();
 });
@@ -327,7 +347,7 @@ $('guest-form').addEventListener('submit', async (e) => {
 async function loadGuests() {
   const box = $('guest-list');
   const { data, error } = await sb.from('guests')
-    .select('id,slug,name_th,title,seats,group_tag,rsvp(attending,party_size,note)')
+    .select('id,slug,name_th,message,group_tag,rsvp(attending,note)')
     .order('created_at', { ascending: false });
 
   if (error) { box.innerHTML = '<p class="dim">โหลดรายชื่อไม่สำเร็จ</p>'; return; }
@@ -340,7 +360,7 @@ async function loadGuests() {
   let yes = 0, no = 0, seats = 0;
   for (const g of data) {
     const r = Array.isArray(g.rsvp) ? g.rsvp[0] : g.rsvp;
-    if (r?.attending) { yes++; seats += r.party_size || 1; }
+    if (r?.attending) { yes++; seats++; }
     else if (r) no++;
   }
   $('guest-summary').textContent =
@@ -356,16 +376,16 @@ async function loadGuests() {
     const left = document.createElement('div');
     const name = document.createElement('div');
     name.className = 'guest__name';
-    name.textContent = [g.title, g.name_th].filter(Boolean).join(' ');
+    name.textContent = g.name_th;
 
     const pill = document.createElement('span');
     pill.className = 'pill ' + (r ? (r.attending ? 'pill--yes' : 'pill--no') : 'pill--wait');
-    pill.textContent = r ? (r.attending ? `มา ${r.party_size} คน` : 'ไม่สะดวก') : 'รอตอบ';
+    pill.textContent = r ? (r.attending ? 'มาร่วมงาน' : 'ไม่สะดวก') : 'รอตอบ';
     name.appendChild(pill);
 
     const meta = document.createElement('div');
     meta.className = 'guest__meta';
-    meta.textContent = [`${g.seats} ที่นั่ง`, g.group_tag, r?.note].filter(Boolean).join(' · ');
+    meta.textContent = [g.slug, g.group_tag, g.message, r?.note].filter(Boolean).join(' · ');
 
     left.append(name, meta);
 
