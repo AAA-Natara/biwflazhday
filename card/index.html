@@ -20,37 +20,33 @@
 
 <main class="page">
 
-<!-- ============ SCENE 1 · the sealed envelope ============ -->
+<!-- ============ SCENE 1 · the closed card ============ -->
 <section class="scene" id="scene">
-  <p class="scene__hint" id="scene-hint" data-key="card.hint">แตะซองเพื่อเปิดการ์ด</p>
+  <button type="button" class="cover" id="cover" aria-label="เปิดการ์ดเชิญ">
+    <svg class="cover__frame" viewBox="0 0 400 600" preserveAspectRatio="none" aria-hidden="true">
+      <rect x="11" y="11" width="378" height="578" fill="none" stroke="var(--nude-deep)" stroke-width="0.7"/>
+      <rect x="16" y="16" width="368" height="568" fill="none" stroke="var(--nude-deep)" stroke-width="0.5" opacity=".55"/>
+    </svg>
 
-  <button type="button" class="envelope" id="envelope" aria-label="เปิดการ์ดเชิญ">
-    <span class="env__back"></span>
+    <svg class="cover__bow" viewBox="-108 -78 216 164" fill="var(--paper)" stroke="var(--sky)" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M-8 6C-26 30 -34 58 -28 76L-16 66L-6 78C-2 58 0 30 -2 10Z"/>
+      <path d="M8 6C26 30 34 58 28 76L16 66L6 78C2 58 0 30 2 10Z"/>
+      <path d="M-6 -2C-28 -50 -66 -72 -94 -62C-122 -52 -118 -14 -82 -1C-58 7 -20 11 -6 -2Z"/>
+      <path d="M6 -2C28 -50 66 -72 94 -62C122 -52 118 -14 82 -1C58 7 20 11 6 -2Z"/>
+      <path d="M-12 -5C-40 -28 -66 -40 -86 -37" fill="none" stroke="var(--sky-light)" stroke-width="0.8"/>
+      <path d="M12 -5C40 -28 66 -40 86 -37" fill="none" stroke="var(--sky-light)" stroke-width="0.8"/>
+      <ellipse cx="0" cy="2" rx="12" ry="10"/>
+    </svg>
 
-    <span class="env__card" id="env-card">
-      <span class="mini__eyebrow">the wedding of</span>
-      <span class="mini__names">WORAWAN &amp; CHAT</span>
-      <span class="mini__date">21 . 11 . 2026</span>
-    </span>
+    <span class="cover__eyebrow">the wedding of</span>
+    <span class="cover__names">WORAWAN &amp; CHAT</span>
 
-    <span class="env__front"></span>
+    <span class="cover__div" aria-hidden="true"><i></i><b></b><i></i></span>
 
-    <span class="env__flap"></span>
+    <span class="cover__to" data-key="card.to">เรียน</span>
+    <span class="cover__who" id="env-name">ผู้มีเกียรติ</span>
 
-    <span class="env__seal">
-      <svg viewBox="0 0 60 42" fill="none" stroke="var(--sky)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M28 20C20 8 6 6 4 15C2 23 16 26 28 20Z"/>
-        <path d="M32 20C40 8 54 6 56 15C58 23 44 26 32 20Z"/>
-        <ellipse cx="30" cy="20" rx="5" ry="4"/>
-        <path d="M27 25C24 31 23 36 24 40"/>
-        <path d="M33 25C36 31 37 36 36 40"/>
-      </svg>
-    </span>
-
-    <span class="env__to">
-      <span class="env__to-label" data-key="card.to">เรียน</span>
-      <span class="env__to-name" id="env-name">ผู้มีเกียรติ</span>
-    </span>
+    <span class="cover__hint" id="scene-hint" data-key="card.hint">แตะเพื่อเปิดการ์ด</span>
   </button>
 </section>
 

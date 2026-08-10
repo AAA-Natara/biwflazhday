@@ -89,29 +89,27 @@ function releaseBalloons(count = 13) {
   setTimeout(() => layer.remove(), 16000);
 }
 
-function openEnvelope() {
+function openCard() {
   if (opened) return;
   opened = true;
 
-  const env = $('envelope');
+  const env = $('cover');
   const scene = $('scene');
-  const hint = $('scene-hint');
   const stage = $('stage');
 
   env.classList.add('opening');
-  if (hint) hint.textContent = '';
 
   const r = env.getBoundingClientRect();
   // Two waves: one as the flap lifts, a fuller one as the card clears the top.
-  setTimeout(() => burst(r.left + r.width / 2, r.top + r.height * 0.34, 20), 340);
-  setTimeout(releaseBalloons, 620);
-  setTimeout(() => burst(r.left + r.width / 2, r.top + r.height * 0.18, 34), 900);
+  burst(r.left + r.width / 2, r.top + r.height * 0.4, 26);
+  setTimeout(releaseBalloons, 260);
+  setTimeout(() => burst(r.left + r.width / 2, r.top + r.height * 0.25, 30), 620);
 
   setTimeout(() => {
     scene.hidden = true;
     stage.hidden = false;
     window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-  }, reduce ? 0 : 1750);
+  }, reduce ? 0 : 900);
 }
 
 /* ---------- copy from the database -------------------------------- */
@@ -307,7 +305,7 @@ $('save-btn').addEventListener('click', async (e) => {
   nameEl.textContent = full;
   if (document.fonts) await document.fonts.ready;
 
-  $('envelope').addEventListener('click', openEnvelope);
+  $('cover').addEventListener('click', openCard);
 
   import('./sparkles.js?v=5')
     .then(mod => mod.startSparkles())
