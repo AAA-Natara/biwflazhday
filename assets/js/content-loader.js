@@ -2,7 +2,7 @@
 // This module swaps in whatever the couple has edited. If Supabase is slow,
 // unconfigured, or down, the page still reads correctly.
 
-import { getClient, publicImageUrl } from './supabase-client.js';
+import { getClient, publicImageUrl } from './supabase-client.js?v=5';
 
 const CACHE_KEY = 'bf-content-v1';
 

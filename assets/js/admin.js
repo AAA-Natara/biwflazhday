@@ -1,5 +1,5 @@
-import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js';
-import { shrink } from '../lib/image-resize.js';
+import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=5';
+import { shrink } from '../lib/image-resize.js?v=5';
 
 const $ = id => document.getElementById(id);
 const dirty = new Map();          // key -> new value, for site_content only

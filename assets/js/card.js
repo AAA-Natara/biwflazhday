@@ -2,7 +2,7 @@
 // URL; without it there is no guest, so the page says so plainly rather than
 // pretending to work.
 
-import { getClient } from './supabase-client.js';
+import { getClient } from './supabase-client.js?v=5';
 
 const $ = id => document.getElementById(id);
 const slug = new URLSearchParams(location.search).get('g');
@@ -309,7 +309,7 @@ $('save-btn').addEventListener('click', async (e) => {
 
   $('envelope').addEventListener('click', openEnvelope);
 
-  import('./sparkles.js')
+  import('./sparkles.js?v=5')
     .then(mod => mod.startSparkles())
     .catch(err => console.warn('sparkles unavailable', err));
   bindRsvp(sb, config);
