@@ -294,14 +294,10 @@ async function loadSettings() {
 
 /* ================= guests ================= */
 
-// The slug is what protects a guest's card: it lives in a public URL, so a
-// predictable one would let anyone walk the list. Name plus four random
-// characters keeps links readable without making them guessable.
-function makeSlug(nameEn, nameTh) {
-  const base = (nameEn || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  const stem = base || 'guest';
-  const tail = Math.random().toString(36).slice(2, 6);
-  return `${stem}-${tail}`;
+// The slug is exactly what gets typed — no generated suffix. A collision is
+// caught by the unique index on guests.slug and reported on save.
+function makeSlug(nameEn) {
+  return (nameEn || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
 const cardLink = slug => `${location.origin}${location.pathname.replace(/admin\/?$/, '')}card/?g=${slug}`;
@@ -318,9 +314,12 @@ $('guest-form').addEventListener('submit', async (e) => {
   const name_th = $('g-name').value.trim();
   if (!name_th) { msg.textContent = 'กรุณาใส่ชื่อ'; return; }
 
-  const typed = $('g-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const typed = $('g-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '')
+    || makeSlug($('g-name-en').value.trim());
+  if (!typed) { msg.textContent = 'กรุณาใส่ชื่ออังกฤษหรือลิงก์'; return; }
+
   const row = {
-    slug: typed || makeSlug($('g-name-en').value.trim()),
+    slug: typed,
     name_th,
     name_en: $('g-name-en').value.trim() || null,
     message: $('g-msg').value.trim() || null,
