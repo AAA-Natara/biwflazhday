@@ -17,12 +17,21 @@
 </head>
 <body>
 
+<header id="minibar" aria-hidden="true"><span class="mb-names">WORAWAN &amp; CHAT</span><span class="mb-date">21.11.2026</span></header>
+
 <svg id="ribbon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
 
 <main class="page">
 
   <section id="hero">
     <h1 class="sr-only">งานสมรสของวรวรรณ สงทองธรรม และ ชาติ ลีสกุล</h1>
+
+    <div class="floats" aria-hidden="true">
+      <svg class="fl" data-depth="26" style="left:2%;top:6%"  viewBox="0 0 60 42" fill="none" stroke="var(--sky)" stroke-width="1" stroke-linecap="round"><path d="M28 20C20 8 6 6 4 15C2 23 16 26 28 20Z"/><path d="M32 20C40 8 54 6 56 15C58 23 44 26 32 20Z"/><ellipse cx="30" cy="20" rx="5" ry="4"/><path d="M27 25C24 31 23 36 24 40"/><path d="M33 25C36 31 37 36 36 40"/></svg>
+      <svg class="fl" data-depth="-19" style="right:3%;top:13%" viewBox="0 0 44 30" fill="none" stroke="var(--rose)" stroke-width="1"><circle cx="15" cy="15" r="11"/><circle cx="29" cy="15" r="11"/></svg>
+      <svg class="fl" data-depth="33" style="left:6%;bottom:9%" viewBox="0 0 40 40" fill="none" stroke="var(--nude)" stroke-width="1" stroke-linecap="round"><path d="M20 34C20 34 4 24 4 14C4 8 9 5 13 7C16 8 20 12 20 12C20 12 24 8 27 7C31 5 36 8 36 14C36 24 20 34 20 34Z"/></svg>
+      <svg class="fl" data-depth="-27" style="right:5%;bottom:14%" viewBox="0 0 50 24" fill="none" stroke="var(--sky)" stroke-width="1" stroke-linecap="round"><path d="M3 12C11 3 19 21 27 12C35 3 43 21 47 12"/></svg>
+    </div>
     <p class="eyebrow" data-key="hero.eyebrow">the wedding of</p>
     <p class="name" data-key="hero.bride_first">WORAWAN</p>
     <p class="surname" data-key="hero.bride_last">SONGTHONGTHAM</p>
@@ -32,10 +41,13 @@
 
     <div class="countdown" id="countdown">
       <div data-unit="days"><span class="n">—</span><span class="u">DAYS</span></div>
-      <div data-unit="hours"><span class="n">—</span><span class="u">HOURS</span></div>
-      <div data-unit="mins"><span class="n">—</span><span class="u">MINUTES</span></div>
+      <div data-unit="hours"><span class="n">—</span><span class="u">HRS</span></div>
+      <div data-unit="mins"><span class="n">—</span><span class="u">MIN</span></div>
+      <div data-unit="secs"><span class="n">—</span><span class="u">SEC</span></div>
     </div>
   </section>
+
+  <div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
 
   <section id="verse" class="reveal">
     <p class="verse-body" data-key="verse.text">ความรักนั้นก็อดทนนานและกระทำคุณให้ ความรักไม่อิจฉา ไม่อวดตัว ไม่หยิ่งผยอง</p>
@@ -57,19 +69,19 @@
   <section id="schedule" class="reveal">
     <p class="label" data-key="schedule.label">schedule</p>
     <ol class="timeline">
-      <li><span class="t" data-key="schedule.1_time">13:30</span><span class="d" data-key="schedule.1_text">แขกลงทะเบียนและเข้านั่งในห้องประชุม</span></li>
-      <li><span class="t" data-key="schedule.2_time">14:00</span><span class="d" data-key="schedule.2_text">พิธีสมรสเริ่ม กรุณามาถึงก่อนเวลา</span></li>
-      <li><span class="t" data-key="schedule.3_time">15:30</span><span class="d" data-key="schedule.3_text">ถ่ายภาพร่วมกับคู่บ่าวสาวและรับของที่ระลึก</span></li>
+      <li class="card"><span class="t" data-key="schedule.1_time">13:30</span><span class="d" data-key="schedule.1_text">แขกลงทะเบียนและเข้านั่งในห้องประชุม</span></li>
+      <li class="card"><span class="t" data-key="schedule.2_time">14:00</span><span class="d" data-key="schedule.2_text">พิธีสมรสเริ่ม กรุณามาถึงก่อนเวลา</span></li>
+      <li class="card"><span class="t" data-key="schedule.3_time">15:30</span><span class="d" data-key="schedule.3_text">ถ่ายภาพร่วมกับคู่บ่าวสาวและรับของที่ระลึก</span></li>
     </ol>
   </section>
 
   <section id="theme" class="reveal">
     <p class="label" data-key="theme.label">dress code</p>
-    <div class="swatches" role="img" aria-label="สีของงาน ฟ้าอ่อน ครีม ชมพูนวล และแดงเลือดหมู">
-      <span style="background:#AEC6DA"></span>
-      <span style="background:#E5D3C2"></span>
-      <span style="background:#D6A2AC"></span>
-      <span style="background:#5E2730"></span>
+    <div class="swatches">
+      <button type="button"><span style="background:#AEC6DA"></span><b>SKY · AEC6DA</b></button>
+      <button type="button"><span style="background:#E5D3C2"></span><b>NUDE · E5D3C2</b></button>
+      <button type="button"><span style="background:#D6A2AC"></span><b>ROSE · D6A2AC</b></button>
+      <button type="button"><span style="background:#5E2730"></span><b>WINE · 5E2730</b></button>
     </div>
     <p class="detail" data-key="theme.note">ขอเชิญร่วมแต่งกายในโทนสีของงาน ฟ้าอ่อน ครีม ชมพูนวล หรือแดงเลือดหมู</p>
   </section>

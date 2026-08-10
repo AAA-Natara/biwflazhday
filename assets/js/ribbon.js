@@ -82,28 +82,58 @@ export function drawRibbon() {
   svg.appendChild(bow);
 }
 
-// On first paint the bands draw downward and the bow settles in, like a
-// package being opened. Skipped entirely when reduced motion is requested.
+// The bow fades in on load, then the two bands unroll in step with the
+// guest's scroll — the package opens as they read. Reduced motion skips
+// straight to the finished state.
 export function animateRibbon() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const svg = document.getElementById('ribbon');
   if (!svg) return;
-
-  const bands = svg.querySelector('g');
-  if (bands) {
-    bands.querySelectorAll('path').forEach(p => {
-      const len = p.getTotalLength();
-      p.style.strokeDasharray = len;
-      p.style.strokeDashoffset = len;
-      p.style.transition = 'stroke-dashoffset 1.7s cubic-bezier(.22,.61,.36,1)';
-      requestAnimationFrame(() => { p.style.strokeDashoffset = '0'; });
-    });
-  }
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const bow = svg.querySelector('g:last-of-type');
-  if (bow) {
+  if (bow && !reduce) {
     bow.style.opacity = '0';
-    bow.style.transition = 'opacity .9s ease .5s';
+    bow.style.transition = 'opacity .9s ease .3s';
     requestAnimationFrame(() => { bow.style.opacity = '1'; });
+  }
+  if (reduce) return;
+
+  bindScrollDraw();
+}
+
+let scrollBound = false;
+
+export function bindScrollDraw() {
+  const svg = document.getElementById('ribbon');
+  if (!svg) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const bands = svg.querySelector('g');
+  if (!bands) return;
+
+  const paths = [...bands.querySelectorAll('path')].map(p => {
+    const len = p.getTotalLength();
+    p.style.strokeDasharray = len;
+    return { p, len };
+  });
+
+  const apply = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    // Below one viewport of scroll there is nothing to track, so just show it.
+    const t = max > 40 ? Math.min(1, window.scrollY / max) : 1;
+    // A head start keeps the ribbon visible before the first scroll.
+    const drawn = 0.22 + t * 0.78;
+    paths.forEach(({ p, len }) => { p.style.strokeDashoffset = len * (1 - drawn); });
+  };
+
+  apply();
+  if (!scrollBound) {
+    scrollBound = true;
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { apply(); ticking = false; });
+    }, { passive: true });
   }
 }

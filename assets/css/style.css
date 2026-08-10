@@ -375,3 +375,148 @@ details .body { padding: 0 0 18px; }
   color: var(--ink-faint);
   margin-top: 16px;
 }
+
+/* ================================================================
+   Motion layer
+   Every effect below is decoration: if JS never runs, or the guest
+   asks for reduced motion, the page still reads exactly the same.
+   ================================================================ */
+
+/* --- sticky mini header ------------------------------------------ */
+
+#minibar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 13px clamp(18px, 5vw, 34px);
+  background: rgba(253, 251, 247, 0.92);
+  border-bottom: 0.5px solid var(--nude);
+  transform: translateY(-100%);
+  transition: transform .45s cubic-bezier(.22,.61,.36,1);
+}
+#minibar.show { transform: none; }
+#minibar span {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  color: var(--ink);
+}
+#minibar .mb-date { color: var(--ink-faint); }
+
+/* --- floating motifs --------------------------------------------- */
+
+.floats { position: absolute; inset: 0; pointer-events: none; }
+.fl {
+  position: absolute;
+  width: clamp(26px, 7vw, 52px);
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  transition: transform .5s cubic-bezier(.22,.61,.36,1);
+  will-change: transform;
+}
+.fl:nth-child(1) { animation-delay: .2s }
+.fl:nth-child(2) { animation-delay: .45s }
+.fl:nth-child(3) { animation-delay: .7s }
+.fl:nth-child(4) { animation-delay: .9s }
+@keyframes fadeIn { to { opacity: 1 } }
+
+/* --- letters rising ---------------------------------------------- */
+
+.js .name span.ch {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: rise .75s cubic-bezier(.22,.61,.36,1) forwards;
+}
+@keyframes rise { to { opacity: 1; transform: none } }
+
+.js #hero .eyebrow,
+.js #hero .surname,
+.js #hero .countdown { opacity: 0; animation: rise .9s ease forwards; }
+.js #hero .eyebrow { animation-delay: .1s }
+.js #hero .countdown { animation-delay: 1.5s }
+
+.js #hero .amp {
+  opacity: 0;
+  animation: pop .7s cubic-bezier(.34,1.56,.64,1) .8s forwards;
+}
+@keyframes pop { from { opacity: 0; transform: scale(.6) } to { opacity: 1; transform: none } }
+
+/* --- marquee ------------------------------------------------------ */
+
+.marquee {
+  border-top: 0.5px solid var(--nude);
+  border-bottom: 0.5px solid var(--nude);
+  padding: 14px 0;
+  margin: 0 0 clamp(56px, 11vw, 96px);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.track { display: inline-flex; align-items: center; gap: 26px; animation: run 26s linear infinite; }
+@keyframes run { to { transform: translateX(-50%) } }
+.track em {
+  font-family: var(--serif);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--ink);
+}
+.track i { color: var(--sky); font-style: normal; font-size: 9px; }
+
+/* --- schedule cards ----------------------------------------------- */
+
+.timeline li.card {
+  border: 0.5px solid var(--nude);
+  border-radius: 3px;
+  padding: 16px;
+  margin-bottom: 10px;
+  background: var(--paper);
+  transition: transform .35s cubic-bezier(.22,.61,.36,1), background .35s, border-color .35s;
+}
+.timeline li.card:last-child { margin-bottom: 0; }
+.timeline li.card:hover { transform: translateX(7px); background: var(--paper-2); border-color: var(--sky); }
+.timeline li.card:hover .t { color: var(--ink); }
+.timeline .t { transition: color .35s; }
+
+/* --- interactive swatches ------------------------------------------ */
+
+.swatches button { border: 0; background: none; padding: 0; cursor: pointer; text-align: center; }
+.swatches button span { transition: transform .4s cubic-bezier(.34,1.56,.64,1); }
+.swatches button:hover span,
+.swatches button:focus-visible span { transform: scale(1.35) translateY(-3px); }
+.swatches b {
+  display: block;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+  margin-top: 13px;
+  opacity: 0;
+  transition: opacity .3s;
+  white-space: nowrap;
+}
+.swatches button:hover b,
+.swatches button:focus-visible b { opacity: 1; }
+.swatches { align-items: flex-start; }
+
+/* --- magnetic links ------------------------------------------------- */
+
+.link { transition: border-color .3s, transform .3s cubic-bezier(.22,.61,.36,1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fl, .track, .js .name span.ch,
+  .js #hero .eyebrow, .js #hero .surname, .js #hero .countdown, .js #hero .amp {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  #minibar, .timeline li.card, .swatches button span, .link { transition: none !important; }
+  .swatches b { opacity: 1; }
+}
