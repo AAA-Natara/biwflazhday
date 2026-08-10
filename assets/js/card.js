@@ -6,10 +6,73 @@ import { getClient } from './supabase-client.js';
 
 const $ = id => document.getElementById(id);
 const slug = new URLSearchParams(location.search).get('g');
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let guest = null;
 let attending = null;
 let party = 1;
+let opened = false;
+
+/* ---------- the opening ------------------------------------------- */
+
+const SPARK = 'M12 0C13.1 8.2 15.8 10.9 24 12C15.8 13.1 13.1 15.8 12 24C10.9 15.8 8.2 13.1 0 12C8.2 10.9 10.9 8.2 12 0Z';
+const TINTS = ['#AEC6DA', '#D6A2AC', '#D9C3AE'];
+
+// A burst thrown from the mouth of the envelope: random angle, random reach,
+// random life, so no two sparks travel together.
+function burst(originX, originY, count = 34) {
+  const layer = $('dust');
+  if (!layer || reduce) return;
+
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+    const reach = 90 + Math.random() * 210;
+    const size = 6 + Math.random() * 15;
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.style.width = `${size.toFixed(1)}px`;
+    svg.style.left = `${originX - size / 2}px`;
+    svg.style.top = `${originY - size / 2}px`;
+    svg.style.setProperty('--dx', `${(Math.cos(angle) * reach).toFixed(0)}px`);
+    svg.style.setProperty('--dy', `${(Math.sin(angle) * reach - 40).toFixed(0)}px`);
+    svg.style.setProperty('--life', `${(1.1 + Math.random() * 1.1).toFixed(2)}s`);
+    svg.style.animationDelay = `${(Math.random() * 0.35).toFixed(2)}s`;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', SPARK);
+    path.setAttribute('fill', TINTS[i % TINTS.length]);
+    svg.appendChild(path);
+    layer.appendChild(svg);
+
+    svg.addEventListener('animationend', () => svg.remove());
+  }
+}
+
+function openEnvelope() {
+  if (opened) return;
+  opened = true;
+
+  const env = $('envelope');
+  const scene = $('scene');
+  const hint = $('scene-hint');
+  const stage = $('stage');
+
+  env.classList.add('opening');
+  if (hint) hint.textContent = '';
+
+  const r = env.getBoundingClientRect();
+  // Two waves: one as the flap lifts, a fuller one as the card clears the top.
+  setTimeout(() => burst(r.left + r.width / 2, r.top + r.height * 0.34, 20), 340);
+  setTimeout(() => burst(r.left + r.width / 2, r.top + r.height * 0.18, 34), 900);
+
+  setTimeout(() => {
+    scene.hidden = true;
+    stage.hidden = false;
+    fitName($('guest-name'));
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  }, reduce ? 0 : 1750);
+}
 
 /* ---------- copy from the database -------------------------------- */
 
@@ -46,6 +109,9 @@ async function loadCopy(sb) {
 // four-fold difference. Rather than wrap or truncate, shrink until it fits.
 function fitName(el) {
   const box = el.parentElement;
+  // While scene 2 is still hidden the box has no width, so there is nothing
+  // to measure against; the caller re-runs this once the card is on screen.
+  if (!box.clientWidth) return;
   let size = 22;
   el.style.fontSize = size + 'px';
   while (el.scrollWidth > box.clientWidth - 8 && size > 12) {
@@ -55,6 +121,8 @@ function fitName(el) {
 }
 
 function showBlank(message) {
+  const dust = $('dust');
+  if (dust) dust.remove();
   document.querySelector('.page').innerHTML = `
     <div class="blank">
       <svg viewBox="0 0 60 42" width="58" fill="none" stroke="#AEC6DA" stroke-width="1" stroke-linecap="round" aria-hidden="true">
@@ -213,11 +281,17 @@ $('save-btn').addEventListener('click', async (e) => {
     return;
   }
 
+  const full = [guest.title, guest.name_th].filter(Boolean).join(' ');
+
+  const envName = $('env-name');
+  if (envName) envName.textContent = full;
+
   const nameEl = $('guest-name');
-  nameEl.textContent = [guest.title, guest.name_th].filter(Boolean).join(' ');
+  nameEl.textContent = full;
   if (document.fonts) await document.fonts.ready;
   fitName(nameEl);
 
+  $('envelope').addEventListener('click', openEnvelope);
   bindRsvp(sb, config);
   sb.rpc('log_card_view', { p_slug: slug }).catch(() => {});
 })();

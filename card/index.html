@@ -5,21 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>การ์ดเชิญ · Worawan &amp; Chat</title>
 <meta name="robots" content="noindex">
-<meta name="description" content="การ์ดเชิญงานสมรส วรวรรณ และ ชาติ วันเสาร์ที่ 21 พฤศจิกายน 2569">
+<meta property="og:title" content="คุณได้รับการ์ดเชิญงานสมรส Worawan &amp; Chat">
+<meta property="og:description" content="วันเสาร์ที่ 21 พฤศจิกายน 2569 · คริสตจักรเมืองทอง · แตะเพื่อเปิดการ์ด">
 <meta name="theme-color" content="#FDFBF7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=DM+Sans:wght@500;700&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Italiana&family=Parisienne&family=DM+Sans:wght@400;500&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/card.css">
 </head>
 <body>
 
+<div class="dust" id="dust" aria-hidden="true"></div>
+
 <main class="page">
 
-  <!-- ============ THE CARD ============ -->
+<!-- ============ SCENE 1 · the sealed envelope ============ -->
+<section class="scene" id="scene">
+  <p class="scene__hint" id="scene-hint">แตะซองเพื่อเปิดการ์ด</p>
+
+  <button type="button" class="envelope" id="envelope" aria-label="เปิดการ์ดเชิญ">
+    <span class="env__back"></span>
+
+    <span class="env__card" id="env-card">
+      <span class="mini__eyebrow">the wedding of</span>
+      <span class="mini__names">WORAWAN &amp; CHAT</span>
+      <span class="mini__date">21 . 11 . 2026</span>
+    </span>
+
+    <span class="env__front"></span>
+
+    <span class="env__flap"></span>
+
+    <span class="env__seal">
+      <svg viewBox="0 0 60 42" fill="none" stroke="var(--sky)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M28 20C20 8 6 6 4 15C2 23 16 26 28 20Z"/>
+        <path d="M32 20C40 8 54 6 56 15C58 23 44 26 32 20Z"/>
+        <ellipse cx="30" cy="20" rx="5" ry="4"/>
+        <path d="M27 25C24 31 23 36 24 40"/>
+        <path d="M33 25C36 31 37 36 36 40"/>
+      </svg>
+    </span>
+
+    <span class="env__to">
+      <span class="env__to-label">เรียน</span>
+      <span class="env__to-name" id="env-name">ผู้มีเกียรติ</span>
+    </span>
+  </button>
+</section>
+
+<!-- ============ SCENE 2 · the card ============ -->
+<section class="stage" id="stage" hidden>
+
   <div class="card" id="card">
     <svg class="card__frame" viewBox="0 0 400 600" preserveAspectRatio="none" aria-hidden="true">
-      <rect x="14" y="14" width="372" height="572" rx="2" fill="none" stroke="var(--nude)" stroke-width="0.6"/>
+      <rect x="13" y="13" width="374" height="574" rx="2" fill="none" stroke="var(--nude)" stroke-width="0.6"/>
     </svg>
 
     <svg class="card__bow" viewBox="0 0 200 130" fill="none" stroke="var(--sky)" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
@@ -62,10 +101,9 @@
     </a>
   </div>
 
-  <!-- ============ RSVP ============ -->
   <section class="rsvp" id="rsvp">
     <h2>ตอบรับคำเชิญ</h2>
-    <p class="rsvp__sub" id="rsvp-sub">กรุณาตอบรับภายในวันที่ 7 พฤศจิกายน 2569</p>
+    <p class="rsvp__sub" id="rsvp-sub">กรุณาตอบรับภายในกำหนด</p>
 
     <form id="rsvp-form" novalidate>
       <fieldset>
@@ -80,7 +118,7 @@
         <label for="party-size">จำนวนผู้ร่วมงาน</label>
         <div class="stepper">
           <button type="button" id="minus" aria-label="ลดจำนวน">−</button>
-          <output id="party-size" for="minus plus">1</output>
+          <output id="party-size">1</output>
           <button type="button" id="plus" aria-label="เพิ่มจำนวน">+</button>
         </div>
         <p class="hint" id="seat-hint"></p>
@@ -93,6 +131,8 @@
       <p class="status" id="rsvp-status" role="status"></p>
     </form>
   </section>
+
+</section>
 
 </main>
 

@@ -69,20 +69,120 @@ body {
 .card__amp { font-family: var(--script); font-size: clamp(16px, 4.6vw, 21px); color: var(--rose); margin: 2% 0; }
 
 .card__guest {
+  position: relative;
   width: 100%;
   margin: 7% 0 6%;
   padding: 5% 4%;
-  border-top: 0.5px solid var(--nude);
-  border-bottom: 0.5px solid var(--nude);
+  overflow: hidden;
 }
-.card__to { display: block; font-family: var(--thai); font-size: 13px; color: var(--ink-faint); margin-bottom: 6px; }
+
+/* The rules are elements rather than borders so they can draw outward from
+   the centre when the card opens. */
+.card__rule {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 0.5px;
+  background: var(--nude);
+  transform: scaleX(0);
+  transform-origin: center;
+}
+.card__rule--top { top: 0; }
+.card__rule--bottom { bottom: 0; }
+
+.card__to {
+  display: block;
+  font-family: var(--thai);
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+  opacity: 0;
+}
 .card__who {
   display: block;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--ink);
   font-family: var(--thai);
   font-weight: 400;
   font-size: 22px;          /* JS shrinks this to fit long names */
   line-height: 1.45;
   white-space: nowrap;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+  filter: blur(7px);
+}
+
+/* A single pass of light across the name, once, as it settles. */
+.card__shimmer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg,
+    transparent 38%,
+    rgba(255, 255, 255, .78) 50%,
+    transparent 62%);
+  translate: -120% 0;
+  opacity: 0;
+}
+
+.card__burst { position: absolute; inset: 0; pointer-events: none; }
+.card__burst svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  margin: -6px 0 0 -6px;
+  opacity: 0;
+  animation: burst var(--dur, 1.5s) cubic-bezier(.16,.8,.3,1) var(--delay, 0s) forwards;
+}
+
+/* ---- the opening sequence -------------------------------------- */
+
+.card.open .card__rule       { animation: draw-rule .8s cubic-bezier(.22,.61,.36,1) .15s forwards; }
+.card.open .card__to         { animation: soft-in .7s ease .5s forwards; }
+.card.open .card__who        { animation: name-in 1.1s cubic-bezier(.22,.61,.36,1) .65s forwards; }
+.card.open .card__shimmer    { animation: sweep 1.5s ease-out 1.25s; }
+
+@keyframes draw-rule { to { transform: scaleX(1) } }
+@keyframes soft-in   { to { opacity: 1 } }
+@keyframes name-in {
+  from { opacity: 0; filter: blur(7px); scale: .94 }
+  to   { opacity: 1; filter: blur(0);   scale: 1 }
+}
+@keyframes sweep {
+  0%   { opacity: 0; translate: -120% 0 }
+  18%  { opacity: 1 }
+  100% { opacity: 0; translate: 120% 0 }
+}
+@keyframes burst {
+  0%   { opacity: 0; translate: 0 0;                    scale: .2; rotate: 0deg }
+  22%  { opacity: 1 }
+  100% { opacity: 0; translate: var(--x) var(--y);      scale: 1;  rotate: 140deg }
+}
+
+/* ---- ambient dust ------------------------------------------------ */
+
+.sparkles { position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+.sparkle {
+  position: absolute;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation:
+    dust-rise var(--rise, 20s) linear var(--rise-delay, 0s) infinite,
+    dust-twinkle var(--twinkle, 5s) ease-in-out var(--twinkle-delay, 0s) infinite;
+}
+@keyframes dust-rise {
+  from { translate: 0 0 }
+  to   { translate: var(--sway, 0px) -130px }
+}
+@keyframes dust-twinkle {
+  0%, 100% { opacity: 0;               scale: 0.4 }
+  45%      { opacity: var(--peak, .7); scale: 1 }
+  60%      { opacity: var(--peak, .7); scale: 0.94 }
 }
 
 .card__meta { margin-top: auto; }
@@ -90,6 +190,177 @@ body {
 .card__venue { font-family: var(--thai); font-size: 14px; margin: 0 0 4px; }
 .card__time { font-family: var(--thai); font-size: 13px; color: var(--ink-soft); margin: 0; }
 .card__foot { font-family: var(--thai); font-size: 11px; color: var(--ink-faint); margin: 6% 0 0; }
+
+
+/* ==================================================================
+   Scene 1 — the sealed envelope
+   The whole thing is one button: on a phone the guest should be able
+   to tap anywhere on the envelope, not hunt for a small target.
+   ================================================================== */
+
+.scene { display: grid; place-items: center; min-height: 74dvh; }
+
+.scene__hint {
+  font-family: var(--thai);
+  font-size: 14px;
+  color: var(--ink-faint);
+  margin: 0 0 30px;
+  animation: breathe 2.8s ease-in-out infinite;
+}
+@keyframes breathe { 0%, 100% { opacity: .5 } 50% { opacity: 1 } }
+
+.envelope {
+  position: relative;
+  width: min(330px, 84vw);
+  aspect-ratio: 3 / 2;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  perspective: 900px;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+.envelope:hover { transform: translateY(-4px); }
+.envelope.opening { pointer-events: none; }
+
+.env__back, .env__front, .env__flap, .env__card {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: block;
+}
+
+.env__back {
+  inset: 0;
+  background: var(--nude-bg);
+  border: 0.5px solid var(--nude-deep);
+  border-radius: 3px;
+}
+
+/* The card sits inside the pocket and rises out on open. */
+.env__card {
+  left: 6%;
+  right: 6%;
+  top: 8%;
+  height: 84%;
+  background: var(--paper);
+  border: 0.5px solid var(--nude);
+  border-radius: 2px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  transition: transform 1s cubic-bezier(.22,.61,.36,1) .55s;
+}
+.opening .env__card { transform: translateY(-42%); }
+
+.mini__eyebrow { font-family: var(--script); font-size: 16px; color: var(--ink-faint); }
+.mini__names {
+  font-family: var(--names);
+  font-weight: 500;
+  font-size: clamp(14px, 4vw, 17px);
+  letter-spacing: 0.16em;
+  text-indent: 0.16em;
+}
+.mini__date {
+  font-family: var(--ui);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+}
+
+/* The pocket front, drawn as two folded triangles meeting in the middle. */
+.env__front {
+  bottom: 0;
+  height: 62%;
+  z-index: 3;
+  background:
+    linear-gradient(to top right, var(--nude-bg) 49.6%, transparent 49.8%),
+    linear-gradient(to top left,  var(--nude-bg) 49.6%, transparent 49.8%),
+    var(--nude-bg);
+  border: 0.5px solid var(--nude-deep);
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+  box-shadow: 0 -1px 0 var(--nude-deep);
+}
+
+/* The flap hinges on its top edge and swings all the way back. */
+.env__flap {
+  top: 0;
+  height: 56%;
+  z-index: 5;
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform .85s cubic-bezier(.6,-0.2,.4,1.2), z-index 0s .45s;
+  background: linear-gradient(to bottom, var(--nude-bg) 0%, var(--nude-bg) 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-radius: 3px 3px 0 0;
+}
+.opening .env__flap { transform: rotateX(-172deg); z-index: 1; }
+
+.env__seal {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  translate: -50% -50%;
+  z-index: 6;
+  width: 62px;
+  background: var(--paper);
+  border-radius: 50%;
+  padding: 7px;
+  transition: opacity .35s ease, scale .35s ease;
+}
+.env__seal svg { display: block; width: 100%; }
+.opening .env__seal { opacity: 0; scale: .5; }
+
+.env__to {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 11%;
+  z-index: 4;
+  text-align: center;
+  transition: opacity .4s ease;
+}
+.opening .env__to { opacity: 0; }
+.env__to-label { display: block; font-family: var(--thai); font-size: 12px; color: var(--ink-faint); }
+.env__to-name {
+  display: block;
+  font-family: var(--thai);
+  font-weight: 400;
+  font-size: 19px;
+  margin-top: 4px;
+  padding: 0 12%;
+  line-height: 1.4;
+}
+
+/* ==================================================================
+   Sparkle burst — fired once, on open
+   ================================================================== */
+
+.dust { position: fixed; inset: 0; pointer-events: none; z-index: 40; overflow: hidden; }
+.dust svg {
+  position: absolute;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: burst var(--life, 1.5s) cubic-bezier(.15,.7,.3,1) forwards;
+}
+@keyframes burst {
+  0%   { opacity: 0;   translate: 0 0;                       scale: .2 }
+  18%  { opacity: 1 }
+  100% { opacity: 0;   translate: var(--dx) var(--dy);       scale: 1 }
+}
+
+/* Scene 2 fades up once the envelope is out of the way. */
+.stage { animation: stageIn .9s ease forwards; }
+@keyframes stageIn { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: none } }
+
+@media (prefers-reduced-motion: reduce) {
+  .scene__hint, .dust svg, .stage { animation: none !important; }
+  .env__flap, .env__card, .env__seal, .env__to, .envelope { transition: none !important; }
+}
 
 /* ==================================================================
    Buttons
@@ -216,4 +487,9 @@ textarea:focus { outline: none; border-color: var(--sky); }
 
 @media (prefers-reduced-motion: reduce) {
   .btn, .choice button { transition: none !important; }
+  .sparkles { display: none; }
+  .card__rule { transform: scaleX(1) !important; }
+  .card__to, .card__who { opacity: 1 !important; filter: none !important; }
+  .card.open .card__rule, .card.open .card__to,
+  .card.open .card__who, .card.open .card__shimmer { animation: none !important; }
 }
