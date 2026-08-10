@@ -14,10 +14,23 @@ export const settings = {
   event_datetime: '2026-11-21T14:00:00+07:00'
 };
 
+// Every switch in the admin panel must move something on the page. A toggle
+// that controls nothing is worse than no toggle: it teaches the couple that
+// the panel lies. Gallery is handled separately because it also needs photos.
+const SECTION_TOGGLES = {
+  'story':     'show_story',
+  'wishes':    'show_wishes',
+  'rsvp-note': 'rsvp_open'
+};
+
 function toggle(id, on) {
   const el = document.getElementById(id);
   if (el) el.hidden = !on;
 }
+
+// Sections start hidden in the HTML only when they are optional. If a
+// settings row is missing entirely, treat it as "show" so a database hiccup
+// can never blank out the invitation.
 
 async function apply({ content, config, photos }) {
   if (content) {
@@ -36,8 +49,7 @@ async function apply({ content, config, photos }) {
       if (row.value === 'true' || row.value === 'false') settings[row.key] = row.value === 'true';
       else settings[row.key] = row.value;
     }
-    toggle('story', settings.show_story);
-    toggle('wishes', settings.show_wishes);
+    for (const [id, key] of Object.entries(SECTION_TOGGLES)) toggle(id, settings[key] !== false);
   }
 
   if (photos) {

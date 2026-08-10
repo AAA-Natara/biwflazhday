@@ -246,14 +246,17 @@ grant execute on function public.log_card_view(text) to anon, authenticated;
 -- ---------------------------------------------------------------
 
 insert into public.site_settings (key, value) values
+  ('event_datetime','2026-11-21T14:00:00+07:00'),
   ('show_story',    'false'),
   ('show_gallery',  'false'),
-  ('show_gift',     'false'),
-  ('show_wishes',   'true'),
   ('rsvp_open',     'true'),
   ('rsvp_deadline', '2026-11-07'),
-  ('event_datetime','2026-11-21T14:00:00+07:00')
+  ('show_wishes',   'true')
 on conflict (key) do nothing;
+
+-- show_gift never had a section on the page. A switch that moves nothing is
+-- worse than no switch, so it is removed rather than left dangling.
+delete from public.site_settings where key = 'show_gift';
 
 insert into public.site_content (key, value_th, field_type, section, sort_order) values
   ('hero.eyebrow',    'the wedding of',              'text',     'hero',     10),

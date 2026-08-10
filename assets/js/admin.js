@@ -31,14 +31,17 @@ const FIELD_LABELS = {
   'footer.apology': 'บรรทัดขออภัย', 'footer.signoff': 'บรรทัดปิดท้าย'
 };
 
+// Order matters here: the list follows the order the sections appear on the
+// page, not the alphabet, so the panel reads like the site.
+const SETTING_ORDER = ['event_datetime', 'show_story', 'show_gallery', 'rsvp_open', 'rsvp_deadline', 'show_wishes'];
+
 const SETTING_LABELS = {
-  show_story:    ['แสดงเรื่องราวของเรา', 'เปิดเมื่อเขียนเนื้อหาเสร็จแล้ว'],
-  show_gallery:  ['แสดงแกลเลอรี',        'ต้องมีรูปอย่างน้อยหนึ่งรูป'],
-  show_wishes:   ['แสดงคำอวยพร',         'ส่วนรับคำอวยพรบนหน้าแรก'],
-  show_gift:     ['แสดงส่วนของขวัญ',      'ยังไม่ได้ใช้งาน'],
-  rsvp_open:     ['เปิดรับการตอบรับ',     'ปิดเมื่อเลยกำหนดแล้ว'],
-  rsvp_deadline: ['กำหนดตอบรับ',          'รูปแบบ ปี-เดือน-วัน'],
-  event_datetime:['วันเวลาจัดงาน',        'ใช้กับนาฬิกานับถอยหลังและปฏิทิน']
+  event_datetime:['วันเวลาจัดงาน',        'ใช้กับนาฬิกานับถอยหลังและปุ่มบันทึกลงปฏิทิน'],
+  show_story:    ['แสดงเรื่องราวของเรา',   'ส่วน Our Story บนหน้าแรก เปิดเมื่อเขียนเนื้อหาเสร็จแล้ว'],
+  show_gallery:  ['แสดงแกลเลอรี',         'ส่วน Gallery บนหน้าแรก ต้องมีรูปในแท็บรูปภาพอย่างน้อยหนึ่งรูป'],
+  rsvp_open:     ['เปิดรับการตอบรับ',      'ปิดแล้วส่วน RSVP จะหายจากหน้าแรก และการ์ดจะไม่รับคำตอบอีก'],
+  rsvp_deadline: ['กำหนดตอบรับ',           'รูปแบบ ปี-เดือน-วัน เช่น 2026-11-07'],
+  show_wishes:   ['แสดงคำอวยพร',          'ส่วนรับคำอวยพรบนหน้าแรก']
 };
 
 function labelFor(key) {
@@ -219,11 +222,17 @@ $('discard').addEventListener('click', () => {
 
 async function loadSettings() {
   const box = $('settings-list');
-  const { data } = await sb.from('site_settings').select('key,value').order('key');
+  const { data } = await sb.from('site_settings').select('key,value');
   if (!data) { box.innerHTML = '<p class="dim">โหลดการตั้งค่าไม่สำเร็จ</p>'; return; }
 
+  // Anything not in SETTING_ORDER is a leftover that no longer drives the
+  // page, so it is not rendered at all.
+  const rows = SETTING_ORDER
+    .map(key => data.find(r => r.key === key))
+    .filter(Boolean);
+
   box.innerHTML = '';
-  for (const row of data) {
+  for (const row of rows) {
     const [title, hint] = SETTING_LABELS[row.key] || [row.key, ''];
     const isBool = row.value === 'true' || row.value === 'false';
 
