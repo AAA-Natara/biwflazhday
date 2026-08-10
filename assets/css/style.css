@@ -16,8 +16,12 @@
   --ink-soft: #8E6B70;
   --ink-faint: #B09A9C;
 
-  --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-  --thai: 'Trirong', 'Cormorant Garamond', serif;
+  /* Cormorant is kept for the two names only — it is beautiful at 48px and
+     illegible at 10px. Everything else uses faces built to hold up small. */
+  --names: 'Cormorant Garamond', Georgia, serif;
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --ui: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --thai: 'Trirong', Georgia, serif;
 
   --rail: 22px;                 /* space the ribbon occupies */
   --gutter: clamp(20px, 5vw, 34px);
@@ -82,33 +86,33 @@ main { position: relative; z-index: 1; }
 .sec-num {
   grid-area: num;
   align-self: start;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.2em;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.12em;
   color: var(--sky);
   padding-top: 10px;
 }
 .sec-title {
   grid-area: title;
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: clamp(28px, 7vw, 40px);
-  letter-spacing: 0.04em;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(29px, 7.2vw, 42px);
+  letter-spacing: 0.005em;
   line-height: 1.1;
   margin: 0;
 }
 .sec-th {
   grid-area: th;
   font-family: var(--thai);
-  font-weight: 300;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 15px;
   color: var(--ink-soft);
   margin-top: 7px;
 }
 .sec-title.solo {
-  font-size: clamp(26px, 6vw, 34px);
-  letter-spacing: 0.16em;
+  font-size: clamp(28px, 6.4vw, 36px);
+  letter-spacing: 0.02em;
   margin: 0 0 20px;
 }
 
@@ -135,17 +139,17 @@ main { position: relative; z-index: 1; }
 @keyframes fadeIn { to { opacity: 1 } }
 
 .eyebrow {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 500;
   font-style: italic;
-  font-size: 16px;
-  letter-spacing: 0.12em;
+  font-size: 18px;
+  letter-spacing: 0.06em;
   color: var(--ink-faint);
   margin: 0 0 24px;
 }
 .name {
-  font-family: var(--serif);
-  font-weight: 500;
+  font-family: var(--names);
+  font-weight: 600;
   font-size: clamp(31px, 8.4vw, 48px);
   letter-spacing: 0.2em;
   text-indent: 0.2em;
@@ -153,19 +157,19 @@ main { position: relative; z-index: 1; }
   margin: 0;
 }
 .surname {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 10px;
-  letter-spacing: 0.42em;
-  text-indent: 0.42em;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.26em;
+  text-indent: 0.26em;
   color: var(--ink-faint);
   margin: 11px 0 0;
 }
 .amp {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 500;
   font-style: italic;
-  font-size: 26px;
+  font-size: 28px;
   color: var(--rose);
   margin: 14px 0 8px;
 }
@@ -173,19 +177,19 @@ main { position: relative; z-index: 1; }
 .countdown { display: flex; justify-content: center; gap: clamp(14px, 5vw, 32px); margin-top: 40px; }
 .countdown div { min-width: 46px; }
 .countdown .n {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: 28px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 30px;
   line-height: 1;
   display: block;
   font-variant-numeric: tabular-nums;
 }
 .countdown .u {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 8px;
-  letter-spacing: 0.26em;
-  text-indent: 0.26em;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-indent: 0.14em;
   color: var(--ink-faint);
   display: block;
   margin-top: 9px;
@@ -205,14 +209,14 @@ main { position: relative; z-index: 1; }
 .track { display: inline-flex; align-items: center; gap: 26px; animation: run 26s linear infinite; }
 @keyframes run { to { transform: translateX(-50%) } }
 .track em {
-  font-family: var(--serif);
+  font-family: var(--ui);
   font-style: normal;
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.3em;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.16em;
   color: var(--ink);
 }
-.track i { color: var(--sky); font-style: normal; font-size: 9px; }
+.track i { color: var(--sky); font-style: normal; font-size: 11px; }
 
 /* ==================================================================
    Verse
@@ -220,11 +224,11 @@ main { position: relative; z-index: 1; }
 
 .verse-body { font-size: clamp(16px, 4.2vw, 18px); line-height: 2.1; margin: 0; }
 .verse-ref {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-indent: 0.3em;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
   color: var(--ink-soft);
   margin: 20px 0 0;
 }
@@ -245,17 +249,17 @@ main { position: relative; z-index: 1; }
 .datecard__num { text-align: center; line-height: 1; }
 .dc-weekday, .dc-month {
   display: block;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 9px;
-  letter-spacing: 0.28em;
-  text-indent: 0.28em;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-indent: 0.16em;
   color: var(--ink-faint);
 }
 .dc-day {
   display: block;
-  font-family: var(--serif);
-  font-weight: 500;
+  font-family: var(--display);
+  font-weight: 600;
   font-size: clamp(66px, 17vw, 96px);
   line-height: .92;
   margin: 10px 0;
@@ -347,10 +351,10 @@ main { position: relative; z-index: 1; }
 }
 .timeline li:hover::before { background: var(--sky); transform: scale(1.25); }
 .timeline .t {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 15px;
-  letter-spacing: 0.1em;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.04em;
   color: var(--ink);
 }
 .timeline .d { font-size: 15px; line-height: 1.9; color: var(--ink-soft); }
@@ -385,23 +389,23 @@ main { position: relative; z-index: 1; }
 .chip:hover span, .chip:focus-visible span { transform: translateY(-6px); }
 .chip b {
   display: block;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.16em;
+  font-size: 15px;
+  letter-spacing: 0.01em;
   margin-top: 13px;
 }
 .chip i {
   display: block;
-  font-family: var(--serif);
+  font-family: var(--ui);
   font-style: normal;
   font-weight: 500;
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   color: var(--ink-faint);
   margin-top: 4px;
 }
-.hint { font-size: 12px; color: var(--ink-faint); margin: 20px 0 0; }
+.hint { font-family: var(--ui); font-size: 13px; color: var(--ink-faint); margin: 20px 0 0; }
 
 /* ==================================================================
    Getting there
@@ -437,11 +441,11 @@ main { position: relative; z-index: 1; }
 .wish-list li { padding: 22px 0; border-bottom: 0.5px solid var(--nude); }
 .wish-list li:last-child { border-bottom: 0; }
 .wish-list .who {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.24em;
-  text-indent: 0.24em;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-indent: 0.12em;
   color: var(--ink-faint);
   display: block;
   margin-bottom: 10px;
@@ -451,11 +455,11 @@ main { position: relative; z-index: 1; }
 form { max-width: 420px; }
 label {
   display: block;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 10px;
-  letter-spacing: 0.26em;
-  text-indent: 0.26em;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-indent: 0.12em;
   color: var(--ink-faint);
   margin: 22px 0 8px;
 }
@@ -474,7 +478,7 @@ input[type=text], textarea {
 }
 input:focus, textarea:focus { outline: none; border-bottom-color: var(--sky); }
 textarea { resize: vertical; min-height: 84px; line-height: 1.85; }
-.status { font-size: 14px; color: var(--ink-soft); margin-top: 16px; min-height: 20px; }
+.status { font-family: var(--ui); font-size: 14px; color: var(--ink-soft); margin-top: 16px; min-height: 20px; }
 
 /* --- gallery ------------------------------------------------------ */
 
@@ -485,13 +489,13 @@ textarea { resize: vertical; min-height: 84px; line-height: 1.85; }
 
 footer { padding: clamp(64px, 12vw, 100px) 0 clamp(84px, 16vw, 130px); }
 .foot-bow { width: 46px; margin: 0 auto 26px; display: block; }
-footer p { font-size: 13px; color: var(--ink-faint); margin: 0; }
+footer p { font-size: 14px; color: var(--ink-faint); margin: 0; }
 .footer-names {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-indent: 0.3em;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
   margin-top: 16px;
 }
 
@@ -512,7 +516,7 @@ footer p { font-size: 13px; color: var(--ink-faint); margin: 0; }
   transition: transform .45s cubic-bezier(.22,.61,.36,1);
 }
 #minibar.show { transform: none; }
-#minibar span { font-family: var(--serif); font-weight: 600; font-size: 9px; letter-spacing: 0.28em; }
+#minibar span { font-family: var(--ui); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; }
 #minibar .mb-date { color: var(--ink-faint); }
 
 /* --- motion --------------------------------------------------------- */
