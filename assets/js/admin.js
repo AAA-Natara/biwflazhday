@@ -1,5 +1,5 @@
-import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=8';
-import { shrink } from '../lib/image-resize.js?v=8';
+import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=10';
+import { shrink } from '../lib/image-resize.js?v=10';
 
 const $ = id => document.getElementById(id);
 const dirty = new Map();          // key -> new value, for site_content only
@@ -127,7 +127,7 @@ function enterApp() {
   window.scrollTo(0, 0);
   openTab('content');
   // Loaded up front so the tab counts are right before anything is clicked.
-  loadGuests();
+  loadReplies();
   loadWishes();
 }
 
@@ -136,6 +136,7 @@ function enterApp() {
 const LOADERS = {
   content:  () => loadContent(),
   settings: () => loadSettings(),
+  replies:  () => loadReplies(),
   guests:   () => loadGuests(),
   gallery:  () => { loadGallery('hero'); loadGallery('gallery'); },
   wishes:   () => loadWishes()
@@ -446,6 +447,93 @@ async function loadGuests() {
   }
 }
 
+/* ================= replies ================= */
+
+// Read-only view of who is coming. Kept apart from the guest list so that
+// checking a reply never sits next to a delete button.
+async function loadReplies() {
+  const box = $('replies-list');
+  const tally = $('tally');
+  const { data, error } = await sb.from('guests')
+    .select('id,name_th,group_tag,rsvp(attending,note,responded_at)')
+    .order('name_th');
+
+  if (error || !data) { box.innerHTML = '<p class="dim">โหลดข้อมูลไม่สำเร็จ</p>'; return; }
+
+  const reply = g => (Array.isArray(g.rsvp) ? g.rsvp[0] : g.rsvp) || null;
+  const yes = data.filter(g => reply(g)?.attending);
+  const no = data.filter(g => reply(g) && !reply(g).attending);
+  const wait = data.filter(g => !reply(g));
+
+  tally.innerHTML = '';
+  [['yes', yes.length, 'มาร่วมงาน'], ['no', no.length, 'ไม่สะดวก'], ['wait', wait.length, 'ยังไม่ตอบ']]
+    .forEach(([cls, n, label]) => {
+      const d = document.createElement('div');
+      d.className = cls;
+      const b = document.createElement('b');
+      b.textContent = n;
+      const s = document.createElement('span');
+      s.textContent = label;
+      d.append(b, s);
+      tally.appendChild(d);
+    });
+
+  badge('replies', `${yes.length}/${data.length}`);
+
+  box.innerHTML = '';
+  if (!data.length) { box.innerHTML = '<p class="dim">ยังไม่มีรายชื่อแขก</p>'; return; }
+
+  const section = (title, rows, showWhen) => {
+    if (!rows.length) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'rgroup';
+    const h = document.createElement('h3');
+    h.textContent = `${title} · ${rows.length} คน`;
+    const ul = document.createElement('ul');
+
+    for (const g of rows) {
+      const r = reply(g);
+      const li = document.createElement('li');
+
+      const line = document.createElement('div');
+      const who = document.createElement('span');
+      who.className = 'who';
+      who.textContent = g.name_th;
+      line.appendChild(who);
+
+      if (showWhen && r?.responded_at) {
+        const when = document.createElement('span');
+        when.className = 'when';
+        when.textContent = new Date(r.responded_at).toLocaleDateString('th-TH', {
+          day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+        });
+        line.appendChild(when);
+      }
+      if (g.group_tag) {
+        const tag = document.createElement('span');
+        tag.className = 'src';
+        tag.textContent = g.group_tag;
+        line.appendChild(tag);
+      }
+      li.appendChild(line);
+
+      if (r?.note) {
+        const said = document.createElement('p');
+        said.className = 'said';
+        said.textContent = r.note;
+        li.appendChild(said);
+      }
+      ul.appendChild(li);
+    }
+    wrap.append(h, ul);
+    box.appendChild(wrap);
+  };
+
+  section('มาร่วมงาน', yes, true);
+  section('ไม่สะดวก', no, true);
+  section('ยังไม่ตอบ', wait, false);
+}
+
 /* ================= gallery ================= */
 
 async function loadGallery(kind = 'gallery') {
@@ -560,7 +648,7 @@ function badge(tab, text) {
 async function loadWishes() {
   const box = $('wishes-list');
   const { data } = await sb.from('wishes')
-    .select('id,display_name,message,approved,created_at')
+    .select('id,display_name,message,approved,created_at,source')
     .order('approved').order('created_at', { ascending: false });
 
   if (!data || !data.length) {
@@ -587,6 +675,13 @@ async function loadWishes() {
       day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
     }) + (w.approved ? ' · แสดงอยู่' : ' · รออนุมัติ');
     head.append(who, when);
+
+    if (w.source === 'rsvp') {
+      const src = document.createElement('span');
+      src.className = 'src';
+      src.textContent = 'จากการ์ดเชิญ';
+      head.appendChild(src);
+    }
 
     const msg = document.createElement('p');
     msg.className = 'wish__msg';

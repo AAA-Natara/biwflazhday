@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;700&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/admin.css?v=8">
+<link rel="stylesheet" href="../assets/css/admin.css?v=10">
 </head>
 <body>
 
@@ -41,6 +41,7 @@
     <nav class="tabs" id="tabs">
       <button type="button" data-tab="content" class="on">ข้อความ</button>
       <button type="button" data-tab="settings">ตั้งค่า</button>
+      <button type="button" data-tab="replies">การตอบรับ</button>
       <button type="button" data-tab="guests">รายชื่อแขก</button>
       <button type="button" data-tab="gallery">รูปภาพ</button>
       <button type="button" data-tab="wishes">คำอวยพร</button>
@@ -61,9 +62,15 @@
       <div id="settings-list" class="stack"><p class="dim">กำลังโหลด…</p></div>
     </section>
 
+    <!-- ---- replies ---- -->
+    <section id="tab-replies" class="tab" hidden>
+      <div class="tally" id="tally"></div>
+      <div id="replies-list" class="stack"><p class="dim">กำลังโหลด…</p></div>
+    </section>
+
     <!-- ---- guests ---- -->
     <section id="tab-guests" class="tab" hidden>
-      <p class="lede">เพิ่มรายชื่อแล้วคัดลอกลิงก์การ์ดส่วนตัวไปส่งทาง LINE ลิงก์แต่ละใบมีรหัสเฉพาะ เดาไม่ได้</p>
+      <p class="lede">เพิ่มรายชื่อแล้วคัดลอกลิงก์การ์ดส่วนตัวไปส่งทาง LINE ดูว่าใครตอบรับแล้วได้ที่แท็บการตอบรับ</p>
 
       <div class="group">
         <h2>เพิ่มรายชื่อ</h2>
@@ -148,6 +155,6 @@
   <p class="toast" id="toast" hidden></p>
 </div>
 
-<script type="module" src="../assets/js/admin.js?v=8"></script>
+<script type="module" src="../assets/js/admin.js?v=10"></script>
 </body>
 </html>

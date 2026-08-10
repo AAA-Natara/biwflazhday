@@ -321,3 +321,59 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
 }
 .badge:empty { display: none; }
 .tabs button.on .badge { background: var(--sky); color: var(--paper); }
+
+/* --- attendance ---------------------------------------------------- */
+
+.tally { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 22px; }
+.tally div {
+  background: var(--paper);
+  border: 0.5px solid var(--nude);
+  border-radius: 4px;
+  padding: 18px 14px;
+  text-align: center;
+}
+.tally b {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1;
+}
+.tally span { display: block; font-family: var(--thai); font-size: 13px; color: var(--ink-soft); margin-top: 8px; }
+.tally .yes b { color: var(--ok); }
+.tally .no b  { color: var(--warn); }
+.tally .wait b { color: var(--ink-faint); }
+
+.rgroup { margin-bottom: 26px; }
+.rgroup > h3 {
+  font-family: var(--thai);
+  font-weight: 400;
+  font-size: 16px;
+  margin: 0 0 10px;
+  color: var(--ink-soft);
+}
+.rgroup ul { list-style: none; margin: 0; padding: 0; background: var(--paper); border: 0.5px solid var(--nude); border-radius: 4px; }
+.rgroup li { padding: 14px 18px; border-bottom: 0.5px solid var(--nude); }
+.rgroup li:last-child { border-bottom: 0; }
+.rgroup .who { font-family: var(--thai); font-size: 16px; }
+.rgroup .when { font-family: var(--thai); font-size: 12px; color: var(--ink-faint); margin-left: 8px; }
+.rgroup .said {
+  font-family: var(--thai);
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink-soft);
+  margin: 7px 0 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--nude);
+}
+
+.src {
+  display: inline-block;
+  font-family: var(--thai);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--nude-bg);
+  color: var(--ink-soft);
+  margin-left: 8px;
+}
