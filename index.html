@@ -12,7 +12,7 @@
 <meta name="theme-color" content="#FDFBF7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=DM+Sans:wght@500;700&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Italiana&family=Parisienne&family=DM+Sans:wght@400;500&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -38,6 +38,11 @@
       <svg class="fl" data-depth="-27" style="right:5%;bottom:14%" viewBox="0 0 50 24" fill="none" stroke="var(--sky)" stroke-width="1" stroke-linecap="round"><path d="M3 12C11 3 19 21 27 12C35 3 43 21 47 12"/></svg>
     </div>
 
+    <figure class="portrait" id="portrait" hidden>
+      <div class="portrait__stack" id="portrait-stack"></div>
+      <div class="portrait__dots" id="portrait-dots" role="tablist" aria-label="เลือกภาพ"></div>
+    </figure>
+
     <p class="eyebrow" data-key="hero.eyebrow">the wedding of</p>
     <p class="name" data-key="hero.bride_first">WORAWAN</p>
     <p class="surname" data-key="hero.bride_last">SONGTHONGTHAM</p>
@@ -53,8 +58,6 @@
     </div>
   </div>
 </section>
-
-<div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
 
 <!-- ============ VERSE ============ -->
 <section id="verse" class="band band--nude reveal">
@@ -189,6 +192,11 @@
     <div class="grid"></div>
   </div>
 </section>
+
+<dialog id="lightbox" class="lightbox">
+  <button type="button" class="lightbox__close" id="lb-close" aria-label="ปิด">×</button>
+  <img id="lb-img" alt="">
+</dialog>
 
 <!-- ============ RSVP ============ -->
 <section id="rsvp-note" class="band band--nude reveal">

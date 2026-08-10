@@ -71,21 +71,54 @@ function splitNames() {
   if (surs[1]) surs[1].style.animationDelay = '1.2s';
 }
 
-// Marquee: the strip is duplicated so translateX(-50%) loops seamlessly.
-function fillMarquee() {
-  const track = document.getElementById('track');
-  if (!track) return;
-  const items = ['WORAWAN & CHAT', '21 . 11 . 2026', 'MUANGTHONG CHURCH', '14:00', 'SAVE THE DATE'];
-  const run = items.map(t => {
-    const em = document.createElement('em');
-    em.textContent = t;
-    const i = document.createElement('i');
-    i.textContent = '\u25C6';
-    return [em, i];
-  }).flat();
-  for (let copy = 0; copy < 4; copy++) {
-    run.forEach(node => track.appendChild(node.cloneNode(true)));
+// Hero slideshow. Rebuilt whenever content-loader finishes, since the photo
+// list only exists after Supabase answers.
+let slideTimer;
+function startPortrait() {
+  const stack = document.getElementById('portrait-stack');
+  const dots = document.getElementById('portrait-dots');
+  if (!stack) return;
+  const slides = [...stack.querySelectorAll('img')];
+  if (!slides.length) return;
+
+  const buttons = dots ? [...dots.querySelectorAll('button')] : [];
+  let i = 0;
+
+  const show = (next) => {
+    i = (next + slides.length) % slides.length;
+    slides.forEach((s, n) => s.classList.toggle('on', n === i));
+    buttons.forEach((b, n) => b.setAttribute('aria-selected', String(n === i)));
+  };
+
+  buttons.forEach((b, n) => b.addEventListener('click', () => { show(n); restart(); }));
+
+  function restart() {
+    clearInterval(slideTimer);
+    if (slides.length > 1 && !reduce) slideTimer = setInterval(() => show(i + 1), 5200);
   }
+
+  show(0);
+  restart();
+  redraw();
+}
+document.addEventListener('portrait:ready', startPortrait);
+
+// Tapping a gallery photo opens it full size.
+function bindLightbox() {
+  const box = document.getElementById('lightbox');
+  const img = document.getElementById('lb-img');
+  const grid = document.querySelector('#gallery .grid');
+  if (!box || !img || !grid) return;
+
+  grid.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-full]');
+    if (!btn) return;
+    img.src = btn.dataset.full;
+    img.alt = btn.querySelector('img')?.alt || '';
+    box.showModal();
+  });
+  document.getElementById('lb-close')?.addEventListener('click', () => box.close());
+  box.addEventListener('click', (e) => { if (e.target === box) box.close(); });
 }
 
 // Hero motifs drift with the pointer. Touch devices simply never fire this.
@@ -257,9 +290,9 @@ document.getElementById('wish-form')?.addEventListener('submit', async (e) => {
 /* ---------- boot ------------------------------------------------------ */
 
 splitNames();
-fillMarquee();
 bindParallax();
 bindPalette();
+bindLightbox();
 buildMap();
 bindMiniBar();
 

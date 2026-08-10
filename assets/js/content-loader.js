@@ -41,21 +41,64 @@ async function apply({ content, config, photos }) {
   }
 
   if (photos) {
+    const hero = photos.filter(p => p.kind === 'hero');
+    const rest = photos.filter(p => p.kind !== 'hero');
+
+    await buildPortrait(hero);
+
     const grid = document.querySelector('#gallery .grid');
-    const show = settings.show_gallery && photos.length > 0;
+    const show = settings.show_gallery && rest.length > 0;
     toggle('gallery', show);
     if (show && grid) {
       grid.innerHTML = '';
-      for (const p of photos) {
+      for (const p of rest) {
+        const url = await publicImageUrl(p.storage_path);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.full = url;
         const img = document.createElement('img');
-        img.src = await publicImageUrl(p.storage_path);
+        img.src = url;
         img.alt = p.caption || 'ภาพคู่บ่าวสาว';
         img.loading = 'lazy';
         img.decoding = 'async';
-        grid.appendChild(img);
+        btn.appendChild(img);
+        grid.appendChild(btn);
       }
     }
   }
+}
+
+// The hero photo frame stays hidden until there is something to show, so the
+// page never reserves space for an empty box.
+async function buildPortrait(hero) {
+  const fig = document.getElementById('portrait');
+  const stack = document.getElementById('portrait-stack');
+  const dots = document.getElementById('portrait-dots');
+  if (!fig || !stack || !dots) return;
+
+  if (!hero.length) { fig.hidden = true; return; }
+
+  stack.innerHTML = '';
+  dots.innerHTML = '';
+
+  for (const [i, p] of hero.entries()) {
+    const img = document.createElement('img');
+    img.src = await publicImageUrl(p.storage_path);
+    img.alt = p.caption || 'ภาพคู่บ่าวสาว';
+    img.decoding = 'async';
+    if (i > 0) img.loading = 'lazy';
+    stack.appendChild(img);
+
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', `ภาพที่ ${i + 1}`);
+    dot.setAttribute('aria-selected', String(i === 0));
+    dots.appendChild(dot);
+  }
+  dots.hidden = hero.length < 2;
+  fig.hidden = false;
+  document.dispatchEvent(new CustomEvent('portrait:ready'));
 }
 
 export async function loadContent() {
@@ -71,7 +114,7 @@ export async function loadContent() {
     const [content, config, photos] = await Promise.all([
       sb.from('site_content').select('key,value_th,value_en'),
       sb.from('site_settings').select('key,value'),
-      sb.from('gallery').select('storage_path,caption').order('sort_order')
+      sb.from('gallery').select('storage_path,caption,kind').order('sort_order')
     ]);
 
     const payload = {

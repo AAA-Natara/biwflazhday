@@ -62,10 +62,17 @@ create table if not exists public.gallery (
   id           uuid primary key default gen_random_uuid(),
   storage_path text not null,
   caption      text,
+  kind         text not null default 'gallery' check (kind in ('hero','gallery')),
   sort_order   int not null default 0,
   is_visible   boolean not null default true,
   created_at   timestamptz not null default now()
 );
+
+-- For projects created before the hero slideshow existed.
+alter table public.gallery add column if not exists kind text not null default 'gallery';
+do $$ begin
+  alter table public.gallery add constraint gallery_kind_check check (kind in ('hero','gallery'));
+exception when duplicate_object then null; end $$;
 
 create table if not exists public.card_views (
   id       bigserial primary key,
@@ -74,7 +81,7 @@ create table if not exists public.card_views (
 );
 
 create index if not exists idx_wishes_approved on public.wishes (approved, created_at desc);
-create index if not exists idx_gallery_order   on public.gallery (is_visible, sort_order);
+create index if not exists idx_gallery_order   on public.gallery (kind, is_visible, sort_order);
 
 -- ---------------------------------------------------------------
 -- 2. Helper

@@ -113,7 +113,8 @@ function enterApp() {
   $('app').hidden = false;
   loadContent();
   loadSettings();
-  loadGallery();
+  loadGallery('hero');
+  loadGallery('gallery');
   loadWishes();
 }
 
@@ -271,9 +272,10 @@ async function loadSettings() {
 
 /* ================= gallery ================= */
 
-async function loadGallery() {
-  const box = $('gallery-list');
-  const { data } = await sb.from('gallery').select('id,storage_path,sort_order').order('sort_order');
+async function loadGallery(kind = 'gallery') {
+  const box = $(kind === 'hero' ? 'hero-list' : 'gallery-list');
+  const { data } = await sb.from('gallery')
+    .select('id,storage_path,sort_order,kind').eq('kind', kind).order('sort_order');
   if (!data || !data.length) { box.innerHTML = '<p class="dim">ยังไม่มีรูป</p>'; return; }
 
   box.innerHTML = '';
@@ -295,14 +297,14 @@ async function loadGallery() {
     up.textContent = '←';
     up.title = 'เลื่อนไปก่อนหน้า';
     up.disabled = i === 0;
-    up.addEventListener('click', () => swap(data, i, i - 1));
+    up.addEventListener('click', () => swap(data, i, i - 1, kind));
 
     const down = document.createElement('button');
     down.className = 'ghost';
     down.textContent = '→';
     down.title = 'เลื่อนไปถัดไป';
     down.disabled = i === data.length - 1;
-    down.addEventListener('click', () => swap(data, i, i + 1));
+    down.addEventListener('click', () => swap(data, i, i + 1, kind));
 
     const del = document.createElement('button');
     del.className = 'ghost ghost--danger';
@@ -312,7 +314,7 @@ async function loadGallery() {
       await sb.storage.from(STORAGE_BUCKET).remove([row.storage_path]);
       await sb.from('gallery').delete().eq('id', row.id);
       toast('ลบแล้ว');
-      loadGallery();
+      loadGallery(kind);
     });
 
     bar.append(up, down, del);
@@ -321,40 +323,49 @@ async function loadGallery() {
   });
 }
 
-async function swap(rows, a, b) {
+async function swap(rows, a, b, kind) {
   await Promise.all([
     sb.from('gallery').update({ sort_order: b * 10 }).eq('id', rows[a].id),
     sb.from('gallery').update({ sort_order: a * 10 }).eq('id', rows[b].id)
   ]);
-  loadGallery();
+  loadGallery(kind);
 }
 
-$('file-input').addEventListener('change', async (e) => {
-  const files = [...e.target.files];
-  if (!files.length) return;
-  const msg = $('upload-msg');
-  let done = 0;
+function bindUploader(inputId, msgId, kind) {
+  const input = $(inputId);
+  if (!input) return;
+  input.addEventListener('change', async (e) => {
+    const files = [...e.target.files];
+    if (!files.length) return;
+    const msg = $(msgId);
+    let done = 0;
 
-  for (const file of files) {
-    msg.textContent = `กำลังอัปโหลด ${done + 1} จาก ${files.length}…`;
-    try {
-      const { blob, name, type } = await shrink(file);
-      const path = `gallery/${name}`;
-      const { error: upErr } = await sb.storage.from(STORAGE_BUCKET)
-        .upload(path, blob, { contentType: type, cacheControl: '31536000' });
-      if (upErr) throw upErr;
-      await sb.from('gallery').insert({ storage_path: path, sort_order: Date.now() % 100000 });
-      done++;
-    } catch (err) {
-      console.warn(err);
-      msg.textContent = 'อัปโหลดไม่สำเร็จ: ' + (err.message || 'ไม่ทราบสาเหตุ');
-      return;
+    for (const file of files) {
+      msg.textContent = `กำลังอัปโหลด ${done + 1} จาก ${files.length}…`;
+      try {
+        const { blob, name, type } = await shrink(file);
+        const path = `${kind}/${name}`;
+        const { error: upErr } = await sb.storage.from(STORAGE_BUCKET)
+          .upload(path, blob, { contentType: type, cacheControl: '31536000' });
+        if (upErr) throw upErr;
+        await sb.from('gallery').insert({
+          storage_path: path, kind, sort_order: Date.now() % 100000
+        });
+        done++;
+      } catch (err) {
+        console.warn(err);
+        msg.textContent = 'อัปโหลดไม่สำเร็จ: ' + (err.message || 'ไม่ทราบสาเหตุ');
+        return;
+      }
     }
-  }
-  msg.textContent = `อัปโหลดแล้ว ${done} รูป`;
-  e.target.value = '';
-  loadGallery();
-});
+    msg.textContent = `อัปโหลดแล้ว ${done} รูป`;
+    e.target.value = '';
+    loadGallery(kind);
+  });
+}
+
+bindUploader('hero-input', 'hero-msg', 'hero');
+bindUploader('file-input', 'upload-msg', 'gallery');
 
 /* ================= wishes ================= */
 

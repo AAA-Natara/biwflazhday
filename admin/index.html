@@ -62,13 +62,29 @@
     <!-- ---- gallery ---- -->
     <section id="tab-gallery" class="tab" hidden>
       <p class="lede">รูปจะถูกย่อให้ด้านยาวไม่เกิน 1600px และแปลงเป็น WebP ในเครื่องก่อนอัปโหลด</p>
-      <div class="uploader">
-        <label class="btn" for="file-input">เลือกรูป</label>
-        <input type="file" id="file-input" accept="image/*" multiple hidden>
-        <span class="dim" id="upload-msg"></span>
+
+      <div class="group">
+        <h2>รูปบนหัวเว็บ</h2>
+        <p class="group__hint">แนะนำ 3–4 รูป แนวตั้งอัตราส่วน 3:4 จะหมุนสลับกันอัตโนมัติทุก 5 วินาที</p>
+        <div class="uploader">
+          <label class="btn" for="hero-input">เลือกรูป</label>
+          <input type="file" id="hero-input" accept="image/*" multiple hidden>
+          <span class="dim" id="hero-msg"></span>
+        </div>
+        <div id="hero-list" class="thumbs"><p class="dim">กำลังโหลด…</p></div>
       </div>
-      <div id="gallery-list" class="thumbs"><p class="dim">กำลังโหลด…</p></div>
-      <p class="note">อย่าลืมเปิดสวิตช์ "แสดงแกลเลอรี" ในแท็บตั้งค่า มิฉะนั้นรูปจะไม่ขึ้นบนหน้าเว็บ</p>
+
+      <div class="group" style="margin-top:14px">
+        <h2>แกลเลอรี</h2>
+        <p class="group__hint">รูปในส่วนแกลเลอรีของหน้าเว็บ กดดูขนาดเต็มได้</p>
+        <div class="uploader">
+          <label class="btn" for="file-input">เลือกรูป</label>
+          <input type="file" id="file-input" accept="image/*" multiple hidden>
+          <span class="dim" id="upload-msg"></span>
+        </div>
+        <div id="gallery-list" class="thumbs"><p class="dim">กำลังโหลด…</p></div>
+        <p class="note">อย่าลืมเปิดสวิตช์ "แสดงแกลเลอรี" ในแท็บตั้งค่า มิฉะนั้นรูปจะไม่ขึ้นบนหน้าเว็บ</p>
+      </div>
     </section>
 
     <!-- ---- wishes ---- -->
