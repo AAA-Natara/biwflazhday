@@ -1,9 +1,9 @@
 // Boot order matters: the ribbon, countdown and reveal must all work with no
 // network at all. Supabase is touched only after the page already looks right.
 
-import { drawRibbon, animateRibbon, bindScrollDraw } from './ribbon.js?v=7';
-import { loadContent, settings } from './content-loader.js?v=7';
-import { getClient } from './supabase-client.js?v=7';
+import { drawRibbon, animateRibbon, bindScrollDraw } from './ribbon.js?v=9';
+import { loadContent, settings } from './content-loader.js?v=9';
+import { getClient } from './supabase-client.js?v=9';
 
 document.documentElement.classList.add('js');
 
@@ -282,7 +282,14 @@ document.getElementById('wish-form')?.addEventListener('submit', async (e) => {
     p_message: document.getElementById('wish-message').value,
     p_slug: new URLSearchParams(location.search).get('g')
   });
-  if (error) { status.textContent = 'ส่งไม่สำเร็จ กรุณาลองอีกครั้ง'; return; }
+  if (error) {
+    // The real message is shown on purpose: a silent "try again" hides
+    // whether the row was rejected, the function is missing, or the key is
+    // wrong, and there is no way to tell them apart from the outside.
+    console.error('submit_wish failed', error);
+    status.textContent = 'ส่งไม่สำเร็จ · ' + (error.message || error.code || 'ไม่ทราบสาเหตุ');
+    return;
+  }
   form.reset();
   status.textContent = 'ส่งแล้ว คำอวยพรจะขึ้นหลังเจ้าภาพตรวจ';
 });
@@ -295,7 +302,7 @@ bindPalette();
 bindLightbox();
 // Loaded on its own so a missing or blocked file can never take the rest of
 // the page down with it.
-import('./sparkles.js?v=7')
+import('./sparkles.js?v=9')
   .then(mod => mod.startSparkles())
   .catch(err => console.warn('sparkles unavailable', err));
 buildMap();
