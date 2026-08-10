@@ -1,5 +1,5 @@
-import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=7';
-import { shrink } from '../lib/image-resize.js?v=7';
+import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=8';
+import { shrink } from '../lib/image-resize.js?v=8';
 
 const $ = id => document.getElementById(id);
 const dirty = new Map();          // key -> new value, for site_content only
@@ -125,21 +125,46 @@ function enterApp() {
   $('login').hidden = true;
   $('app').hidden = false;
   window.scrollTo(0, 0);
-  loadContent();
-  loadSettings();
+  openTab('content');
+  // Loaded up front so the tab counts are right before anything is clicked.
   loadGuests();
-  loadGallery('hero');
-  loadGallery('gallery');
   loadWishes();
 }
 
 /* ================= tabs ================= */
 
+const LOADERS = {
+  content:  () => loadContent(),
+  settings: () => loadSettings(),
+  guests:   () => loadGuests(),
+  gallery:  () => { loadGallery('hero'); loadGallery('gallery'); },
+  wishes:   () => loadWishes()
+};
+
+let currentTab = 'content';
+
+function openTab(name) {
+  currentTab = name;
+  document.querySelectorAll('#tabs button')
+    .forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  document.querySelectorAll('.tab')
+    .forEach(t => { t.hidden = t.id !== `tab-${name}`; });
+  // Data is re-read on every visit: a reply that arrived while this page sat
+  // open would otherwise stay invisible until a full reload.
+  LOADERS[name]?.();
+}
+
 $('tabs').addEventListener('click', (e) => {
   const btn = e.target.closest('button[data-tab]');
   if (!btn) return;
-  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b === btn));
-  document.querySelectorAll('.tab').forEach(t => { t.hidden = t.id !== `tab-${btn.dataset.tab}`; });
+  if (dirty.size && currentTab === 'content' &&
+      !confirm('ยังมีข้อความที่แก้ค้างไว้และยังไม่บันทึก ออกจากแท็บนี้เลยไหม')) return;
+  openTab(btn.dataset.tab);
+});
+
+$('refresh').addEventListener('click', () => {
+  LOADERS[currentTab]?.();
+  toast('อัปเดตข้อมูลแล้ว');
 });
 
 /* ================= content ================= */
@@ -332,7 +357,7 @@ $('guest-form').addEventListener('submit', async (e) => {
 async function loadGuests() {
   const box = $('guest-list');
   const { data, error } = await sb.from('guests')
-    .select('id,slug,name_th,message,group_tag,rsvp(attending,note)')
+    .select('id,slug,name_th,message,group_tag,rsvp(attending,note,responded_at)')
     .order('created_at', { ascending: false });
 
   if (error) { box.innerHTML = '<p class="dim">โหลดรายชื่อไม่สำเร็จ</p>'; return; }
@@ -348,8 +373,17 @@ async function loadGuests() {
     if (r?.attending) { yes++; seats++; }
     else if (r) no++;
   }
+  const waiting = data.length - yes - no;
   $('guest-summary').textContent =
-    `เชิญ ${data.length} รายชื่อ · ตอบรับ ${yes} · ไม่สะดวก ${no} · รอตอบ ${data.length - yes - no} · รวมผู้ร่วมงาน ${seats} คน`;
+    `เชิญ ${data.length} คน · มาร่วมงาน ${yes} · ไม่สะดวก ${no} · ยังไม่ตอบ ${waiting}`;
+  badge('guests', `${yes}/${data.length}`);
+
+  // Answered first, newest answer at the top, then everyone still pending.
+  const rank = g => {
+    const r = Array.isArray(g.rsvp) ? g.rsvp[0] : g.rsvp;
+    return r ? 0 : 1;
+  };
+  data.sort((a, b) => rank(a) - rank(b));
 
   box.innerHTML = '';
   for (const g of data) {
@@ -370,7 +404,11 @@ async function loadGuests() {
 
     const meta = document.createElement('div');
     meta.className = 'guest__meta';
-    meta.textContent = [g.slug, g.group_tag, g.message, r?.note].filter(Boolean).join(' · ');
+    const when = r?.responded_at
+      ? new Date(r.responded_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+      : null;
+    meta.textContent = [g.slug, g.group_tag, when && `ตอบเมื่อ ${when}`, r?.note && `“${r.note}”`]
+      .filter(Boolean).join(' · ');
 
     left.append(name, meta);
 
@@ -507,13 +545,32 @@ bindUploader('file-input', 'upload-msg', 'gallery');
 
 /* ================= wishes ================= */
 
+function badge(tab, text) {
+  const btn = document.querySelector(`#tabs button[data-tab="${tab}"]`);
+  if (!btn) return;
+  let el = btn.querySelector('.badge');
+  if (!el) {
+    el = document.createElement('span');
+    el.className = 'badge';
+    btn.appendChild(el);
+  }
+  el.textContent = text;
+}
+
 async function loadWishes() {
   const box = $('wishes-list');
   const { data } = await sb.from('wishes')
     .select('id,display_name,message,approved,created_at')
     .order('approved').order('created_at', { ascending: false });
 
-  if (!data || !data.length) { box.innerHTML = '<p class="dim">ยังไม่มีคำอวยพร</p>'; return; }
+  if (!data || !data.length) {
+    box.innerHTML = '<p class="dim">ยังไม่มีคำอวยพร</p>';
+    badge('wishes', '');
+    return;
+  }
+
+  const pending = data.filter(w => !w.approved).length;
+  badge('wishes', pending ? `${pending} รอ` : '');
 
   box.innerHTML = '';
   for (const w of data) {
