@@ -108,17 +108,38 @@ function bindParallax() {
   });
 }
 
-// Buttons lean toward the cursor, then snap back.
-function bindMagnetic() {
-  if (reduce) return;
-  document.querySelectorAll('.link').forEach(el => {
-    el.addEventListener('pointermove', (e) => {
-      if (e.pointerType === 'touch') return;
-      const r = el.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;
-      el.style.transform = `translateX(${(x * 8).toFixed(1)}px)`;
+// The map is only pointed at the venue after the real address has loaded,
+// so the embed is never built twice with a stale query.
+export function buildMap() {
+  const frame = document.getElementById('map-frame');
+  if (!frame) return;
+  const venue = document.querySelector('[data-key="event.venue"]')?.textContent.trim() || '';
+  const addr = document.querySelector('[data-key="event.address"]')?.textContent.trim() || '';
+  const q = encodeURIComponent(`${venue} ${addr}`.trim());
+  const src = `https://www.google.com/maps?q=${q}&hl=th&z=16&output=embed`;
+  if (frame.dataset.src !== src) {
+    frame.dataset.src = src;
+    frame.src = src;
+  }
+}
+
+// Tapping a colour copies its hex, which is the one thing a guest actually
+// wants from a dress code: something to match fabric against.
+function bindPalette() {
+  const hint = document.getElementById('copy-hint');
+  const original = hint?.textContent || '';
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', async () => {
+      const hex = chip.dataset.hex || '';
+      try {
+        await navigator.clipboard.writeText(hex);
+        if (hint) hint.textContent = `คัดลอก ${hex} แล้ว`;
+      } catch {
+        if (hint) hint.textContent = `รหัสสีคือ ${hex}`;
+      }
+      clearTimeout(bindPalette.timer);
+      bindPalette.timer = setTimeout(() => { if (hint) hint.textContent = original; }, 2200);
     });
-    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
   });
 }
 
@@ -238,7 +259,8 @@ document.getElementById('wish-form')?.addEventListener('submit', async (e) => {
 splitNames();
 fillMarquee();
 bindParallax();
-bindMagnetic();
+bindPalette();
+buildMap();
 bindMiniBar();
 
 tickCountdown();
@@ -246,6 +268,7 @@ setInterval(tickCountdown, 1000);
 
 (async function boot() {
   await loadContent();
+  buildMap();
   tickCountdown();
   if (settings.show_wishes) loadWishes();
   redraw();
