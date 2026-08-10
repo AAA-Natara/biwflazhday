@@ -1,5 +1,5 @@
-import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=5';
-import { shrink } from '../lib/image-resize.js?v=5';
+import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=7';
+import { shrink } from '../lib/image-resize.js?v=7';
 
 const $ = id => document.getElementById(id);
 const dirty = new Map();          // key -> new value, for site_content only
@@ -14,7 +14,6 @@ const SECTION_TITLES = {
   theme:    ['สีของงาน',      'คำอธิบายใต้หัวข้อ'],
   travel:   ['การเดินทาง',    'ที่จอดรถและรถสาธารณะ'],
   story:    ['เรื่องราวของเรา', 'เปิดการแสดงผลได้ที่แท็บตั้งค่า'],
-  rsvp:     ['การตอบรับ',     'ข้อความชี้แจงบนหน้าแรก'],
   card:     ['การ์ดเชิญส่วนตัว', 'ข้อความบนหน้าการ์ดที่ส่งให้แขกรายคน'],
   footer:   ['ท้ายหน้า',      'บรรทัดปิดท้าย']
 };
