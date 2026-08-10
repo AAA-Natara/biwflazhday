@@ -67,7 +67,9 @@ body {
 .cover.opening { transform: scale(1.04); opacity: 0; pointer-events: none; }
 
 .cover__frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.cover > *:not(.cover__frame) { position: relative; }
+/* The hint pins itself to the bottom of the card, so it must stay out of
+   this rule — otherwise it drops into the flow and lands on the name. */
+.cover > *:not(.cover__frame):not(.cover__hint) { position: relative; }
 
 .cover__bow { width: 46%; max-width: 130px; margin-bottom: 9%; }
 
@@ -98,7 +100,11 @@ body {
   font-size: clamp(18px, 5vw, 21px);
   line-height: 1.45;
   color: var(--ink);
+  min-height: 1.45em;
+  opacity: 0;
+  transition: opacity .5s ease;
 }
+.cover__who.in { opacity: 1; }
 
 .cover__hint {
   position: absolute;
@@ -177,7 +183,11 @@ body {
   font-size: clamp(20px, 5.6vw, 25px);
   line-height: 1.45;
   margin: 0;
+  min-height: 1.45em;
+  opacity: 0;
+  transition: opacity .5s ease;
 }
+.c-who.in { opacity: 1; }
 .c-msg {
   font-family: var(--thai);
   font-weight: 300;

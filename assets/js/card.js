@@ -2,7 +2,7 @@
 // URL; without it there is no guest, so the page says so plainly rather than
 // pretending to work.
 
-import { getClient } from './supabase-client.js?v=5';
+import { getClient } from './supabase-client.js?v=6';
 
 const $ = id => document.getElementById(id);
 const slug = new URLSearchParams(location.search).get('g');
@@ -293,7 +293,7 @@ $('save-btn').addEventListener('click', async (e) => {
   const full = guest.name_th;
 
   const envName = $('env-name');
-  if (envName) envName.textContent = full;
+  if (envName) { envName.textContent = full; envName.classList.add('in'); }
 
   const msgEl = $('guest-msg');
   if (msgEl && guest.message) {
@@ -303,11 +303,12 @@ $('save-btn').addEventListener('click', async (e) => {
 
   const nameEl = $('guest-name');
   nameEl.textContent = full;
+  nameEl.classList.add('in');
   if (document.fonts) await document.fonts.ready;
 
   $('cover').addEventListener('click', openCard);
 
-  import('./sparkles.js?v=5')
+  import('./sparkles.js?v=6')
     .then(mod => mod.startSparkles())
     .catch(err => console.warn('sparkles unavailable', err));
   bindRsvp(sb, config);
