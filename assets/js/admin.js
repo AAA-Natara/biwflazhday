@@ -111,6 +111,7 @@ $('logout').addEventListener('click', async () => {
 function enterApp() {
   $('login').hidden = true;
   $('app').hidden = false;
+  window.scrollTo(0, 0);
   loadContent();
   loadSettings();
   loadGallery('hero');
