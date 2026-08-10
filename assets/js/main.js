@@ -4,7 +4,6 @@
 import { drawRibbon, animateRibbon, bindScrollDraw } from './ribbon.js';
 import { loadContent, settings } from './content-loader.js';
 import { getClient } from './supabase-client.js';
-import { startSparkles } from './sparkles.js';
 
 document.documentElement.classList.add('js');
 
@@ -294,7 +293,11 @@ splitNames();
 bindParallax();
 bindPalette();
 bindLightbox();
-startSparkles();
+// Loaded on its own so a missing or blocked file can never take the rest of
+// the page down with it.
+import('./sparkles.js')
+  .then(mod => mod.startSparkles())
+  .catch(err => console.warn('sparkles unavailable', err));
 buildMap();
 bindMiniBar();
 

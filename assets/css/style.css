@@ -672,20 +672,20 @@ footer p { font-size: 14px; color: var(--ink-faint); margin: 0; }
   opacity: 0;
   will-change: transform, opacity;
   animation:
-    rise var(--rise, 20s) linear var(--rise-delay, 0s) infinite,
-    twinkle var(--twinkle, 5s) ease-in-out var(--twinkle-delay, 0s) infinite;
+    dust-rise var(--rise, 20s) linear var(--rise-delay, 0s) infinite,
+    dust-twinkle var(--twinkle, 5s) ease-in-out var(--twinkle-delay, 0s) infinite;
 }
 
 /* The rise carries the sparkle upward and sideways; the twinkle handles
    opacity and scale. Keeping them on separate properties lets both run at
    once without one overwriting the other. */
-@keyframes rise {
+@keyframes dust-rise {
   from { translate: 0 0 }
   to   { translate: var(--sway, 0px) -130px }
 }
 
-@keyframes twinkle {
-  0%, 100% { opacity: 0;              scale: 0.4 }
+@keyframes dust-twinkle {
+  0%, 100% { opacity: 0;               scale: 0.4 }
   45%      { opacity: var(--peak, .7); scale: 1 }
   60%      { opacity: var(--peak, .7); scale: 0.94 }
 }
