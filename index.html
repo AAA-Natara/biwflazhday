@@ -37,23 +37,61 @@
     </div>
   </section>
 
+  <section id="verse" class="reveal">
+    <p class="verse-body" data-key="verse.text">ความรักนั้นก็อดทนนานและกระทำคุณให้ ความรักไม่อิจฉา ไม่อวดตัว ไม่หยิ่งผยอง</p>
+    <p class="verse-ref" data-key="verse.ref">1 โครินธ์ 13:4</p>
+  </section>
+
   <section id="event" class="reveal">
+    <p class="label" data-key="event.label">the day</p>
     <p class="lead" data-key="event.date">วันเสาร์ที่ 21 พฤศจิกายน 2569</p>
     <p class="detail" data-key="event.venue">คริสตจักรเมืองทอง</p>
+    <p class="muted" data-key="event.address">ถนนแจ้งวัฒนะ อำเภอปากเกร็ด จังหวัดนนทบุรี</p>
     <p class="muted" data-key="event.time">พิธีสมรส เวลา 14:00 น.</p>
-    <p style="margin-top:26px">
-      <a class="link" data-key="event.map_url" href="https://maps.google.com/?q=คริสตจักรเมืองทอง" target="_blank" rel="noopener">MAP</a>
-    </p>
+    <div class="row">
+      <a class="link" id="map-link" data-key="event.map_url" href="https://maps.google.com/?q=คริสตจักรเมืองทอง" target="_blank" rel="noopener">MAP</a>
+      <button type="button" class="link" id="ics-btn">ADD TO CALENDAR</button>
+    </div>
+  </section>
+
+  <section id="schedule" class="reveal">
+    <p class="label" data-key="schedule.label">schedule</p>
+    <ol class="timeline">
+      <li><span class="t" data-key="schedule.1_time">13:30</span><span class="d" data-key="schedule.1_text">แขกลงทะเบียนและเข้านั่งในห้องประชุม</span></li>
+      <li><span class="t" data-key="schedule.2_time">14:00</span><span class="d" data-key="schedule.2_text">พิธีสมรสเริ่ม กรุณามาถึงก่อนเวลา</span></li>
+      <li><span class="t" data-key="schedule.3_time">15:30</span><span class="d" data-key="schedule.3_text">ถ่ายภาพร่วมกับคู่บ่าวสาวและรับของที่ระลึก</span></li>
+    </ol>
   </section>
 
   <section id="theme" class="reveal">
-    <p class="label" data-key="theme.label">theme</p>
+    <p class="label" data-key="theme.label">dress code</p>
     <div class="swatches" role="img" aria-label="สีของงาน ฟ้าอ่อน ครีม ชมพูนวล และแดงเลือดหมู">
       <span style="background:#AEC6DA"></span>
       <span style="background:#E5D3C2"></span>
       <span style="background:#D6A2AC"></span>
       <span style="background:#5E2730"></span>
     </div>
+    <p class="detail" data-key="theme.note">ขอเชิญร่วมแต่งกายในโทนสีของงาน ฟ้าอ่อน ครีม ชมพูนวล หรือแดงเลือดหมู</p>
+  </section>
+
+  <section id="travel" class="reveal">
+    <p class="label" data-key="travel.label">getting there</p>
+    <div class="pair">
+      <p class="pair-h" data-key="travel.1_head">ที่จอดรถ</p>
+      <p class="body" data-key="travel.1_text">มีที่จอดรถภายในบริเวณคริสตจักร กรุณาเผื่อเวลาสำหรับการหาที่จอดในวันงาน</p>
+    </div>
+    <div class="pair">
+      <p class="pair-h" data-key="travel.2_head">รถสาธารณะ</p>
+      <p class="body" data-key="travel.2_text">สามารถเดินทางด้วยรถไฟฟ้าสายสีชมพู แล้วต่อรถรับจ้างเข้าสู่คริสตจักร</p>
+    </div>
+  </section>
+
+  <section id="faq" class="reveal">
+    <p class="label" data-key="faq.label">good to know</p>
+    <details><summary data-key="faq.1_q">พาเด็กมาร่วมงานได้ไหม</summary><p class="body" data-key="faq.1_a">ยินดีต้อนรับทุกท่านในครอบครัว หากเด็กร้องระหว่างพิธีสามารถพาออกมาที่โถงด้านนอกได้</p></details>
+    <details><summary data-key="faq.2_q">ถ่ายรูประหว่างพิธีได้ไหม</summary><p class="body" data-key="faq.2_a">ช่วงพิธีขอความกรุณางดถ่ายภาพและปิดเสียงโทรศัพท์ หลังพิธีเชิญถ่ายภาพได้เต็มที่</p></details>
+    <details><summary data-key="faq.3_q">ควรมาถึงกี่โมง</summary><p class="body" data-key="faq.3_a">ขอเชิญมาถึงก่อนเวลา 13:45 น. เพื่อลงทะเบียนและเข้านั่งก่อนพิธีเริ่ม</p></details>
+    <details><summary data-key="faq.4_q">มีงานเลี้ยงต่อหรือไม่</summary><p class="body" data-key="faq.4_a">งานในวันนี้มีเฉพาะพิธีสมรสในคริสตจักร ไม่มีงานเลี้ยงต่อในช่วงเย็น</p></details>
   </section>
 
   <section id="story" class="reveal" hidden>
@@ -66,29 +104,9 @@
     <div class="grid"></div>
   </section>
 
-  <section id="rsvp" class="reveal">
-    <p class="label" data-key="rsvp.heading">ตอบรับคำเชิญ</p>
-    <form id="rsvp-form" novalidate>
-      <label id="attend-label">จะมาร่วมงานหรือไม่</label>
-      <div class="choice" role="group" aria-labelledby="attend-label">
-        <button type="button" data-attending="yes" aria-pressed="false">มาร่วมงาน</button>
-        <button type="button" data-attending="no" aria-pressed="false">ไม่สะดวก</button>
-      </div>
-
-      <div id="party-field" hidden>
-        <label for="party-size">จำนวนผู้ร่วมงาน</label>
-        <input type="number" id="party-size" min="1" max="10" value="1" inputmode="numeric">
-      </div>
-
-      <label for="rsvp-note">ข้อความถึงเจ้าภาพ</label>
-      <textarea id="rsvp-note" maxlength="400" placeholder="ข้อจำกัดด้านอาหาร หรือข้อความอื่น ๆ"></textarea>
-
-      <div class="actions">
-        <button type="submit" class="link">SEND</button>
-      </div>
-      <p class="status" id="rsvp-status" role="status"></p>
-    </form>
-    <p class="muted" data-key="rsvp.note" style="margin-top:22px">กรุณาตอบรับภายในวันที่ 7 พฤศจิกายน 2569</p>
+  <section id="rsvp-note" class="reveal">
+    <p class="label" data-key="rsvp.label">rsvp</p>
+    <p class="body" data-key="rsvp.note">การตอบรับสามารถทำได้จากลิงก์การ์ดเชิญส่วนตัวที่ท่านได้รับ หากยังไม่ได้รับลิงก์ กรุณาติดต่อเจ้าภาพ</p>
   </section>
 
   <section id="wishes" class="reveal">
@@ -99,15 +117,14 @@
       <input type="text" id="wish-name" maxlength="60" required>
       <label for="wish-message">คำอวยพร</label>
       <textarea id="wish-message" maxlength="600" required></textarea>
-      <div class="actions">
-        <button type="submit" class="link">SEND</button>
-      </div>
+      <div class="actions"><button type="submit" class="link">SEND</button></div>
       <p class="status" id="wish-status" role="status"></p>
     </form>
   </section>
 
   <footer class="reveal">
     <p data-key="footer.apology">( ขออภัยหากมิได้มาเรียนเชิญด้วยตัวเอง )</p>
+    <p class="footer-names" data-key="footer.signoff">Worawan &amp; Chat · 21.11.2026</p>
   </footer>
 
 </main>

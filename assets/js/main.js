@@ -7,8 +7,6 @@ import { getClient } from './supabase-client.js';
 
 document.documentElement.classList.add('js');
 
-const guestSlug = new URLSearchParams(location.search).get('g');
-
 /* ---------- ribbon ------------------------------------------------ */
 
 let redrawTimer;
@@ -22,6 +20,7 @@ animateRibbon();
 window.addEventListener('resize', redraw);
 new ResizeObserver(redraw).observe(document.body);
 if (document.fonts) document.fonts.ready.then(redraw);
+document.addEventListener('toggle', redraw, true); // FAQ accordions change height
 
 /* ---------- countdown --------------------------------------------- */
 
@@ -29,14 +28,56 @@ function tickCountdown() {
   const box = document.getElementById('countdown');
   if (!box) return;
   const target = new Date(settings.event_datetime).getTime();
-  const diff = target - Date.now();
   if (!Number.isFinite(target)) return;
+  const diff = target - Date.now();
   if (diff <= 0) { box.hidden = true; return; }
 
   box.querySelector('[data-unit=days] .n').textContent = Math.floor(diff / 86400000);
   box.querySelector('[data-unit=hours] .n').textContent = Math.floor(diff / 3600000) % 24;
   box.querySelector('[data-unit=mins] .n').textContent = Math.floor(diff / 60000) % 60;
 }
+
+/* ---------- add to calendar --------------------------------------- */
+
+function icsStamp(d) {
+  return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+}
+
+document.getElementById('ics-btn')?.addEventListener('click', () => {
+  const start = new Date(settings.event_datetime);
+  const end = new Date(start.getTime() + 2 * 3600000);
+  const venue = document.querySelector('[data-key="event.venue"]')?.textContent.trim() || '';
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//biwflazhday//TH',
+    'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    'UID:wedding-biwflazh-2026@biwflazhday.online',
+    `DTSTAMP:${icsStamp(new Date())}`,
+    `DTSTART:${icsStamp(start)}`,
+    `DTEND:${icsStamp(end)}`,
+    'SUMMARY:Worawan & Chat Wedding',
+    `LOCATION:${venue}`,
+    'BEGIN:VALARM',
+    'TRIGGER:-P1D',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:Wedding tomorrow',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'biwflazh-wedding.ics';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
 
 /* ---------- scroll reveal ------------------------------------------ */
 
@@ -47,58 +88,8 @@ const io = new IntersectionObserver((entries) => {
 }, { rootMargin: '0px 0px -12% 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-// Safety net: if anything above throws, nothing stays invisible.
+// Safety net: nothing is allowed to stay invisible if something above throws.
 setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('in')), 2500);
-
-/* ---------- rsvp ---------------------------------------------------- */
-
-const rsvpForm = document.getElementById('rsvp-form');
-let attending = null;
-
-document.querySelectorAll('.choice button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    attending = btn.dataset.attending === 'yes';
-    document.querySelectorAll('.choice button').forEach(b => {
-      b.setAttribute('aria-pressed', String(b === btn));
-    });
-    const seats = document.getElementById('party-field');
-    if (seats) seats.hidden = !attending;
-  });
-});
-
-if (rsvpForm) {
-  rsvpForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const status = document.getElementById('rsvp-status');
-
-    if (attending === null) { status.textContent = 'กรุณาเลือกว่าจะมาร่วมงานหรือไม่'; return; }
-    if (!guestSlug) { status.textContent = 'ลิงก์นี้ไม่มีรหัสผู้รับเชิญ กรุณาเปิดจากลิงก์ที่ได้รับ'; return; }
-
-    const sb = await getClient();
-    if (!sb) { status.textContent = 'ยังเชื่อมต่อฐานข้อมูลไม่ได้'; return; }
-
-    status.textContent = 'กำลังบันทึก…';
-    const { error } = await sb.rpc('submit_rsvp', {
-      p_slug: guestSlug,
-      p_attending: attending,
-      p_party_size: Number(document.getElementById('party-size')?.value || 1),
-      p_note: document.getElementById('rsvp-note')?.value || ''
-    });
-
-    if (error) {
-      const map = {
-        rsvp_closed: 'ปิดรับคำตอบแล้ว',
-        guest_not_found: 'ไม่พบรายชื่อสำหรับลิงก์นี้',
-        party_size_out_of_range: 'จำนวนผู้ร่วมงานเกินที่นั่งที่เชิญไว้'
-      };
-      const key = Object.keys(map).find(k => error.message.includes(k));
-      status.textContent = map[key] || 'บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง';
-      return;
-    }
-    status.textContent = attending ? 'บันทึกแล้ว แล้วพบกันวันงาน' : 'บันทึกแล้ว ขอบคุณที่แจ้งให้ทราบ';
-    rsvpForm.querySelector('button[type=submit]').disabled = true;
-  });
-}
 
 /* ---------- wishes --------------------------------------------------- */
 
@@ -125,27 +116,26 @@ async function loadWishes() {
     li.append(who, msg);
     list.appendChild(li);
   }
+  redraw();
 }
 
-const wishForm = document.getElementById('wish-form');
-if (wishForm) {
-  wishForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const status = document.getElementById('wish-status');
-    const sb = await getClient();
-    if (!sb) { status.textContent = 'ยังเชื่อมต่อฐานข้อมูลไม่ได้'; return; }
+document.getElementById('wish-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const status = document.getElementById('wish-status');
+  const sb = await getClient();
+  if (!sb) { status.textContent = 'ยังเชื่อมต่อฐานข้อมูลไม่ได้'; return; }
 
-    status.textContent = 'กำลังส่ง…';
-    const { error } = await sb.rpc('submit_wish', {
-      p_display_name: document.getElementById('wish-name').value,
-      p_message: document.getElementById('wish-message').value,
-      p_slug: guestSlug
-    });
-    if (error) { status.textContent = 'ส่งไม่สำเร็จ กรุณาลองอีกครั้ง'; return; }
-    wishForm.reset();
-    status.textContent = 'ส่งแล้ว คำอวยพรจะขึ้นหลังเจ้าภาพตรวจ';
+  status.textContent = 'กำลังส่ง…';
+  const { error } = await sb.rpc('submit_wish', {
+    p_display_name: document.getElementById('wish-name').value,
+    p_message: document.getElementById('wish-message').value,
+    p_slug: new URLSearchParams(location.search).get('g')
   });
-}
+  if (error) { status.textContent = 'ส่งไม่สำเร็จ กรุณาลองอีกครั้ง'; return; }
+  form.reset();
+  status.textContent = 'ส่งแล้ว คำอวยพรจะขึ้นหลังเจ้าภาพตรวจ';
+});
 
 /* ---------- boot ------------------------------------------------------ */
 
@@ -156,9 +146,5 @@ setInterval(tickCountdown, 30000);
   await loadContent();
   tickCountdown();
   if (settings.show_wishes) loadWishes();
-  if (!settings.rsvp_open) {
-    const btn = rsvpForm?.querySelector('button[type=submit]');
-    if (btn) { btn.disabled = true; document.getElementById('rsvp-status').textContent = 'ปิดรับคำตอบแล้ว'; }
-  }
   redraw();
 })();

@@ -248,19 +248,55 @@ insert into public.site_settings (key, value) values
 on conflict (key) do nothing;
 
 insert into public.site_content (key, value_th, field_type, section, sort_order) values
-  ('hero.eyebrow',      'the wedding of',                          'text',     'hero',   10),
-  ('hero.bride_first',  'WORAWAN',                                 'text',     'hero',   20),
-  ('hero.bride_last',   'SONGTHONGTHAM',                           'text',     'hero',   30),
-  ('hero.groom_first',  'CHAT',                                    'text',     'hero',   40),
-  ('hero.groom_last',   'LEESAKUL',                                'text',     'hero',   50),
-  ('event.date',        'วันเสาร์ที่ 21 พฤศจิกายน 2569',                'text',     'event',  10),
-  ('event.venue',       'คริสตจักรเมืองทอง',                          'text',     'event',  20),
-  ('event.time',        'พิธีสมรส เวลา 14:00 น.',                     'text',     'event',  30),
-  ('event.map_url',     'https://maps.google.com/?q=คริสตจักรเมืองทอง', 'text',     'event',  40),
-  ('theme.label',       'theme',                                   'text',     'theme',  10),
-  ('story.body',        'เรื่องราวของเราเริ่มต้นในวันที่ธรรมดาที่สุด และค่อย ๆ กลายเป็นสิ่งที่เราไม่อาจอธิบายได้ด้วยคำใดคำหนึ่ง — แก้ข้อความนี้ได้ที่หลังบ้าน', 'textarea', 'story', 10),
-  ('rsvp.heading',      'ตอบรับคำเชิญ',                              'text',     'rsvp',   10),
-  ('rsvp.note',         'กรุณาตอบรับภายในวันที่ 7 พฤศจิกายน 2569',      'text',     'rsvp',   20),
-  ('wishes.heading',    'คำอวยพร',                                  'text',     'wishes', 10),
-  ('footer.apology',    '( ขออภัยหากมิได้มาเรียนเชิญด้วยตัวเอง )',        'text',     'footer', 10)
+  ('hero.eyebrow',   'the wedding of',                'text',     'hero',     10),
+  ('hero.bride_first','WORAWAN',                      'text',     'hero',     20),
+  ('hero.bride_last','SONGTHONGTHAM',                 'text',     'hero',     30),
+  ('hero.groom_first','CHAT',                         'text',     'hero',     40),
+  ('hero.groom_last','LEESAKUL',                      'text',     'hero',     50),
+
+  ('verse.text',     'ความรักนั้นก็อดทนนานและกระทำคุณให้ ความรักไม่อิจฉา ไม่อวดตัว ไม่หยิ่งผยอง', 'textarea', 'verse', 10),
+  ('verse.ref',      '1 โครินธ์ 13:4',                 'text',     'verse',    20),
+
+  ('event.label',    'the day',                       'text',     'event',    10),
+  ('event.date',     'วันเสาร์ที่ 21 พฤศจิกายน 2569',     'text',     'event',    20),
+  ('event.venue',    'คริสตจักรเมืองทอง',               'text',     'event',    30),
+  ('event.address',  'ถนนแจ้งวัฒนะ อำเภอปากเกร็ด จังหวัดนนทบุรี', 'text', 'event', 40),
+  ('event.time',     'พิธีสมรส เวลา 14:00 น.',          'text',     'event',    50),
+  ('event.map_url',  'https://maps.google.com/?q=คริสตจักรเมืองทอง', 'text', 'event', 60),
+
+  ('schedule.label', 'schedule',                      'text',     'schedule', 10),
+  ('schedule.1_time','13:30',                         'text',     'schedule', 20),
+  ('schedule.1_text','แขกลงทะเบียนและเข้านั่งในห้องประชุม', 'text',   'schedule', 30),
+  ('schedule.2_time','14:00',                         'text',     'schedule', 40),
+  ('schedule.2_text','พิธีสมรสเริ่ม กรุณามาถึงก่อนเวลา',   'text',     'schedule', 50),
+  ('schedule.3_time','15:30',                         'text',     'schedule', 60),
+  ('schedule.3_text','ถ่ายภาพร่วมกับคู่บ่าวสาวและรับของที่ระลึก', 'text', 'schedule', 70),
+
+  ('theme.label',    'dress code',                    'text',     'theme',    10),
+  ('theme.note',     'ขอเชิญร่วมแต่งกายในโทนสีของงาน ฟ้าอ่อน ครีม ชมพูนวล หรือแดงเลือดหมู', 'textarea', 'theme', 20),
+
+  ('travel.label',   'getting there',                 'text',     'travel',   10),
+  ('travel.1_head',  'ที่จอดรถ',                       'text',     'travel',   20),
+  ('travel.1_text',  'มีที่จอดรถภายในบริเวณคริสตจักร กรุณาเผื่อเวลาสำหรับการหาที่จอดในวันงาน', 'textarea', 'travel', 30),
+  ('travel.2_head',  'รถสาธารณะ',                      'text',     'travel',   40),
+  ('travel.2_text',  'สามารถเดินทางด้วยรถไฟฟ้าสายสีชมพู แล้วต่อรถรับจ้างเข้าสู่คริสตจักร', 'textarea', 'travel', 50),
+
+  ('faq.label',      'good to know',                  'text',     'faq',      10),
+  ('faq.1_q',        'พาเด็กมาร่วมงานได้ไหม',            'text',     'faq',      20),
+  ('faq.1_a',        'ยินดีต้อนรับทุกท่านในครอบครัว หากเด็กร้องระหว่างพิธีสามารถพาออกมาที่โถงด้านนอกได้', 'textarea', 'faq', 30),
+  ('faq.2_q',        'ถ่ายรูประหว่างพิธีได้ไหม',          'text',     'faq',      40),
+  ('faq.2_a',        'ช่วงพิธีขอความกรุณางดถ่ายภาพและปิดเสียงโทรศัพท์ หลังพิธีเชิญถ่ายภาพได้เต็มที่', 'textarea', 'faq', 50),
+  ('faq.3_q',        'ควรมาถึงกี่โมง',                  'text',     'faq',      60),
+  ('faq.3_a',        'ขอเชิญมาถึงก่อนเวลา 13:45 น. เพื่อลงทะเบียนและเข้านั่งก่อนพิธีเริ่ม', 'textarea', 'faq', 70),
+  ('faq.4_q',        'มีงานเลี้ยงต่อหรือไม่',            'text',     'faq',      80),
+  ('faq.4_a',        'งานในวันนี้มีเฉพาะพิธีสมรสในคริสตจักร ไม่มีงานเลี้ยงต่อในช่วงเย็น', 'textarea', 'faq', 90),
+
+  ('story.body',     'เรื่องราวของเราเริ่มต้นในวันที่ธรรมดาที่สุด และค่อย ๆ กลายเป็นสิ่งที่เราไม่อาจอธิบายได้ด้วยคำใดคำหนึ่ง — แก้ข้อความนี้ได้ที่หลังบ้าน', 'textarea', 'story', 10),
+
+  ('rsvp.label',     'rsvp',                          'text',     'rsvp',     10),
+  ('rsvp.note',      'การตอบรับสามารถทำได้จากลิงก์การ์ดเชิญส่วนตัวที่ท่านได้รับ หากยังไม่ได้รับลิงก์ กรุณาติดต่อเจ้าภาพ', 'textarea', 'rsvp', 20),
+
+  ('wishes.heading', 'คำอวยพร',                        'text',     'wishes',   10),
+  ('footer.apology', '( ขออภัยหากมิได้มาเรียนเชิญด้วยตัวเอง )', 'text',  'footer',   10),
+  ('footer.signoff', 'Worawan & Chat · 21.11.2026',   'text',     'footer',   20)
 on conflict (key) do nothing;
