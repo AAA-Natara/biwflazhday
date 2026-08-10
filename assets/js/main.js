@@ -4,6 +4,7 @@
 import { drawRibbon, animateRibbon, bindScrollDraw } from './ribbon.js';
 import { loadContent, settings } from './content-loader.js';
 import { getClient } from './supabase-client.js';
+import { startSparkles } from './sparkles.js';
 
 document.documentElement.classList.add('js');
 
@@ -293,6 +294,7 @@ splitNames();
 bindParallax();
 bindPalette();
 bindLightbox();
+startSparkles();
 buildMap();
 bindMiniBar();
 
