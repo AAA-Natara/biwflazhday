@@ -26,7 +26,7 @@
   --script: 'Parisienne', 'Cormorant Garamond', cursive;
   --display: 'Italiana', 'Cormorant Garamond', Georgia, serif;
   --names: 'Cormorant Garamond', Georgia, serif;
-  --ui: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --ui: 'DM Sans', 'Trirong', system-ui, -apple-system, sans-serif;
   --thai: 'Trirong', Georgia, serif;
 
   --rail: 22px;                 /* space the ribbon occupies */
@@ -206,13 +206,12 @@ main { position: relative; z-index: 1; }
 
 .verse-body { font-size: clamp(16px, 4.2vw, 18px); line-height: 2.1; margin: 0; }
 .verse-ref {
-  font-family: var(--ui);
-  font-weight: 500;
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-indent: 0.18em;
+  font-family: var(--thai);
+  font-weight: 400;
+  font-size: 15px;
+  letter-spacing: normal;
   color: var(--ink-soft);
-  margin: 20px 0 0;
+  margin: 22px 0 0;
 }
 
 /* ==================================================================
@@ -388,7 +387,7 @@ main { position: relative; z-index: 1; }
   color: var(--ink-faint);
   margin-top: 4px;
 }
-.hint { font-family: var(--ui); font-size: 13px; color: var(--ink-faint); margin: 20px 0 0; }
+.hint { font-family: var(--thai); font-size: 14px; color: var(--ink-faint); margin: 20px 0 0; }
 
 /* ==================================================================
    Getting there
@@ -424,11 +423,10 @@ main { position: relative; z-index: 1; }
 .wish-list li { padding: 22px 0; border-bottom: 0.5px solid var(--nude); }
 .wish-list li:last-child { border-bottom: 0; }
 .wish-list .who {
-  font-family: var(--ui);
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 0.12em;
-  text-indent: 0.12em;
+  font-family: var(--thai);
+  font-weight: 400;
+  font-size: 15px;
+  letter-spacing: normal;
   color: var(--ink-faint);
   display: block;
   margin-bottom: 10px;
@@ -438,12 +436,11 @@ main { position: relative; z-index: 1; }
 form { max-width: 420px; }
 label {
   display: block;
-  font-family: var(--ui);
-  font-weight: 500;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-indent: 0.12em;
-  color: var(--ink-faint);
+  font-family: var(--thai);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: normal;
+  color: var(--ink-soft);
   margin: 22px 0 8px;
 }
 input[type=text], textarea {
@@ -461,7 +458,7 @@ input[type=text], textarea {
 }
 input:focus, textarea:focus { outline: none; border-bottom-color: var(--sky); }
 textarea { resize: vertical; min-height: 84px; line-height: 1.85; }
-.status { font-family: var(--ui); font-size: 14px; color: var(--ink-soft); margin-top: 16px; min-height: 20px; }
+.status { font-family: var(--thai); font-size: 15px; color: var(--ink-soft); margin-top: 16px; min-height: 20px; }
 
 /* --- gallery ------------------------------------------------------ */
 
@@ -631,4 +628,27 @@ footer p { font-size: 14px; color: var(--ink-faint); margin: 0; }
   .fl { animation: none !important; }
   .portrait__stack img { transition: opacity .4s ease !important; transform: none !important; }
   .grid img { transition: none !important; }
+}
+
+/* ==================================================================
+   Thai safety net
+   Thai has no spaces between words, so letter-spacing destroys word
+   grouping and pushes tone marks off their bases. These fields are
+   editable from the admin panel, so a Thai string can appear in any
+   of them — the guard below keeps that from breaking the layout.
+   ================================================================== */
+
+:lang(th),
+[data-key^="event.date"],
+[data-key^="event.venue"],
+[data-key^="event.address"],
+[data-key^="event.time"] {
+  letter-spacing: normal;
+}
+
+.sec-num, .surname, .countdown .u, .dc-weekday, .dc-month,
+.timeline .t, .chip i, .footer-names, #minibar span {
+  /* Latin and digits only by design; if the couple types Thai here it
+     still renders in Trirong rather than an arbitrary system font. */
+  font-feature-settings: 'tnum' 1;
 }

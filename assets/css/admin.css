@@ -17,7 +17,7 @@
   --warn: #9A5B3E;
 
   --display: 'Fraunces', Georgia, serif;
-  --ui: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --ui: 'DM Sans', 'Trirong', system-ui, -apple-system, sans-serif;
   --thai: 'Trirong', Georgia, serif;
 }
 
@@ -60,7 +60,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; }
 .gate__card h1 { font-size: 26px; }
 .gate__sub {
   font-family: var(--ui);
-  font-weight: 700;
+  font-weight: 500;
   font-size: 12px;
   letter-spacing: 0.14em;
   color: var(--ink-faint);
@@ -86,9 +86,9 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; }
   border: 0;
   background: none;
   padding: 12px 14px;
-  font-family: var(--ui);
-  font-weight: 700;
-  font-size: 13px;
+  font-family: var(--thai);
+  font-weight: 400;
+  font-size: 16px;
   color: var(--ink-faint);
   cursor: pointer;
   border-bottom: 2px solid transparent;
@@ -112,9 +112,9 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; }
 }
 .group > h2 { font-size: 19px; margin-bottom: 4px; }
 .group__hint {
-  font-family: var(--ui);
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-family: var(--thai);
+  font-size: 14px;
+  letter-spacing: normal;
   color: var(--ink-faint);
   margin: 0 0 18px;
 }
@@ -123,10 +123,10 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; }
 .field:last-child { margin-bottom: 0; }
 .field label {
   display: block;
-  font-family: var(--ui);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-family: var(--thai);
+  font-weight: 400;
+  font-size: 15px;
+  letter-spacing: normal;
   color: var(--ink-soft);
   margin-bottom: 7px;
 }
@@ -161,7 +161,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   padding: 16px 18px;
 }
 .toggle p { margin: 0; font-size: 15px; }
-.toggle small { display: block; font-family: var(--ui); font-size: 12px; color: var(--ink-faint); margin-top: 4px; }
+.toggle small { display: block; font-family: var(--thai); font-size: 14px; color: var(--ink-faint); margin-top: 4px; }
 .switch {
   flex: none;
   width: 50px;
@@ -197,9 +197,9 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   border-radius: 3px;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--ui);
-  font-weight: 700;
-  font-size: 14px;
+  font-family: var(--thai);
+  font-weight: 400;
+  font-size: 15px;
   cursor: pointer;
   text-decoration: none;
   transition: background .2s, border-color .2s;
@@ -213,9 +213,9 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   border: 0;
   background: none;
   padding: 8px 10px;
-  font-family: var(--ui);
-  font-weight: 700;
-  font-size: 13px;
+  font-family: var(--thai);
+  font-weight: 400;
+  font-size: 15px;
   color: var(--ink-soft);
   cursor: pointer;
   text-decoration: none;
@@ -238,7 +238,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   border-top: 0.5px solid var(--nude-deep);
   padding: 13px clamp(16px, 4vw, 28px);
 }
-.savebar span { font-family: var(--ui); font-weight: 700; font-size: 13px; color: var(--ink-soft); }
+.savebar span { font-family: var(--thai); font-weight: 400; font-size: 15px; color: var(--ink-soft); }
 .savebar div { display: flex; gap: 8px; align-items: center; }
 
 /* --- gallery ------------------------------------------------------ */
@@ -253,14 +253,14 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
 
 .wish { background: var(--paper); border: 0.5px solid var(--nude); border-radius: 4px; padding: 16px 18px; }
 .wish.pending { border-left: 3px solid var(--rose); }
-.wish__who { font-family: var(--ui); font-weight: 700; font-size: 13px; letter-spacing: 0.06em; }
-.wish__when { font-family: var(--ui); font-size: 12px; color: var(--ink-faint); margin-left: 8px; }
+.wish__who { font-family: var(--thai); font-weight: 400; font-size: 16px; }
+.wish__when { font-family: var(--thai); font-size: 13px; color: var(--ink-faint); margin-left: 8px; }
 .wish__msg { font-size: 15px; line-height: 1.9; margin: 10px 0 14px; color: var(--ink-soft); }
 .wish__act { display: flex; gap: 6px; }
 
 /* --- messages ----------------------------------------------------- */
 
-.msg { font-family: var(--ui); font-size: 13px; color: var(--warn); margin: 16px 0 0; min-height: 18px; }
+.msg { font-family: var(--thai); font-size: 14px; color: var(--warn); margin: 16px 0 0; min-height: 18px; }
 .toast {
   position: fixed;
   left: 50%;
@@ -268,9 +268,9 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   transform: translateX(-50%);
   background: var(--ink);
   color: var(--paper);
-  font-family: var(--ui);
-  font-weight: 700;
-  font-size: 13px;
+  font-family: var(--thai);
+  font-weight: 400;
+  font-size: 15px;
   padding: 11px 20px;
   border-radius: 3px;
   margin: 0;
