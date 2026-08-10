@@ -377,3 +377,73 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   color: var(--ink-soft);
   margin-left: 8px;
 }
+
+/* --- guest list ---------------------------------------------------- */
+
+.toolbar { display: flex; gap: 10px; margin-bottom: 16px; }
+.toolbar input[type=search] { flex: 1; min-width: 0; }
+.toolbar .btn { flex: none; }
+
+.rows { background: var(--paper); border: 0.5px solid var(--nude); border-radius: 4px; }
+.rows:empty { display: none; }
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 14px;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 0.5px solid var(--nude);
+}
+.row:last-child { border-bottom: 0; }
+.row__name { font-family: var(--thai); font-size: 16px; }
+.row__meta { font-family: var(--thai); font-size: 12.5px; color: var(--ink-faint); margin-top: 3px; }
+.row__act { display: flex; gap: 2px; }
+@media (max-width: 520px) {
+  .row { grid-template-columns: 1fr; }
+  .row__act { justify-content: flex-start; margin-top: 6px; }
+}
+
+/* --- add sheet ------------------------------------------------------ */
+
+.sheetbox {
+  width: min(460px, calc(100vw - 32px));
+  border: 0;
+  border-radius: 6px;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+.sheetbox::backdrop { background: rgba(94, 39, 48, .38); }
+.sheetbox form { padding: 22px 22px 20px; }
+.sheetbox__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.sheetbox__head h2 { font-size: 21px; }
+.sheetbox__foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 22px; }
+
+/* --- collapsible content groups ------------------------------------ */
+
+details.group { padding: 0; }
+details.group > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 20px;
+  position: relative;
+}
+details.group > summary::-webkit-details-marker { display: none; }
+details.group > summary::after {
+  content: '';
+  position: absolute;
+  right: 22px;
+  top: 26px;
+  width: 8px;
+  height: 8px;
+  border-right: 1px solid var(--ink-faint);
+  border-bottom: 1px solid var(--ink-faint);
+  transform: rotate(45deg);
+  transition: transform .25s;
+}
+details.group[open] > summary::after { transform: rotate(-135deg); }
+details.group > summary h2 { margin: 0 26px 4px 0; }
+details.group > summary .group__hint { margin: 0; }
+details.group > .field { padding: 0 20px; }
+details.group > .field:last-of-type { padding-bottom: 20px; }

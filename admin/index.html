@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;700&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/admin.css?v=10">
+<link rel="stylesheet" href="../assets/css/admin.css?v=11">
 </head>
 <body>
 
@@ -70,43 +70,46 @@
 
     <!-- ---- guests ---- -->
     <section id="tab-guests" class="tab" hidden>
-      <p class="lede">เพิ่มรายชื่อแล้วคัดลอกลิงก์การ์ดส่วนตัวไปส่งทาง LINE ดูว่าใครตอบรับแล้วได้ที่แท็บการตอบรับ</p>
-
-      <div class="group">
-        <h2>เพิ่มรายชื่อ</h2>
-        <p class="group__hint">ข้อความเชิญจะขึ้นใต้ชื่อบนการ์ดของคนนั้นคนเดียว เว้นว่างไว้ได้</p>
-        <form id="guest-form">
-          <div class="field">
-            <label for="g-name">ชื่อที่จะขึ้นบนการ์ด</label>
-            <input type="text" id="g-name" required placeholder="ณธารา ธวัฒน์ธารา">
-          </div>
-          <div class="field">
-            <label for="g-msg">ข้อความเชิญเฉพาะคนนี้</label>
-            <textarea id="g-msg" maxlength="300" placeholder="ขอบคุณที่อยู่ข้างกันมาตลอด อยากให้มาร่วมเป็นส่วนหนึ่งของวันสำคัญนี้"></textarea>
-          </div>
-          <div class="field">
-            <label for="g-name-en">ชื่ออังกฤษ ใช้สร้างลิงก์</label>
-            <input type="text" id="g-name-en" placeholder="natara">
-          </div>
-          <div class="field">
-            <label for="g-slug">ลิงก์ <span class="key">พิมพ์เอง ถ้าซ้ำจะบันทึกไม่ผ่าน</span></label>
-            <input type="text" id="g-slug" placeholder="natara">
-          </div>
-          <div class="field">
-            <label for="g-group">กลุ่ม</label>
-            <input type="text" id="g-group" placeholder="ญาติ / คริสตจักร / ที่ทำงาน / เพื่อน">
-          </div>
-          <button type="submit" class="btn btn--solid">เพิ่มรายชื่อ</button>
-          <p class="msg" id="guest-msg" role="status"></p>
-        </form>
+      <div class="toolbar">
+        <input type="search" id="guest-search" placeholder="ค้นหาชื่อ ลิงก์ หรือกลุ่ม" aria-label="ค้นหารายชื่อ">
+        <button type="button" class="btn btn--solid" id="add-open">เพิ่มรายชื่อ</button>
       </div>
-
-      <div class="group" style="margin-top:14px">
-        <h2>รายชื่อทั้งหมด</h2>
-        <p class="group__hint" id="guest-summary"></p>
-        <div id="guest-list"><p class="dim">กำลังโหลด…</p></div>
-      </div>
+      <p class="group__hint" id="guest-summary"></p>
+      <div id="guest-list" class="rows"><p class="dim">กำลังโหลด…</p></div>
     </section>
+
+    <dialog id="guest-dialog" class="sheetbox">
+      <form id="guest-form" method="dialog">
+        <div class="sheetbox__head">
+          <h2 id="guest-dialog-title">เพิ่มรายชื่อ</h2>
+          <button type="button" class="ghost" id="add-close" aria-label="ปิด">✕</button>
+        </div>
+
+        <div class="field">
+          <label for="g-name">ชื่อที่จะขึ้นบนการ์ด</label>
+          <input type="text" id="g-name" required placeholder="ณธารา ธวัฒน์ธารา">
+        </div>
+        <div class="field">
+          <label for="g-msg">ข้อความเชิญเฉพาะคนนี้</label>
+          <textarea id="g-msg" maxlength="300" placeholder="ขอบคุณที่อยู่ข้างกันมาตลอด อยากให้มาร่วมเป็นส่วนหนึ่งของวันสำคัญนี้"></textarea>
+        </div>
+        <div class="field">
+          <label for="g-slug">ลิงก์ <span class="key">พิมพ์เอง ถ้าซ้ำจะบันทึกไม่ผ่าน</span></label>
+          <input type="text" id="g-slug" placeholder="natara">
+        </div>
+        <div class="field">
+          <label for="g-group">กลุ่ม</label>
+          <input type="text" id="g-group" placeholder="ญาติ / คริสตจักร / ที่ทำงาน / เพื่อน">
+        </div>
+        <input type="hidden" id="g-name-en">
+
+        <div class="sheetbox__foot">
+          <button type="button" class="ghost" id="add-cancel">ยกเลิก</button>
+          <button type="submit" class="btn btn--solid" id="g-save">บันทึก</button>
+        </div>
+        <p class="msg" id="guest-msg" role="status"></p>
+      </form>
+    </dialog>
 
     <!-- ---- gallery ---- -->
     <section id="tab-gallery" class="tab" hidden>
@@ -155,6 +158,6 @@
   <p class="toast" id="toast" hidden></p>
 </div>
 
-<script type="module" src="../assets/js/admin.js?v=10"></script>
+<script type="module" src="../assets/js/admin.js?v=11"></script>
 </body>
 </html>

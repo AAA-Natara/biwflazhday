@@ -1,5 +1,5 @@
-import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=10';
-import { shrink } from '../lib/image-resize.js?v=10';
+import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=11';
+import { shrink } from '../lib/image-resize.js?v=11';
 
 const $ = id => document.getElementById(id);
 const dirty = new Map();          // key -> new value, for site_content only
@@ -185,17 +185,23 @@ async function loadContent() {
   box.innerHTML = '';
   const sections = Object.keys(groups).sort((a, b) => order.indexOf(a) - order.indexOf(b));
 
-  for (const name of sections) {
+  for (const [i, name] of sections.entries()) {
     const [title, hint] = SECTION_TITLES[name] || [name, ''];
-    const wrap = document.createElement('div');
-    wrap.className = 'group';
 
+    // Collapsed by default: sixty-odd fields in one scroll is unusable, and
+    // the couple only ever edits one area at a time.
+    const wrap = document.createElement('details');
+    wrap.className = 'group';
+    wrap.open = i === 0;
+
+    const sum = document.createElement('summary');
     const h = document.createElement('h2');
     h.textContent = title;
     const p = document.createElement('p');
     p.className = 'group__hint';
     p.textContent = hint;
-    wrap.append(h, p);
+    sum.append(h, p);
+    wrap.appendChild(sum);
 
     for (const row of groups[name]) {
       const field = document.createElement('div');
@@ -321,6 +327,25 @@ async function loadSettings() {
 
 const cardLink = slug => `${location.origin}${location.pathname.replace(/admin\/?$/, '')}card/?g=${slug}`;
 
+let guestCache = [];
+
+/* --- add sheet ---------------------------------------------------- */
+
+const dialog = $('guest-dialog');
+
+function openSheet() {
+  $('guest-msg').textContent = '';
+  dialog.showModal();
+  $('g-name').focus();
+}
+function closeSheet() {
+  dialog.close();
+  for (const id of ['g-name', 'g-slug', 'g-group', 'g-msg']) $(id).value = '';
+}
+$('add-open').addEventListener('click', openSheet);
+$('add-close').addEventListener('click', closeSheet);
+$('add-cancel').addEventListener('click', closeSheet);
+
 $('guest-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const msg = $('guest-msg');
@@ -328,96 +353,90 @@ $('guest-form').addEventListener('submit', async (e) => {
   if (!name_th) { msg.textContent = 'กรุณาใส่ชื่อ'; return; }
 
   // Exactly what was typed, lowercased. Nothing is generated or appended.
-  const typed = $('g-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
-  if (!typed) { msg.textContent = 'กรุณาใส่ลิงก์'; return; }
+  const slug = $('g-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+  if (!slug) { msg.textContent = 'กรุณาใส่ลิงก์'; return; }
 
-  const row = {
-    slug: typed,
-    name_th,
-    name_en: $('g-name-en').value.trim() || null,
-    message: $('g-msg').value.trim() || null,
-    seats: 1,
-    group_tag: $('g-group').value.trim() || null
-  };
-
+  const btn = $('g-save');
+  btn.disabled = true;
   msg.textContent = 'กำลังบันทึก…';
-  const { error } = await sb.from('guests').insert(row);
+
+  const { error } = await sb.from('guests').insert({
+    slug,
+    name_th,
+    message: $('g-msg').value.trim() || null,
+    group_tag: $('g-group').value.trim() || null,
+    seats: 1
+  });
+  btn.disabled = false;
+
   if (error) {
     msg.textContent = error.message.includes('duplicate')
       ? 'ลิงก์นี้ถูกใช้ไปแล้ว กรุณาเปลี่ยนเป็นชื่ออื่น'
       : 'บันทึกไม่สำเร็จ ' + error.message;
     return;
   }
-
-  msg.textContent = '';
-  for (const id of ['g-name', 'g-name-en', 'g-group', 'g-msg', 'g-slug']) $(id).value = '';
+  closeSheet();
   toast('เพิ่มรายชื่อแล้ว');
   loadGuests();
 });
 
+/* --- list --------------------------------------------------------- */
+
+$('guest-search').addEventListener('input', () => renderGuests());
+
 async function loadGuests() {
-  const box = $('guest-list');
   const { data, error } = await sb.from('guests')
-    .select('id,slug,name_th,message,group_tag,rsvp(attending,note,responded_at)')
+    .select('id,slug,name_th,message,group_tag,rsvp(attending)')
     .order('created_at', { ascending: false });
 
-  if (error) { box.innerHTML = '<p class="dim">โหลดรายชื่อไม่สำเร็จ</p>'; return; }
-  if (!data || !data.length) {
-    box.innerHTML = '<p class="dim">ยังไม่มีรายชื่อ</p>';
-    $('guest-summary').textContent = '';
+  if (error) { $('guest-list').innerHTML = '<p class="dim">โหลดรายชื่อไม่สำเร็จ</p>'; return; }
+  guestCache = data || [];
+  renderGuests();
+}
+
+function renderGuests() {
+  const box = $('guest-list');
+  const q = $('guest-search').value.trim().toLowerCase();
+
+  const rows = guestCache.filter(g =>
+    !q || [g.name_th, g.slug, g.group_tag].filter(Boolean).join(' ').toLowerCase().includes(q));
+
+  $('guest-summary').textContent = q
+    ? `พบ ${rows.length} จาก ${guestCache.length} รายชื่อ`
+    : `ทั้งหมด ${guestCache.length} รายชื่อ`;
+
+  box.innerHTML = '';
+  if (!rows.length) {
+    box.innerHTML = `<p class="dim" style="padding:18px">${q ? 'ไม่พบรายชื่อที่ค้นหา' : 'ยังไม่มีรายชื่อ'}</p>`;
     return;
   }
 
-  let yes = 0, no = 0, seats = 0;
-  for (const g of data) {
-    const r = Array.isArray(g.rsvp) ? g.rsvp[0] : g.rsvp;
-    if (r?.attending) { yes++; seats++; }
-    else if (r) no++;
-  }
-  const waiting = data.length - yes - no;
-  $('guest-summary').textContent =
-    `เชิญ ${data.length} คน · มาร่วมงาน ${yes} · ไม่สะดวก ${no} · ยังไม่ตอบ ${waiting}`;
-  badge('guests', `${yes}/${data.length}`);
-
-  // Answered first, newest answer at the top, then everyone still pending.
-  const rank = g => {
-    const r = Array.isArray(g.rsvp) ? g.rsvp[0] : g.rsvp;
-    return r ? 0 : 1;
-  };
-  data.sort((a, b) => rank(a) - rank(b));
-
-  box.innerHTML = '';
-  for (const g of data) {
+  for (const g of rows) {
     const r = Array.isArray(g.rsvp) ? g.rsvp[0] : g.rsvp;
 
-    const wrap = document.createElement('div');
-    wrap.className = 'guest';
+    const row = document.createElement('div');
+    row.className = 'row';
 
     const left = document.createElement('div');
     const name = document.createElement('div');
-    name.className = 'guest__name';
+    name.className = 'row__name';
     name.textContent = g.name_th;
 
     const pill = document.createElement('span');
     pill.className = 'pill ' + (r ? (r.attending ? 'pill--yes' : 'pill--no') : 'pill--wait');
-    pill.textContent = r ? (r.attending ? 'มาร่วมงาน' : 'ไม่สะดวก') : 'รอตอบ';
+    pill.textContent = r ? (r.attending ? 'มา' : 'ไม่สะดวก') : 'รอตอบ';
     name.appendChild(pill);
 
     const meta = document.createElement('div');
-    meta.className = 'guest__meta';
-    const when = r?.responded_at
-      ? new Date(r.responded_at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
-      : null;
-    meta.textContent = [g.slug, g.group_tag, when && `ตอบเมื่อ ${when}`, r?.note && `“${r.note}”`]
-      .filter(Boolean).join(' · ');
-
+    meta.className = 'row__meta';
+    meta.textContent = [g.slug, g.group_tag, g.message].filter(Boolean).join(' · ');
     left.append(name, meta);
 
     const act = document.createElement('div');
-    act.className = 'guest__act';
+    act.className = 'row__act';
 
     const copy = document.createElement('button');
-    copy.className = 'btn';
+    copy.className = 'ghost';
     copy.textContent = 'คัดลอกลิงก์';
     copy.addEventListener('click', async () => {
       try { await navigator.clipboard.writeText(cardLink(g.slug)); toast('คัดลอกลิงก์แล้ว'); }
@@ -442,8 +461,8 @@ async function loadGuests() {
     });
 
     act.append(copy, open, del);
-    wrap.append(left, act);
-    box.appendChild(wrap);
+    row.append(left, act);
+    box.appendChild(row);
   }
 }
 
