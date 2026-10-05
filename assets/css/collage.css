@@ -1,0 +1,572 @@
+/* ================================================================
+   collage.css · the shared scrapbook
+   Loaded by the landing page and the personal card. Everything in
+   here is a physical object: a card, an envelope, a polaroid, a
+   bouquet laid on cream paper. Page-specific layout lives in
+   style.css and card.css.
+   ================================================================ */
+
+:root{
+  --paper:#FBF8F3;
+  --cream:#F2EBDE;
+  --cream-deep:#E4D9C4;
+
+  --olive:#7D8456;
+  --olive-deep:#5C6340;
+  --olive-pale:#AEB489;
+
+  --wine:#6E1F2E;
+  --wine-soft:#8E3347;
+
+  --ink:#43302A;
+  --ink-soft:#7D685E;
+  --ink-faint:#A79387;
+
+  --script:'Italianno',cursive;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --body:'Cormorant Garamond','Trirong',Georgia,serif;
+
+  --strip:452px;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--body);
+  font-weight:400;
+  font-size:17px;
+  line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* Latin faces carry no Thai glyphs and tracking displaces Thai tone
+   marks, so any Thai the couple types in the admin panel opts out of
+   both. */
+:lang(th){letter-spacing:normal}
+
+img{max-width:100%;display:block}
+/* A closed dialog is hidden by the browser's own stylesheet, which any
+   display rule of ours would quietly outrank. */
+dialog:not([open]){display:none}
+a{color:inherit}
+[hidden]{display:none !important}
+
+/* The whole design is one narrow column of pasted-down pieces, even
+   on a desktop. Widening it would pull the collage apart. */
+.strip{
+  max-width:var(--strip);
+  margin:0 auto;
+  padding:0 20px;
+  position:relative;
+}
+
+/* ---------------------------------------------------------------
+   1. Picture slots
+   An empty slot draws a dashed box naming what belongs there, so
+   the couple can see where to upload. A filled slot is the picture
+   and nothing else — no border, no label. Turning off the hint
+   switch in the admin panel removes every empty box at once.
+   --------------------------------------------------------------- */
+
+.slot{
+  position:relative;
+  background:rgba(242,235,222,.86);
+  border:1px dashed #C9BCA2;
+  border-radius:2px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.slot > span{
+  font-family:var(--serif);
+  font-size:9px;
+  letter-spacing:.14em;
+  line-height:1.7;
+  text-align:center;
+  text-transform:uppercase;
+  color:#9A8572;
+  padding:8px;
+}
+.slot > img{width:100%;height:100%;object-fit:cover}
+
+.slot.is-filled{background:transparent;border:0;border-radius:0}
+.slot.is-filled > span{display:none}
+
+/* Transparent cut-outs — bouquets, the seal — must not be cropped
+   into a square, so they sit inside the box rather than filling it. */
+.slot--cut{border-radius:50%;background:rgba(242,235,222,.6)}
+.slot--cut > img{object-fit:contain}
+.slot--cut.is-filled{border-radius:0;background:transparent}
+.slot--cut.is-filled{filter:drop-shadow(0 6px 10px rgba(67,48,42,.14))}
+
+/* With hints off, an unfilled slot leaves no trace. */
+html[data-hints="off"] .slot:not(.is-filled){display:none}
+
+/* ---------------------------------------------------------------
+   1b. Swap-in art
+   The envelope and the wax seal are drawn here as a working
+   fallback rather than an empty box, so the pages look finished
+   before a single file is uploaded. A photograph of the real
+   envelope takes the drawing's place and the drawing disappears.
+   --------------------------------------------------------------- */
+
+.art{position:relative}
+.art > img{width:100%;height:100%;object-fit:contain}
+.art.is-filled > svg{display:none}
+.art.is-filled > img{position:absolute;inset:0}
+
+/* A photograph carries its own paper and shadow, so the painted
+   board underneath it has to go. */
+.lux.is-filled{background:none;box-shadow:none}
+.lux.is-filled::after{display:none}
+
+/* ---------------------------------------------------------------
+   2. Paper and board textures
+   A flat fill reads as a coloured rectangle. These layer a top
+   light, a vertical shift in tone, a contact shadow, a diffuse
+   shadow and fine grain, which is what makes a printed board look
+   like board.
+   --------------------------------------------------------------- */
+
+.lux{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(130% 95% at 50% -10%, rgba(255,255,255,.10), rgba(255,255,255,0) 58%),
+    linear-gradient(176deg, #868D5F 0%, #7A8151 55%, #6E7548 100%);
+  box-shadow:
+    0 1px 1px rgba(44,38,16,.20),
+    0 14px 30px -12px rgba(44,38,16,.42),
+    inset 0 1px 0 rgba(255,255,255,.14);
+}
+.lux--wine{
+  background:
+    radial-gradient(130% 95% at 50% -10%, rgba(255,255,255,.12), rgba(255,255,255,0) 58%),
+    linear-gradient(176deg, #7B2434 0%, #6E1F2E 55%, #5B1824 100%);
+  box-shadow:
+    0 1px 1px rgba(40,10,16,.22),
+    0 14px 30px -12px rgba(40,10,16,.40),
+    inset 0 1px 0 rgba(255,255,255,.16);
+}
+.lux--pale{
+  background:
+    radial-gradient(130% 95% at 50% -10%, rgba(255,255,255,.16), rgba(255,255,255,0) 58%),
+    linear-gradient(176deg, #B6BC91 0%, #AEB489 55%, #9FA67A 100%);
+  box-shadow:
+    0 1px 1px rgba(44,38,16,.14),
+    0 10px 24px -12px rgba(44,38,16,.32),
+    inset 0 1px 0 rgba(255,255,255,.22);
+}
+.lux::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  opacity:.17;
+  mix-blend-mode:overlay;
+}
+
+/* Cream stock, for the pieces that read as paper rather than board. */
+.card-paper{
+  background:
+    radial-gradient(120% 90% at 50% 0%, #FFFFFF, rgba(255,255,255,0) 62%),
+    linear-gradient(178deg, #FEFCF8 0%, #F8F3EA 100%);
+  box-shadow:
+    0 1px 1px rgba(67,48,42,.08),
+    0 12px 26px -14px rgba(67,48,42,.26);
+}
+
+/* ---------------------------------------------------------------
+   3. Type
+   --------------------------------------------------------------- */
+
+.kicker{
+  font-family:var(--serif);
+  font-size:10.5px;
+  font-weight:500;
+  letter-spacing:.3em;
+  text-indent:.3em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.script{
+  font-family:var(--script);
+  font-weight:400;
+  line-height:.92;
+}
+.rule{
+  width:46px;
+  height:1px;
+  background:var(--cream-deep);
+  border:0;
+  margin:18px auto;
+}
+
+/* ---------------------------------------------------------------
+   4. The envelope
+   Drawn in SVG as a stand-in. Uploading a photograph of the real
+   envelope swaps the drawing out entirely — a vector envelope will
+   always read a little flat next to a printed one.
+   --------------------------------------------------------------- */
+
+.env{
+  display:block;
+  position:relative;
+  width:272px;
+  margin:0 auto;
+}
+.env__body{
+  display:block;
+  position:relative;
+  aspect-ratio:3/2;
+  border-radius:3px;
+}
+.env__body > svg{position:absolute;inset:0;width:100%;height:100%}
+.env__body .slot{position:absolute;inset:0;border-radius:3px}
+
+.seal{
+  display:block;
+  position:absolute;
+  left:50%;
+  top:52%;
+  translate:-50% -50%;
+  width:58px;
+  height:58px;
+  z-index:4;
+}
+.seal > svg{width:100%;height:100%;filter:drop-shadow(0 3px 5px rgba(50,14,22,.34))}
+
+/* Bouquets tucked under the corners of whatever they decorate. */
+.bloom{display:block;position:absolute;z-index:5;pointer-events:none}
+.bloom--bl{left:-34px;bottom:-30px;width:96px;aspect-ratio:1;rotate:-8deg}
+.bloom--tr{right:-28px;top:-32px;width:82px;aspect-ratio:1;rotate:12deg}
+
+/* The open envelope: a landscape photograph showing above the
+   pocket, as though it were slipped inside. */
+.env-open{display:block;position:relative;width:286px;margin:0 auto}
+.env-open .liner{width:252px;aspect-ratio:4/3;margin:0 auto;rotate:-1.5deg}
+.env-open__pocket{
+  display:block;
+  position:relative;
+  aspect-ratio:3/2;
+  border-radius:3px;
+  margin-top:-56px;
+  z-index:2;
+}
+.env-open__pocket > svg{position:absolute;inset:0;width:100%;height:100%}
+.env-open__pocket .slot{position:absolute;inset:0}
+
+/* ---------------------------------------------------------------
+   5. The pasted pieces
+   Every piece is a normal block nudged up over the one before it
+   and rotated a degree or two, which is what stops a column of
+   rectangles from looking like a column of rectangles.
+   --------------------------------------------------------------- */
+
+.datecard{
+  position:relative;
+  width:190px;
+  padding:22px 14px 20px;
+  margin:-38px 0 0 2px;
+  rotate:-5deg;
+  z-index:7;
+  text-align:center;
+  border:1px solid rgba(110,31,46,.55);
+  border-radius:30px 10px 30px 10px;
+}
+.datecard b{
+  display:block;
+  font-family:var(--serif);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.24em;
+  text-indent:.24em;
+  color:var(--wine);
+}
+.datecard .d{
+  font-family:var(--serif);
+  font-size:50px;
+  line-height:1;
+  color:var(--ink);
+  margin:2px 0 1px;
+}
+.datecard small{
+  display:block;
+  font-family:var(--serif);
+  font-size:10px;
+  letter-spacing:.2em;
+  text-indent:.2em;
+  color:var(--ink-soft);
+}
+.datecard .pl{
+  display:block;
+  font-family:var(--script);
+  font-size:21px;
+  line-height:1.15;
+  color:var(--wine);
+  margin-top:9px;
+}
+.pearl{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 0 .5px var(--cream-deep);
+}
+
+.greencard{
+  position:relative;
+  width:214px;
+  margin:-58px 0 0 auto;
+  padding:30px 20px 34px;
+  rotate:3deg;
+  z-index:6;
+  border-radius:4px;
+  text-align:center;
+}
+.greencard__in{
+  position:relative;
+  z-index:2;
+  border:1px solid rgba(255,255,255,.40);
+  border-radius:3px;
+  padding:24px 12px 26px;
+}
+.greencard .k{
+  font-family:var(--serif);
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:.2em;
+  line-height:2;
+  color:#F2EFE2;
+}
+.greencard .n{
+  font-family:var(--script);
+  font-size:48px;
+  line-height:.96;
+  color:#FCFAF4;
+  margin:10px 0 0;
+}
+.greencard .amp{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:18px;
+  color:#E4E1CE;
+  line-height:1.4;
+}
+
+.polaroid{
+  position:relative;
+  width:158px;
+  padding:9px 9px 32px;
+  margin:-46px 0 0 6px;
+  rotate:-7deg;
+  z-index:9;
+}
+.polaroid .slot{aspect-ratio:4/5}
+.polaroid em{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:8px;
+  font-family:var(--script);
+  font-style:normal;
+  font-size:20px;
+  line-height:1;
+  text-align:center;
+  color:var(--wine);
+}
+.polaroid--right{margin:-50px 6px 0 auto;rotate:5deg}
+.note + .polaroid{margin-top:-18px}
+
+/* A hand-torn badge. The uneven border-radius is doing the tearing. */
+.badge{
+  position:relative;
+  display:grid;
+  place-content:center;
+  width:142px;
+  aspect-ratio:1;
+  margin:-58px 10px 0 auto;
+  rotate:4deg;
+  z-index:10;
+  text-align:center;
+  border:0;
+  padding:0;
+  color:#F7EFE6;
+  cursor:pointer;
+  border-radius:46% 54% 50% 50% / 52% 48% 52% 48%;
+  font:inherit;
+  text-decoration:none;
+  transition:rotate .5s cubic-bezier(.22,1,.36,1), translate .5s cubic-bezier(.22,1,.36,1);
+}
+.badge:hover,.badge:focus-visible{rotate:1deg;translate:0 -3px}
+.badge__t{position:relative;z-index:2;font-family:var(--script);font-size:36px;line-height:.9}
+.badge__c{position:relative;z-index:2;font-family:var(--serif);font-size:8.5px;letter-spacing:.2em;margin-top:9px}
+.badge--left{margin:-58px auto 0 10px;rotate:-4deg}
+
+/* A small reply envelope, used as the way in to the RSVP form. */
+.mini-env{
+  position:relative;
+  display:block;
+  width:178px;
+  margin:-34px auto 0 4px;
+  rotate:-3deg;
+  z-index:11;
+  border:0;
+  padding:0;
+  cursor:pointer;
+  font:inherit;
+  text-align:center;
+  text-decoration:none;
+  border-radius:3px;
+  transition:rotate .5s cubic-bezier(.22,1,.36,1), translate .5s cubic-bezier(.22,1,.36,1);
+}
+.mini-env:hover,.mini-env:focus-visible{rotate:0deg;translate:0 -3px}
+.mini-env__in{display:grid;position:relative;z-index:2;aspect-ratio:3/2;display:grid;place-content:center;padding:10px}
+.mini-env__in::before{
+  content:'';
+  position:absolute;
+  left:0;right:0;top:0;
+  height:58%;
+  background:rgba(40,36,14,.07);
+  clip-path:polygon(0 0,100% 0,50% 100%);
+}
+.mini-env__t{position:relative;z-index:2;font-family:var(--script);font-size:32px;line-height:.9;color:#FFFDF6}
+.mini-env__c{position:relative;z-index:2;font-family:var(--serif);font-size:8.5px;letter-spacing:.2em;color:#F6F4E6;margin-top:7px}
+
+/* A torn-off note, for the personal message and anything handwritten. */
+.note{
+  display:block;
+  position:relative;
+  width:252px;
+  margin:-30px auto 0;
+  padding:26px 24px 28px;
+  rotate:-1.5deg;
+  text-align:center;
+  /* The guest's own message is the one thing on this page that must never
+     be clipped, and its length is out of our hands, so it sits above every
+     other piece and the photograph below it keeps its distance. */
+  z-index:12;
+}
+.note p{
+  margin:0;
+  font-family:var(--body);
+  font-size:15.5px;
+  line-height:1.95;
+  color:var(--ink);
+}
+.note .q{
+  display:block;
+  font-family:var(--script);
+  font-size:34px;
+  line-height:0;
+  color:var(--cream-deep);
+  margin-bottom:6px;
+}
+
+/* ---------------------------------------------------------------
+   6. Verse
+   --------------------------------------------------------------- */
+
+.verse{
+  max-width:296px;
+  margin:64px auto 0;
+  text-align:center;
+}
+.verse p{
+  margin:0;
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:19px;
+  line-height:1.95;
+  color:var(--wine);
+}
+.verse small{
+  display:block;
+  margin-top:16px;
+  font-family:var(--serif);
+  font-size:10px;
+  letter-spacing:.24em;
+  text-indent:.24em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+
+/* ---------------------------------------------------------------
+   7. Footer
+   --------------------------------------------------------------- */
+
+.foot{
+  position:relative;
+  margin-top:62px;
+  padding:34px 20px 36px;
+  text-align:center;
+  color:#F7F3E8;
+}
+.foot__in{position:relative;z-index:2}
+.foot .n{font-family:var(--script);font-size:38px;line-height:1;color:#FDFBF4}
+.foot .d{font-family:var(--serif);font-size:10px;letter-spacing:.26em;text-indent:.26em;margin-top:8px;color:#E9E7D6}
+.foot .note-line{
+  font-family:var(--serif);
+  font-size:12px;
+  font-style:italic;
+  color:#DCDAC6;
+  margin-top:16px;
+}
+
+/* ---------------------------------------------------------------
+   8. Buttons
+   --------------------------------------------------------------- */
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  min-height:46px;
+  padding:0 22px;
+  border:1px solid var(--olive);
+  border-radius:999px;
+  background:transparent;
+  color:var(--olive-deep);
+  font-family:var(--serif);
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.2em;
+  text-indent:.2em;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  transition:background .3s, color .3s;
+}
+.btn:hover,.btn:focus-visible{background:var(--olive);color:#FBF8F3}
+.btn svg{width:17px;height:17px;flex:none}
+.btn--solid{background:var(--olive);color:#FBF8F3}
+.btn--solid:hover,.btn--solid:focus-visible{background:var(--olive-deep)}
+.btn[disabled]{opacity:.55;cursor:default}
+
+:where(button,a,input,textarea):focus-visible{
+  outline:1.5px solid var(--wine-soft);
+  outline-offset:3px;
+}
+
+/* ---------------------------------------------------------------
+   9. Entrances
+   Each piece settles into place as it scrolls in, like being laid
+   down. Nothing moves far; anything more would fight the collage.
+   --------------------------------------------------------------- */
+
+.rise{opacity:0;translate:0 16px;transition:opacity .9s ease, translate .9s cubic-bezier(.22,1,.36,1)}
+.rise.in{opacity:1;translate:0 0}
+
+@media (prefers-reduced-motion: reduce){
+  .rise{opacity:1;translate:0 0;transition:none}
+  .badge,.mini-env{transition:none}
+  html{scroll-behavior:auto}
+}
