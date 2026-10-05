@@ -1,135 +1,217 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>การ์ดเชิญ · Worawan &amp; Chat</title>
+<title>You&rsquo;re invited · Worawan &amp; Chat</title>
 <meta name="robots" content="noindex">
-<meta property="og:title" content="คุณได้รับการ์ดเชิญงานสมรส Worawan &amp; Chat">
-<meta property="og:description" content="วันเสาร์ที่ 21 พฤศจิกายน 2569 · คริสตจักรเมืองทอง · แตะเพื่อเปิดการ์ด">
-<meta name="theme-color" content="#FCEFEC">
+<meta property="og:title" content="You&rsquo;re invited · Worawan &amp; Chat">
+<meta property="og:description" content="Saturday 21 November 2026 · Two o'clock in the afternoon · Muangthong Church">
+<meta name="theme-color" content="#FBF8F3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Italiana&family=Parisienne&family=DM+Sans:wght@400;500&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/card.css?v=12">
+<link href="https://fonts.googleapis.com/css2?family=Italianno&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Sans+Thai:wght@300;400;500&family=Charm:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/collage.css?v=15">
+<link rel="stylesheet" href="../assets/css/card.css?v=15">
 </head>
 <body>
 
-<div class="sparkles" id="sparkles" aria-hidden="true"></div>
 <div class="dust" id="dust" aria-hidden="true"></div>
 
 <main class="page">
 
-<!-- ============ SCENE 1 · the closed card ============ -->
-<section class="scene" id="scene">
-  <button type="button" class="cover" id="cover" aria-label="เปิดการ์ดเชิญ">
-    <svg class="cover__frame" viewBox="0 0 400 600" preserveAspectRatio="none" aria-hidden="true">
-      <rect x="11" y="11" width="378" height="578" fill="none" stroke="var(--blush-deep)" stroke-width="0.7"/>
-      <rect x="16" y="16" width="368" height="568" fill="none" stroke="var(--blush-deep)" stroke-width="0.5" opacity=".55"/>
-    </svg>
+<!-- ============ the cover ============ -->
+<section class="strip" id="scene">
+  <button type="button" class="cover" id="cover" aria-label="Open the invitation">
+    <span class="kicker cover__eyebrow" data-key="open.eyebrow">WE&rsquo;RE GETTING MARRIED</span>
+    <span class="cover__names">
+      <span data-key="hero.bride_first">Worawan</span>
+      <span class="amp">&amp;</span>
+      <span data-key="hero.groom_first">Chat</span>
+    </span>
 
-    <svg class="cover__bow" viewBox="-108 -78 216 164" fill="var(--paper)" stroke="var(--ribbon)" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
-      <path d="M-8 6C-26 30 -34 58 -28 76L-16 66L-6 78C-2 58 0 30 -2 10Z"/>
-      <path d="M8 6C26 30 34 58 28 76L16 66L6 78C2 58 0 30 2 10Z"/>
-      <path d="M-6 -2C-28 -50 -66 -72 -94 -62C-122 -52 -118 -14 -82 -1C-58 7 -20 11 -6 -2Z"/>
-      <path d="M6 -2C28 -50 66 -72 94 -62C122 -52 118 -14 82 -1C58 7 20 11 6 -2Z"/>
-      <path d="M-12 -5C-40 -28 -66 -40 -86 -37" fill="none" stroke="var(--ribbon-soft)" stroke-width="0.8"/>
-      <path d="M12 -5C40 -28 66 -40 86 -37" fill="none" stroke="var(--ribbon-soft)" stroke-width="0.8"/>
-      <ellipse cx="0" cy="2" rx="12" ry="10"/>
-    </svg>
+    <span class="env">
+      <span class="env__body lux art" data-art="env_closed">
+        <svg viewBox="0 0 300 200" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <filter id="flapsoft" x="-20%" y="-20%" width="140%" height="160%">
+              <feGaussianBlur stdDeviation="5"/>
+            </filter>
+          </defs>
+          <path d="M0 168 L300 168 L300 200 L0 200 Z" fill="rgba(26,22,8,.08)"/>
+          <path d="M0 168 L300 168" stroke="rgba(255,255,255,.10)" stroke-width="1.2" fill="none"/>
+          <path d="M0 8 L300 8 L150 114 Z" fill="rgba(26,22,8,.26)" filter="url(#flapsoft)"/>
+          <path d="M0 0 L300 0 L150 104 Z" fill="rgba(255,255,255,.055)"/>
+          <path d="M0 0 L150 104 L300 0" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1.1"/>
+        </svg>
+      </span>
 
-    <span class="cover__eyebrow">the wedding of</span>
-    <span class="cover__names">WORAWAN &amp; CHAT</span>
+      <span class="seal art" data-art="seal">
+        <svg viewBox="0 0 58 58" aria-hidden="true">
+          <defs>
+            <radialGradient id="waxg" cx="38%" cy="30%" r="78%">
+              <stop offset="0" stop-color="#9A3044"/>
+              <stop offset=".55" stop-color="#6E1F2E"/>
+              <stop offset="1" stop-color="#4E1320"/>
+            </radialGradient>
+          </defs>
+          <path d="M29 4c7 0 8 4 13 6s8 0 10 6-2 8-2 13 4 7 1 12-8 3-12 6-5 7-10 7-6-4-11-6-9 0-11-5 2-8 1-13-4-7-1-12 7-3 11-6S23 4 29 4Z" fill="url(#waxg)"/>
+          <circle cx="29" cy="29" r="19" fill="none" stroke="rgba(255,255,255,.26)" stroke-width="1"/>
+          <text x="29" y="34" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="13.5" fill="#EBC9CF">W&amp;C</text>
+        </svg>
+      </span>
 
-    <span class="cover__div" aria-hidden="true"><i></i><b></b><i></i></span>
+      <span class="slot slot--cut bloom bloom--bl" data-slot="floral_1"><span>Bouquet 1</span></span>
+      <span class="slot slot--cut bloom bloom--tr" data-slot="floral_2"><span>Bouquet 2</span></span>
+    </span>
 
-    <span class="cover__to" data-key="card.to">เรียน</span>
-    <span class="cover__who" id="env-name"></span>
+    <span class="cover__slip card-paper">
+      <span class="cover__to" data-key="card.to">To</span>
+      <span class="cover__who" id="cover-name"></span>
+    </span>
 
-    <span class="cover__hint" id="scene-hint" data-key="card.hint">แตะเพื่อเปิดการ์ด</span>
+    <span class="cover__hint" data-key="card.hint">TAP TO OPEN</span>
   </button>
 </section>
 
-<!-- ============ SCENE 2 · the invitation, top to bottom ============ -->
-<section class="stage" id="stage" hidden>
+<!-- ============ the invitation ============ -->
+<section class="strip" id="stage" hidden>
 
-  <article class="card" id="card">
-    <svg class="card__frame" viewBox="0 0 400 600" preserveAspectRatio="none" aria-hidden="true">
-      <rect x="11" y="11" width="378" height="578" fill="none" stroke="var(--blush)" stroke-width="0.7"/>
-      <rect x="16" y="16" width="368" height="568" fill="none" stroke="var(--blush)" stroke-width="0.5" opacity=".55"/>
-    </svg>
-
-    <svg class="card__bow" viewBox="-108 -78 216 164" fill="var(--paper)" stroke="var(--ribbon)" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
-      <path d="M-8 6C-26 30 -34 58 -28 76L-16 66L-6 78C-2 58 0 30 -2 10Z"/>
-      <path d="M8 6C26 30 34 58 28 76L16 66L6 78C2 58 0 30 2 10Z"/>
-      <path d="M-6 -2C-28 -50 -66 -72 -94 -62C-122 -52 -118 -14 -82 -1C-58 7 -20 11 -6 -2Z"/>
-      <path d="M6 -2C28 -50 66 -72 94 -62C122 -52 118 -14 82 -1C58 7 20 11 6 -2Z"/>
-      <path d="M-12 -5C-40 -28 -66 -40 -86 -37" fill="none" stroke="var(--ribbon-soft)" stroke-width="0.8"/>
-      <path d="M12 -5C40 -28 66 -40 86 -37" fill="none" stroke="var(--ribbon-soft)" stroke-width="0.8"/>
-      <ellipse cx="0" cy="2" rx="12" ry="10"/>
-    </svg>
-
-    <p class="c-eyebrow">the wedding of</p>
-    <p class="c-name">WORAWAN</p>
-    <p class="c-amp">and</p>
-    <p class="c-name">CHAT</p>
-
-    <div class="c-div" aria-hidden="true"><span></span><i></i><span></span></div>
-
-    <p class="c-to" data-key="card.to">เรียน</p>
-    <p class="c-who" id="guest-name"></p>
-    <p class="c-msg" id="guest-msg" hidden></p>
-
-    <svg class="c-rings" viewBox="0 0 46 24" fill="none" stroke="var(--ribbon)" stroke-width="1" aria-hidden="true">
-      <circle cx="17" cy="12" r="9.4"/>
-      <circle cx="29" cy="12" r="9.4"/>
-    </svg>
-
-    <p class="c-date">วันเสาร์ที่ 21 พฤศจิกายน 2569</p>
-    <p class="c-venue">คริสตจักรเมืองทอง</p>
-    <p class="c-time">พิธีสมรส เวลา 14:00 น.</p>
-  </article>
-
-  <div class="c-actions">
-    <button type="button" class="btn" id="save-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11.5m0 0 4-4m-4 4-4-4"/><path d="M4 16.5v2.2a1.8 1.8 0 0 0 1.8 1.8h12.4a1.8 1.8 0 0 0 1.8-1.8v-2.2"/></svg>
-      <span data-key="card.save">บันทึกการ์ด</span>
-    </button>
-    <a class="btn" href="../">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2"/><path d="M6.2 10.4V19a1 1 0 0 0 1 1h9.6a1 1 0 0 0 1-1v-8.6"/></svg>
-      <span data-key="card.home">รายละเอียดงาน</span>
-    </a>
+  <!-- the envelope, opened -->
+  <div class="env-open rise" style="margin-top:32px">
+    <div class="slot liner" data-slot="liner"><span>Photograph in the flap<br>landscape 4 : 3</span></div>
+    <div class="env-open__pocket lux art" data-art="env_open">
+      <svg viewBox="0 0 300 200" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 2 L300 2" stroke="rgba(255,255,255,.14)" stroke-width="2" fill="none"/>
+        <path d="M0 0 L300 0 L300 26 L0 26 Z" fill="rgba(26,22,8,.16)"/>
+      </svg>
+    </div>
   </div>
 
-  <div class="c-scroll" id="scroll-cue" aria-hidden="true">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v13m0 0 5-5m-5 5-5-5"/></svg>
+  <!-- the date -->
+  <div class="datecard card-paper rise">
+    <span class="pearl" style="left:11px;top:11px"></span>
+    <span class="pearl" style="right:11px;top:11px"></span>
+    <span class="pearl" style="left:11px;bottom:11px"></span>
+    <span class="pearl" style="right:11px;bottom:11px"></span>
+    <b data-key="date.weekday">SATURDAY</b>
+    <div class="d" data-key="date.day">21</div>
+    <small data-key="date.month">NOVEMBER 2026</small>
+    <span class="pl" data-key="date.place">Muangthong Church</span>
   </div>
 
-  <section class="ask">
-    <h2 data-key="card.rsvp_heading">ตอบรับคำเชิญ</h2>
-    <p class="ask__sub" id="rsvp-sub" data-key="card.deadline">กรุณาตอบรับภายในวันที่ 7 พฤศจิกายน 2569</p>
+  <!-- the card -->
+  <div class="greencard lux rise">
+    <div class="greencard__in">
+      <div class="k" data-key="card.kicker">JOIN US FOR THE WEDDING OF</div>
+      <div class="n" data-key="hero.bride_first">Worawan</div>
+      <div class="amp">&amp;</div>
+      <div class="n" data-key="hero.groom_first">Chat</div>
+    </div>
+  </div>
+
+  <!-- the note written for this guest -->
+  <div class="note card-paper rise" id="guest-note" hidden>
+    <p>
+      <span class="q" aria-hidden="true">&ldquo;</span>
+      <span id="guest-msg"></span>
+    </p>
+  </div>
+
+  <!-- a photograph -->
+  <div class="polaroid card-paper rise">
+    <div class="slot" data-slot="couple_1"><span>The two of you<br>portrait 4 : 5</span></div>
+    <em>
+      <span data-key="hero.bride_first">Worawan</span> &amp; <span data-key="hero.groom_first">Chat</span>
+    </em>
+  </div>
+
+  <!-- details, over on the landing page -->
+  <a class="badge lux lux--wine rise" href="../">
+    <span class="badge__t" data-key="lbl.details">Details</span>
+    <span class="badge__c" data-key="lbl.click">TAP HERE</span>
+  </a>
+
+  <!-- the reply envelope -->
+  <a class="mini-env lux lux--pale rise" href="#rsvp">
+    <span class="mini-env__in">
+      <span class="mini-env__t" data-key="lbl.rsvp">Kindly RSVP</span>
+      <span class="mini-env__c" data-key="lbl.click">TAP HERE</span>
+    </span>
+  </a>
+
+  <!-- the reply -->
+  <section class="ask card-paper rise" id="rsvp">
+    <h2 data-key="card.rsvp_heading">Kindly RSVP</h2>
+    <p class="ask__sub" data-key="card.deadline">Please let us know by 7 November 2026</p>
 
     <form id="rsvp-form" novalidate>
       <fieldset>
-        <legend data-key="card.question">จะมาร่วมงานหรือไม่</legend>
+        <legend data-key="card.question">Will you be joining us?</legend>
         <div class="choice">
-          <button type="button" data-attending="yes" aria-pressed="false" data-key="card.yes">มาร่วมงาน</button>
-          <button type="button" data-attending="no" aria-pressed="false" data-key="card.no">ไม่สะดวก</button>
+          <button type="button" data-attending="yes" aria-pressed="false" data-key="card.yes">Joyfully accepts</button>
+          <button type="button" data-attending="no" aria-pressed="false" data-key="card.no">Regretfully declines</button>
         </div>
       </fieldset>
 
-      <label for="rsvp-note" data-key="card.note_label">ข้อความถึงบ่าวสาว</label>
-      <textarea id="rsvp-note" maxlength="400" placeholder="อยากบอกอะไรกับบ่าวสาวไหม"></textarea>
+      <label for="rsvp-note" data-key="card.note_label">A note for the couple</label>
+      <textarea id="rsvp-note" maxlength="400" placeholder="Anything you&rsquo;d like to say to them"></textarea>
 
-      <button type="submit" class="btn btn--solid" id="rsvp-submit"><span data-key="card.submit">ส่งคำตอบ</span></button>
+      <button type="submit" class="btn btn--solid" id="rsvp-submit"><span data-key="card.submit">Send reply</span></button>
       <p class="status" id="rsvp-status" role="status"></p>
     </form>
   </section>
+
+  <!-- the verse -->
+  <section class="verse rise">
+    <p data-key="verse.en">But as for me and my household, we will serve the Lord.</p>
+    <small data-key="verse.en_ref">Joshua 24 : 15</small>
+  </section>
+
+  <div class="actions rise">
+    <button type="button" class="btn" id="save-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11.5m0 0 4-4m-4 4-4-4"/><path d="M4 16.5v2.2a1.8 1.8 0 0 0 1.8 1.8h12.4a1.8 1.8 0 0 0 1.8-1.8v-2.2"/></svg>
+      <span data-key="card.save">Save this card</span>
+    </button>
+    <a class="btn" href="../">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2"/><path d="M6.2 10.4V19a1 1 0 0 0 1 1h9.6a1 1 0 0 0 1-1v-8.6"/></svg>
+      <span data-key="card.home">Event details</span>
+    </a>
+  </div>
+
+  <div class="slot slot--cut bouquet rise" data-slot="floral_3" style="width:200px;margin:38px auto 0;aspect-ratio:3/2"><span>Large bouquet<br>transparent png</span></div>
 
 </section>
 
 </main>
 
-<script type="module" src="../assets/js/card.js?v=12"></script>
+<footer class="foot lux" id="foot" hidden>
+  <div class="foot__in">
+    <div class="n">
+      <span data-key="hero.bride_first">Worawan</span> &amp; <span data-key="hero.groom_first">Chat</span>
+    </div>
+    <div class="d">21 . 11 . 2026</div>
+  </div>
+</footer>
+
+<!-- the picture the guest saves · never shown on screen -->
+<div class="keepsake lux" id="keepsake" aria-hidden="true">
+  <div class="keepsake__in">
+    <div class="k" data-key="card.kicker">JOIN US FOR THE WEDDING OF</div>
+    <div class="n" data-key="hero.bride_first">Worawan</div>
+    <div class="amp">&amp;</div>
+    <div class="n" data-key="hero.groom_first">Chat</div>
+    <hr>
+    <div class="to" data-key="card.to">To</div>
+    <div class="who" id="keepsake-name"></div>
+    <div class="meta">
+      <div data-key="date.weekday">SATURDAY</div>
+      <div><span data-key="date.day">21</span> <span data-key="date.month">NOVEMBER 2026</span></div>
+      <div data-key="date.place">Muangthong Church</div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="../assets/js/card.js?v=15"></script>
 </body>
 </html>
