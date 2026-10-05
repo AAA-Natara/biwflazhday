@@ -7,8 +7,8 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;700&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/admin.css?v=14">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/admin.css?v=15">
 </head>
 <body>
 
@@ -53,6 +53,16 @@
     <!-- ---- content ---- -->
     <section id="tab-content" class="tab">
       <p class="lede">แก้ข้อความทุกจุดบนหน้าเว็บได้จากที่นี่ เปลี่ยนแล้วกดบันทึกที่แถบด้านล่าง</p>
+
+      <div class="findbar">
+        <input type="search" id="content-search" placeholder="พิมพ์คำที่อยู่บนเว็บ เช่น RSVP หรือ ที่จอดรถ" aria-label="ค้นหาช่องข้อความ">
+        <label class="switch" for="show-keys">
+          <input type="checkbox" id="show-keys">
+          <span>แสดงรหัสฟิลด์</span>
+        </label>
+      </div>
+      <p class="findbar__hint" id="content-found" role="status"></p>
+
       <div id="content-groups" class="stack"><p class="dim">กำลังโหลด…</p></div>
     </section>
 
@@ -113,15 +123,56 @@
 
     <!-- ---- gallery ---- -->
     <section id="tab-gallery" class="tab" hidden>
-      <p class="lede">รูปจะถูกย่อให้ด้านยาวไม่เกิน 1600px และแปลงเป็น WebP ในเครื่องก่อนอัปโหลด</p>
+      <p class="lede">อัปรูปขนาดเต็มได้เลย ระบบย่อให้เองก่อนส่งขึ้นเซิร์ฟเวอร์ ไม่ต้องย่อมาก่อน</p>
+
+
+      <div class="group">
+        <h2>รูปแต่ละช่องไปอยู่ตรงไหน</h2>
+        <p class="group__hint">หมายเลขในแผนผังตรงกับหมายเลขหน้าชื่อช่องด้านล่าง</p>
+        <div class="artmap">
+          <svg viewBox="0 0 360 440" role="img" aria-label="แผนผังตำแหน่งรูปบนหน้าเว็บ">
+            <style>
+              .mf{fill:#7D8456}.mp{fill:#FFFFFF;stroke:#D9CDB8;stroke-width:1}
+              .mt{font-family:system-ui,sans-serif;font-size:11px;font-weight:700;fill:#fff}
+              .mt2{font-family:system-ui,sans-serif;font-size:11px;font-weight:700;fill:#43302A}
+              .mn{fill:#6E1F2E}.mnl{fill:#E4D9C4;stroke:#B9A98C;stroke-width:1}
+              .cap{font-family:system-ui,sans-serif;font-size:10px;fill:#8A7A6E}
+            </style>
+
+            <!-- closed envelope -->
+            <rect x="92" y="14" width="176" height="112" rx="3" class="mf"/>
+            <path d="M92 14 L268 14 L180 76 Z" fill="rgba(255,255,255,.14)"/>
+            <circle cx="180" cy="74" r="15" class="mn"/>
+            <circle cx="36" cy="118" r="22" class="mnl"/>
+            <circle cx="296" cy="30" r="19" class="mnl"/>
+            <text x="180" y="78" text-anchor="middle" class="mt">3</text>
+            <text x="36" y="122" text-anchor="middle" class="mt2">4</text>
+            <text x="296" y="34" text-anchor="middle" class="mt2">5</text>
+            <text x="180" y="44" text-anchor="middle" class="mt">1</text>
+
+            <!-- open envelope with the photo sticking out -->
+            <rect x="110" y="152" width="140" height="80" rx="2" class="mp"/>
+            <text x="180" y="198" text-anchor="middle" class="mt2">7</text>
+            <rect x="92" y="206" width="176" height="104" rx="3" class="mf"/>
+            <text x="180" y="266" text-anchor="middle" class="mt">2</text>
+
+            <!-- polaroid + bouquet -->
+            <rect x="24" y="330" width="96" height="100" rx="2" class="mp"/>
+            <text x="72" y="386" text-anchor="middle" class="mt2">8</text>
+            <rect x="136" y="330" width="96" height="100" rx="2" class="mp"/>
+            <text x="184" y="386" text-anchor="middle" class="mt2">9</text>
+            <ellipse cx="300" cy="380" rx="42" ry="34" class="mnl"/>
+            <text x="300" y="384" text-anchor="middle" class="mt2">6</text>
+          </svg>
+        </div>
+      </div>
 
       <div class="group">
         <h2>รูปบนการ์ด</h2>
         <p class="group__hint">
-          แต่ละช่องใส่รูปได้ 1 รูป อัปใหม่ทับรูปเดิมได้เลย
-          ช่องที่ยังว่างจะขึ้นกรอบเส้นประบนหน้าเว็บ พร้อมป้ายบอกว่าต้องใส่รูปอะไร
-          ใส่รูปแล้วกรอบและป้ายจะหายไป เหลือแค่รูป
-          ถ้าอยากซ่อนกรอบที่ยังว่างทั้งหมด ปิดสวิตช์ “แสดงกรอบช่องรูปที่ยังว่าง” ในแท็บตั้งค่า
+          ช่องละ 1 รูป อัปใหม่ทับรูปเดิมได้เลย ช่องที่ยังว่างจะขึ้นกรอบเส้นประบนหน้าเว็บ
+          ใส่รูปแล้วกรอบหายไป เหลือแค่รูป · ปิดกรอบที่ยังว่างทั้งหมดได้ที่สวิตช์
+          “แสดงกรอบช่องรูปที่ยังว่าง” ในแท็บตั้งค่า
         </p>
         <div id="art-list" class="artgrid"><p class="dim">กำลังโหลด…</p></div>
         <input type="file" id="art-input" accept="image/*" hidden>
@@ -159,6 +210,6 @@
   <p class="toast" id="toast" hidden></p>
 </div>
 
-<script type="module" src="../assets/js/admin.js?v=14"></script>
+<script type="module" src="../assets/js/admin.js?v=15"></script>
 </body>
 </html>
