@@ -1,8 +1,8 @@
-// Personal invitation card. Everything on this page hangs off one slug in the
+// The personal invitation. Everything on this page hangs off one slug in the
 // URL; without it there is no guest, so the page says so plainly rather than
 // pretending to work.
 
-import { getClient } from './supabase-client.js?v=12';
+import { getClient, publicImageUrl } from './supabase-client.js?v=14';
 
 const $ = id => document.getElementById(id);
 const slug = new URLSearchParams(location.search).get('g');
@@ -12,21 +12,21 @@ let guest = null;
 let attending = null;
 let opened = false;
 
-/* ---------- the opening ------------------------------------------- */
+/* ---------- opening the envelope ---------------------------------- */
 
 const SPARK = 'M12 0C13.1 8.2 15.8 10.9 24 12C15.8 13.1 13.1 15.8 12 24C10.9 15.8 8.2 13.1 0 12C8.2 10.9 10.9 8.2 12 0Z';
-const TINTS = ['#9BA667', '#DEB2A8', '#C08A96'];
+const TINTS = ['#AEB489', '#7D8456', '#8E3347', '#E4D9C4'];
 
 // A burst thrown from the mouth of the envelope: random angle, random reach,
 // random life, so no two sparks travel together.
-function burst(originX, originY, count = 34) {
+function burst(originX, originY, count = 28) {
   const layer = $('dust');
   if (!layer || reduce) return;
 
   for (let i = 0; i < count; i++) {
     const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
-    const reach = 90 + Math.random() * 210;
-    const size = 6 + Math.random() * 15;
+    const reach = 80 + Math.random() * 190;
+    const size = 5 + Math.random() * 12;
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 24 24');
@@ -34,9 +34,9 @@ function burst(originX, originY, count = 34) {
     svg.style.left = `${originX - size / 2}px`;
     svg.style.top = `${originY - size / 2}px`;
     svg.style.setProperty('--dx', `${(Math.cos(angle) * reach).toFixed(0)}px`);
-    svg.style.setProperty('--dy', `${(Math.sin(angle) * reach - 40).toFixed(0)}px`);
+    svg.style.setProperty('--dy', `${(Math.sin(angle) * reach - 36).toFixed(0)}px`);
     svg.style.setProperty('--life', `${(1.1 + Math.random() * 1.1).toFixed(2)}s`);
-    svg.style.animationDelay = `${(Math.random() * 0.35).toFixed(2)}s`;
+    svg.style.animationDelay = `${(Math.random() * 0.32).toFixed(2)}s`;
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', SPARK);
@@ -48,133 +48,109 @@ function burst(originX, originY, count = 34) {
   }
 }
 
-const BALLOON_TINTS = [
-  ['#F0D2CB', '#DEB2A8'],   // blush
-  ['#9BA667', '#7E8750'],   // olive
-  ['#8C3246', '#6B2132'],   // burgundy
-];
-
-// Balloons drawn rather than imaged: a body, a pinched knot, and a slack
-// string. Each gets its own speed and sway so the group never moves as one.
-function releaseBalloons(count = 13) {
-  if (reduce) return;
-  const layer = document.createElement('div');
-  layer.className = 'balloons';
-  layer.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(layer);
-
-  for (let i = 0; i < count; i++) {
-    const [body, shade] = BALLOON_TINTS[i % BALLOON_TINTS.length];
-    const w = 34 + Math.random() * 34;
-
-    const b = document.createElement('div');
-    b.className = 'balloon';
-    b.style.width = `${w.toFixed(0)}px`;
-    b.style.left = `${(4 + Math.random() * 88).toFixed(1)}%`;
-    b.style.setProperty('--dur', `${(7.5 + Math.random() * 5).toFixed(1)}s`);
-    b.style.setProperty('--wait', `${(Math.random() * 1.6).toFixed(2)}s`);
-    b.style.setProperty('--swayDur', `${(2.6 + Math.random() * 2).toFixed(1)}s`);
-
-    b.innerHTML = `
-      <svg viewBox="0 0 60 116" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="30" cy="36" rx="27" ry="34" fill="${body}"/>
-        <path d="M14 20C18 12 25 8 32 8" stroke="#FCEFEC" stroke-width="3" stroke-linecap="round" fill="none" opacity=".55"/>
-        <path d="M30 70l-6 8h12l-6-8Z" fill="${shade}"/>
-        <path d="M30 78C36 88 24 96 30 106C34 112 30 114 28 116" stroke="${shade}" stroke-width="1" fill="none" stroke-linecap="round"/>
-      </svg>`;
-    layer.appendChild(b);
+function reveal() {
+  const pieces = document.querySelectorAll('#stage .rise, .foot');
+  if (reduce || !('IntersectionObserver' in window)) {
+    pieces.forEach(el => el.classList.add('in'));
+    return;
   }
-
-  // The whole layer removes itself once the slowest balloon has left.
-  setTimeout(() => layer.remove(), 16000);
+  const io = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
+  pieces.forEach(el => io.observe(el));
 }
 
 function openCard() {
   if (opened) return;
   opened = true;
 
-  const env = $('cover');
-  const scene = $('scene');
-  const stage = $('stage');
+  const cover = $('cover');
+  const r = cover.getBoundingClientRect();
+  cover.classList.add('opening');
 
-  env.classList.add('opening');
-
-  const r = env.getBoundingClientRect();
-  // Two waves: one as the flap lifts, a fuller one as the card clears the top.
-  burst(r.left + r.width / 2, r.top + r.height * 0.4, 26);
-  setTimeout(releaseBalloons, 260);
-  setTimeout(() => burst(r.left + r.width / 2, r.top + r.height * 0.25, 30), 620);
+  // Two waves: one as the seal breaks, a fuller one as the card clears.
+  burst(r.left + r.width / 2, r.top + r.height * 0.52, 24);
+  setTimeout(() => burst(r.left + r.width / 2, r.top + r.height * 0.34, 30), 560);
 
   setTimeout(() => {
-    scene.hidden = true;
-    stage.hidden = false;
-    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-  }, reduce ? 0 : 900);
+    $('scene').hidden = true;
+    $('stage').hidden = false;
+    $('foot').hidden = false;
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    reveal();
+  }, reduce ? 0 : 860);
 }
 
-/* ---------- copy from the database -------------------------------- */
+/* ---------- copy and pictures from the database ------------------- */
 
-// Everything visible on this page is editable from the admin panel. Rather
-// than list the fields twice, the markup carries data-key and this walks it.
+// Everything visible here is editable from the admin panel. Rather than list
+// the fields twice, the markup carries data-key and this walks it.
 async function loadCopy(sb) {
-  if (!sb) return {};
-
-  const shared = ['event.date', 'event.venue', 'event.time', 'footer.apology',
-                  'hero.bride_first', 'hero.groom_first'];
-  const keys = [...document.querySelectorAll('[data-key]')].map(el => el.dataset.key).concat(shared);
-  const [{ data: content }, { data: config }] = await Promise.all([
-    sb.from('site_content').select('key,value_th').in('key', [...new Set(keys)]),
-    sb.from('site_settings').select('key,value')
+  const [{ data: content }, { data: config }, { data: art }] = await Promise.all([
+    sb.from('site_content').select('key,value_th'),
+    sb.from('site_settings').select('key,value'),
+    sb.from('gallery').select('storage_path,caption,kind,slot').eq('kind', 'art')
   ]);
 
   const map = Object.fromEntries((content || []).map(r => [r.key, r.value_th]));
   document.querySelectorAll('[data-key]').forEach(el => {
     const v = map[el.dataset.key];
-    if (v) el.textContent = v;
+    if (v) { if (el.tagName === 'A') el.href = v; else el.textContent = v; }
   });
 
-  const set = (sel, key) => {
-    const el = document.querySelector(sel);
-    if (el && map[key]) el.textContent = map[key];
-  };
-  set('.card__date', 'event.date');
-  set('.card__venue', 'event.venue');
-  set('.card__time', 'event.time');
-  set('.card__foot', 'footer.apology');
+  const cfg = Object.fromEntries((config || []).map(r => [r.key, r.value]));
+  document.documentElement.dataset.hints = cfg.show_slot_hints === 'false' ? 'off' : 'on';
 
-  // The couple's names live under the landing-page keys; the card borrows them.
-  const names = document.querySelectorAll('.c-name');
-  if (names[0] && map['hero.bride_first']) names[0].textContent = map['hero.bride_first'];
-  if (names[1] && map['hero.groom_first']) names[1].textContent = map['hero.groom_first'];
-  const mini = document.querySelector('.mini__names');
-  if (mini && map['hero.bride_first'] && map['hero.groom_first']) {
-    mini.textContent = `${map['hero.bride_first']} & ${map['hero.groom_first']}`;
+  // The envelope, the seal and the bouquets. A slot keeps its dashed box
+  // until a picture arrives; art the page drew for itself gets replaced.
+  const bySlot = new Map((art || []).filter(p => p.slot).map(p => [p.slot, p]));
+  for (const el of document.querySelectorAll('[data-slot],[data-art]')) {
+    const row = bySlot.get(el.dataset.slot || el.dataset.art);
+    if (!row) continue;
+    const url = await publicImageUrl(row.storage_path);
+    if (!url) continue;
+    let img = el.querySelector(':scope > img');
+    if (!img) {
+      img = document.createElement('img');
+      img.decoding = 'async';
+      el.appendChild(img);
+    }
+    img.src = url;
+    img.alt = row.caption || '';
+    el.classList.add('is-filled');
   }
 
-  return Object.fromEntries((config || []).map(r => [r.key, r.value]));
+  return cfg;
 }
 
-/* ---------- guest ------------------------------------------------- */
+/* ---------- nothing to show --------------------------------------- */
 
 function showBlank(message) {
-  const dust = $('dust');
-  if (dust) dust.remove();
+  for (const id of ['dust', 'foot', 'keepsake']) {
+    const el = $(id);
+    if (el) el.remove();
+  }
+
   document.querySelector('.page').innerHTML = `
     <div class="blank">
-      <svg viewBox="0 0 60 42" width="58" fill="none" stroke="#8C3246" stroke-width="1" stroke-linecap="round" aria-hidden="true">
+      <svg viewBox="0 0 60 42" width="58" fill="none" stroke="#6E1F2E" stroke-width="1" stroke-linecap="round" aria-hidden="true">
         <path d="M28 20C20 8 6 6 4 15C2 23 16 26 28 20Z"/><path d="M32 20C40 8 54 6 56 15C58 23 44 26 32 20Z"/>
         <ellipse cx="30" cy="20" rx="5" ry="4"/><path d="M27 25C24 31 23 36 24 40"/><path d="M33 25C36 31 37 36 36 40"/>
       </svg>
       <h2>Worawan &amp; Chat</h2>
       <p></p>
-      <a class="btn" href="../">ดูรายละเอียดงาน</a>
+      <a class="btn" href="../">Event details</a>
     </div>`;
   document.querySelector('.blank p').textContent = message;
 }
 
-/* ---------- rsvp -------------------------------------------------- */
+/* ---------- the reply --------------------------------------------- */
 
-function bindRsvp(sb, config) {
+function bindRsvp(sb) {
   const buttons = [...document.querySelectorAll('.choice button')];
   const select = (btn) => {
     attending = btn.dataset.attending === 'yes';
@@ -183,21 +159,21 @@ function bindRsvp(sb, config) {
   buttons.forEach(btn => btn.addEventListener('click', () => select(btn)));
 
   // Someone who already answered should see their own choice waiting for
-  // them, not a blank form that makes them wonder if it saved.
+  // them, not a blank form that makes them wonder whether it saved.
   if (guest?.has_replied) {
     const prev = buttons.find(b => (b.dataset.attending === 'yes') === !!guest.attending);
     if (prev) select(prev);
-    $('rsvp-status').textContent = 'คุณตอบไว้แล้ว เปลี่ยนคำตอบได้โดยส่งใหม่อีกครั้ง';
+    $('rsvp-status').textContent = 'You have already replied. Sending again updates your answer.';
   }
 
   $('rsvp-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const status = $('rsvp-status');
-    if (attending === null) { status.textContent = 'กรุณาเลือกว่าจะมาร่วมงานหรือไม่'; return; }
+    if (attending === null) { status.textContent = 'Please choose one of the two.'; return; }
 
     const btn = $('rsvp-submit');
     btn.disabled = true;
-    status.textContent = 'กำลังบันทึก…';
+    status.textContent = 'Sending…';
 
     const { error } = await sb.rpc('submit_rsvp', {
       p_slug: slug,
@@ -209,24 +185,24 @@ function bindRsvp(sb, config) {
     btn.disabled = false;
     if (error) {
       status.textContent = error.message.includes('guest_not_found')
-        ? 'ไม่พบรายชื่อสำหรับลิงก์นี้'
-        : 'บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง';
+        ? 'We could not find this invitation link.'
+        : 'That did not save. Please try once more.';
       return;
     }
     status.textContent = attending
-      ? 'บันทึกแล้ว แล้วพบกันวันงาน'
-      : 'บันทึกแล้ว ขอบคุณที่แจ้งให้ทราบ';
+      ? 'Thank you — we will see you on the day.'
+      : 'Thank you for letting us know.';
   });
 }
 
-/* ---------- save as image ----------------------------------------- */
+/* ---------- saving the card as a picture -------------------------- */
 
 $('save-btn').addEventListener('click', async (e) => {
   const btn = e.currentTarget;
   const label = btn.querySelector('span');
   const original = label.textContent;
   btn.disabled = true;
-  label.textContent = 'กำลังสร้างรูป…';
+  label.textContent = 'Creating…';
 
   try {
     if (!window.html2canvas) {
@@ -238,28 +214,27 @@ $('save-btn').addEventListener('click', async (e) => {
         document.head.appendChild(s);
       });
     }
-    // Without this the capture can run while the webfonts are still swapping,
-    // and the saved card comes out in Times New Roman.
+    // Without this the capture can run while the webfonts are still
+    // swapping, and the saved card comes out in Times New Roman.
     if (document.fonts) await document.fonts.ready;
 
-    const canvas = await window.html2canvas($('card'), {
-      backgroundColor: '#FCEFEC',
-      scale: Math.max(2, window.devicePixelRatio || 1),
+    const canvas = await window.html2canvas($('keepsake'), {
+      backgroundColor: '#7A8151',
+      scale: 2,
       useCORS: true,
       logging: false
     });
 
-    const url = canvas.toDataURL('image/png');
     const a = document.createElement('a');
-    a.href = url;
+    a.href = canvas.toDataURL('image/png');
     a.download = `invitation-${slug || 'card'}.png`;
     document.body.appendChild(a);
     a.click();
     a.remove();
-    label.textContent = 'บันทึกแล้ว';
+    label.textContent = 'Saved';
   } catch (err) {
     console.warn(err);
-    label.textContent = 'บันทึกไม่สำเร็จ';
+    label.textContent = 'Could not save';
   } finally {
     btn.disabled = false;
     setTimeout(() => { label.textContent = original; }, 2600);
@@ -270,47 +245,41 @@ $('save-btn').addEventListener('click', async (e) => {
 
 (async function boot() {
   if (!slug) {
-    showBlank('หน้านี้เปิดได้จากลิงก์การ์ดเชิญส่วนตัวเท่านั้น หากยังไม่ได้รับลิงก์ กรุณาติดต่อเจ้าภาพ');
+    showBlank('This page opens from the personal link on your invitation. If you have not received one yet, please ask the couple.');
     return;
   }
 
   const sb = await getClient();
   if (!sb) {
-    showBlank('ขณะนี้ยังเชื่อมต่อข้อมูลไม่ได้ กรุณาลองอีกครั้งในภายหลัง');
+    showBlank('We cannot reach the invitation right now. Please try again in a little while.');
     return;
   }
 
-  const config = await loadCopy(sb);
+  await loadCopy(sb);
 
   const { data, error } = await sb.rpc('get_guest_by_slug', { p_slug: slug });
   guest = Array.isArray(data) ? data[0] : data;
 
   if (error || !guest) {
-    showBlank('ไม่พบรายชื่อสำหรับลิงก์นี้ กรุณาตรวจสอบลิงก์อีกครั้ง หรือติดต่อเจ้าภาพ');
+    showBlank('We could not find a name for this link. Please check it again, or ask the couple.');
     return;
   }
 
-  const full = guest.name_th;
+  const name = guest.name_th || '';
 
-  const envName = $('env-name');
-  if (envName) { envName.textContent = full; envName.classList.add('in'); }
+  const cover = $('cover-name');
+  if (cover) { cover.textContent = name; cover.classList.add('in'); }
+  const keep = $('keepsake-name');
+  if (keep) keep.textContent = name;
 
-  const msgEl = $('guest-msg');
-  if (msgEl && guest.message) {
-    msgEl.textContent = guest.message;
-    msgEl.hidden = false;
+  if (guest.message) {
+    $('guest-msg').textContent = guest.message;
+    $('guest-note').hidden = false;
   }
 
-  const nameEl = $('guest-name');
-  nameEl.textContent = full;
-  nameEl.classList.add('in');
   if (document.fonts) await document.fonts.ready;
 
   $('cover').addEventListener('click', openCard);
-
-  import('./sparkles.js?v=12')
-    .then(mod => mod.startSparkles())
-    .catch(err => console.warn('sparkles unavailable', err));
-  bindRsvp(sb, config);
+  bindRsvp(sb);
   sb.rpc('log_card_view', { p_slug: slug }).catch(() => {});
 })();

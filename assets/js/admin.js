@@ -1,22 +1,34 @@
-import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=12';
-import { shrink } from '../lib/image-resize.js?v=12';
+import { getAdminClient, isConfigured, STORAGE_BUCKET } from './supabase-client.js?v=14';
+import { shrink } from '../lib/image-resize.js?v=14';
 
 const $ = id => document.getElementById(id);
 const dirty = new Map();          // key -> new value, for site_content only
 let sb = null;
 
 const SECTION_TITLES = {
-  hero:     ['หน้าแรก',      'ชื่อคู่บ่าวสาวและคำนำ'],
-  verse:    ['ข้อพระคัมภีร์',  'ข้อความและที่มา'],
-  headings: ['หัวข้อแต่ละส่วน', 'เลขลำดับ ชื่ออังกฤษ และชื่อไทย'],
-  event:    ['วันงาน',        'วันที่ สถานที่ และแผนที่'],
-  schedule: ['กำหนดการ',      'เวลาและรายละเอียดแต่ละช่วง'],
-  theme:    ['สีของงาน',      'คำอธิบายใต้หัวข้อ'],
-  travel:   ['การเดินทาง',    'ที่จอดรถและรถสาธารณะ'],
-  story:    ['เรื่องราวของเรา', 'เปิดการแสดงผลได้ที่แท็บตั้งค่า'],
-  card:     ['การ์ดเชิญส่วนตัว', 'ข้อความบนหน้าการ์ดที่ส่งให้แขกรายคน'],
-  footer:   ['ท้ายหน้า',      'บรรทัดปิดท้าย']
+  hero:      ['ชื่อบ่าวสาว',     'ใช้ทุกจุดบนเว็บและบนการ์ด'],
+  opening:   ['หน้าเปิด',       'บรรทัดบนสุดและคำชวนให้เลื่อนลง'],
+  maincard:  ['การ์ดสีเขียว',    'บรรทัดเหนือชื่อบนการ์ดใบใหญ่'],
+  datecard:  ['ป้ายวันที่',      'วัน เลขวันที่ เดือน และสถานที่'],
+  verse:     ['ข้อพระคัมภีร์',    'ข้อความและที่มา'],
+  details:   ['รายละเอียดงาน',   'พิธี การแต่งกาย ที่จอดรถ และการเดินทาง'],
+  schedule2: ['กำหนดการ',       'เวลาและรายละเอียดแต่ละช่วง'],
+  labels:    ['ป้ายและหัวข้อ',    'คำบนปุ่มและหัวข้อแต่ละส่วน'],
+  cardpage:  ['การ์ดเชิญส่วนตัว', 'ข้อความบนหน้าการ์ดที่ส่งให้แขกรายคน'],
+  footer:    ['ท้ายหน้า',        'บรรทัดปิดท้าย'],
+  event:     ['ข้อมูลเดิม',       'ยังใช้กับลิงก์แผนที่และปฏิทิน'],
+  headings:  ['หัวข้อเดิม',       'ไม่ได้ใช้บนดีไซน์ใหม่แล้ว'],
+  theme:     ['ข้อความเดิม',      'ไม่ได้ใช้บนดีไซน์ใหม่แล้ว'],
+  travel:    ['ข้อความเดิม',      'ไม่ได้ใช้บนดีไซน์ใหม่แล้ว'],
+  story:     ['ข้อความเดิม',      'ไม่ได้ใช้บนดีไซน์ใหม่แล้ว'],
+  rsvp:      ['ข้อความเดิม',      'ไม่ได้ใช้บนดีไซน์ใหม่แล้ว'],
+  card:      ['การ์ดเชิญส่วนตัว', 'ข้อความบนหน้าการ์ดที่ส่งให้แขกรายคน']
 };
+
+// The order the groups appear in, so the panel reads like the site rather
+// than like the database. Anything not listed falls in after these.
+const SECTION_ORDER = ['hero', 'opening', 'maincard', 'datecard', 'verse',
+  'details', 'schedule2', 'labels', 'cardpage', 'footer'];
 
 const FIELD_LABELS = {
   'card.hint': 'ข้อความบนซองก่อนเปิด',
@@ -30,6 +42,31 @@ const FIELD_LABELS = {
   'card.no': 'ปุ่มตอบว่าไม่สะดวก',
   'card.note_label': 'ป้ายช่องข้อความถึงบ่าวสาว',
   'card.submit': 'ปุ่มส่งคำตอบ',
+  'open.eyebrow': 'บรรทัดบนสุด',
+  'open.cue': 'คำชวนให้เลื่อนลง',
+  'card.kicker': 'บรรทัดเหนือชื่อบนการ์ด',
+  'date.weekday': 'วันในสัปดาห์',
+  'date.day': 'เลขวันที่',
+  'date.month': 'เดือนและปี',
+  'date.place': 'สถานที่',
+  'date.hour': 'เวลา',
+  'verse.en': 'ข้อความ (อังกฤษ)',
+  'verse.en_ref': 'อ้างอิง (อังกฤษ)',
+  'det.ceremony_head': 'พิธี · หัวข้อ',
+  'det.ceremony_body': 'พิธี · เนื้อหา',
+  'det.dress_head': 'การแต่งกาย · หัวข้อ',
+  'det.dress_body': 'การแต่งกาย · เนื้อหา',
+  'det.parking_head': 'ที่จอดรถ · หัวข้อ',
+  'det.parking_body': 'ที่จอดรถ · เนื้อหา',
+  'det.transit_head': 'การเดินทาง · หัวข้อ',
+  'det.transit_body': 'การเดินทาง · เนื้อหา',
+  'lbl.details': 'ป้าย Details',
+  'lbl.rsvp': 'ป้ายตอบรับ',
+  'lbl.click': 'บรรทัดเล็กใต้ป้าย',
+  'lbl.wishes': 'หัวข้อคำอวยพร',
+  'lbl.schedule': 'หัวข้อกำหนดการ',
+  'lbl.gallery': 'หัวข้อแกลเลอรี',
+  'foot.note': 'บรรทัดขออภัย (ท้ายหน้าแรกเท่านั้น)',
   'hero.eyebrow': 'คำนำเหนือชื่อ',
   'hero.bride_first': 'ชื่อเจ้าสาว', 'hero.bride_last': 'นามสกุลเจ้าสาว',
   'hero.groom_first': 'ชื่อเจ้าบ่าว', 'hero.groom_last': 'นามสกุลเจ้าบ่าว',
@@ -44,11 +81,12 @@ const FIELD_LABELS = {
 
 // Order matters here: the list follows the order the sections appear on the
 // page, not the alphabet, so the panel reads like the site.
-const SETTING_ORDER = ['event_datetime', 'show_story', 'show_gallery', 'rsvp_deadline', 'show_wishes'];
+const SETTING_ORDER = ['event_datetime', 'rsvp_deadline', 'show_slot_hints',
+  'show_gallery', 'show_wishes'];
 
 const SETTING_LABELS = {
   event_datetime:['วันเวลาจัดงาน',        'ใช้กับนาฬิกานับถอยหลังและปุ่มบันทึกลงปฏิทิน'],
-  show_story:    ['แสดงเรื่องราวของเรา',   'ส่วน Our Story บนหน้าแรก เปิดเมื่อเขียนเนื้อหาเสร็จแล้ว'],
+  show_slot_hints:['แสดงกรอบช่องรูปที่ยังว่าง', 'เปิดไว้ตอนทำเว็บ จะเห็นว่าต้องใส่รูปอะไรตรงไหน ปิดก่อนส่งลิงก์ให้แขก แล้วช่องที่ยังว่างจะหายไปทั้งหมด'],
   show_gallery:  ['แสดงแกลเลอรี',         'ส่วน Gallery บนหน้าแรก ต้องมีรูปในแท็บรูปภาพอย่างน้อยหนึ่งรูป'],
   rsvp_deadline: ['กำหนดตอบรับ',           'รูปแบบ ปี-เดือน-วัน เช่น 2026-11-07'],
   show_wishes:   ['แสดงคำอวยพร',          'ส่วนรับคำอวยพรบนหน้าแรก']
@@ -138,7 +176,7 @@ const LOADERS = {
   settings: () => loadSettings(),
   replies:  () => loadReplies(),
   guests:   () => loadGuests(),
-  gallery:  () => { loadGallery('hero'); loadGallery('gallery'); },
+  gallery:  () => { loadArt(); loadGallery('gallery'); },
   wishes:   () => loadWishes()
 };
 
@@ -178,12 +216,19 @@ async function loadContent() {
 
   if (error || !data) { box.innerHTML = '<p class="dim">โหลดข้อความไม่สำเร็จ</p>'; return; }
 
-  const order = Object.keys(SECTION_TITLES);
   const groups = {};
   for (const row of data) (groups[row.section] ||= []).push(row);
 
+  // Groups the new design uses come first, in page order. Leftovers from the
+  // old design sort to the bottom rather than vanishing, so nothing the
+  // couple already typed becomes unreachable.
+  const rank = (n) => {
+    const i = SECTION_ORDER.indexOf(n);
+    return i === -1 ? 99 : i;
+  };
+
   box.innerHTML = '';
-  const sections = Object.keys(groups).sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  const sections = Object.keys(groups).sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
 
   for (const [i, name] of sections.entries()) {
     const [title, hint] = SECTION_TITLES[name] || [name, ''];
@@ -553,6 +598,141 @@ async function loadReplies() {
   section('ยังไม่ตอบ', wait, false);
 }
 
+/* ================= named art slots ================= */
+
+// A slot holds exactly one picture. Uploading again replaces what was there,
+// so the couple can never end up with two wax seals arguing over one spot.
+const ART_SLOTS = [
+  ['env_closed', 'ซองจดหมาย (ปิดผนึก)', 'ถ่ายซองจริงแนวนอน 3:2 ถ้าไม่ใส่ เว็บจะวาดซองให้เอง', false],
+  ['env_open',   'ซองจดหมาย (เปิดแล้ว)', 'ซองใบเดิม ถ่ายตอนเปิด แนวนอน 3:2', false],
+  ['seal',       'ตราครั่ง',             'PNG พื้นหลังโปร่งใส ถ้าไม่ใส่ เว็บจะวาดตราให้เอง', true],
+  ['floral_1',   'ช่อดอกไม้ 1',          'PNG โปร่งใส วางมุมซ้ายล่างของซอง', true],
+  ['floral_2',   'ช่อดอกไม้ 2',          'PNG โปร่งใส วางมุมขวาบนของซอง', true],
+  ['floral_3',   'ช่อดอกไม้ใหญ่',        'PNG โปร่งใส วางท้ายหน้า', true],
+  ['liner',      'รูปในฝาซอง',           'รูปคู่แนวนอน 4:3', false],
+  ['couple_1',   'รูปคู่ในกรอบโพลารอยด์', 'แนวตั้ง 4:5', false],
+  ['couple_2',   'รูปคู่ใบที่สอง',        'แนวตั้ง 4:5 อยู่ใต้กำหนดการ', false]
+];
+
+let artRows = new Map();
+
+async function loadArt() {
+  const box = $('art-list');
+  const { data } = await sb.from('gallery')
+    .select('id,storage_path,slot').eq('kind', 'art');
+
+  artRows = new Map((data || []).filter(r => r.slot).map(r => [r.slot, r]));
+
+  box.innerHTML = '';
+  for (const [slot, title, hint, cut] of ART_SLOTS) {
+    const row = artRows.get(slot);
+
+    const card = document.createElement('div');
+    card.className = 'artcard';
+
+    const frame = document.createElement('div');
+    frame.className = 'artcard__frame' + (cut ? ' artcard__frame--cut' : '');
+    if (row) {
+      const img = document.createElement('img');
+      img.src = sb.storage.from(STORAGE_BUCKET).getPublicUrl(row.storage_path).data.publicUrl;
+      img.alt = '';
+      img.loading = 'lazy';
+      frame.appendChild(img);
+    } else {
+      const em = document.createElement('span');
+      em.textContent = 'ยังว่าง';
+      frame.appendChild(em);
+    }
+
+    const h = document.createElement('h3');
+    h.textContent = title;
+    const p = document.createElement('p');
+    p.textContent = hint;
+
+    const bar = document.createElement('div');
+    bar.className = 'artcard__bar';
+
+    const pick = document.createElement('button');
+    pick.type = 'button';
+    pick.className = 'btn';
+    pick.textContent = row ? 'เปลี่ยนรูป' : 'เลือกรูป';
+    pick.addEventListener('click', () => pickArt(slot, cut));
+    bar.appendChild(pick);
+
+    if (row) {
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'ghost ghost--danger';
+      del.textContent = 'ลบ';
+      del.addEventListener('click', () => removeArt(row));
+      bar.appendChild(del);
+    }
+
+    const msg = document.createElement('p');
+    msg.className = 'dim';
+    msg.id = `art-msg-${slot}`;
+
+    card.append(frame, h, p, bar, msg);
+    box.appendChild(card);
+  }
+}
+
+// One hidden file input is reused by every slot; the slot it was opened for
+// is remembered here rather than in nine separate inputs.
+let artTarget = null;
+
+function pickArt(slot, cut) {
+  artTarget = { slot, cut };
+  const input = $('art-input');
+  input.value = '';
+  input.click();
+}
+
+$('art-input').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file || !artTarget) return;
+  const { slot, cut } = artTarget;
+  const msg = $(`art-msg-${slot}`);
+  msg.textContent = 'กำลังอัปโหลด…';
+
+  try {
+    // Cut-outs keep their transparency; photographs do not need it.
+    const { blob, name, type } = await shrink(file, { keepAlpha: cut });
+    const path = `art/${slot}/${name}`;
+    const { error: upErr } = await sb.storage.from(STORAGE_BUCKET)
+      .upload(path, blob, { contentType: type, cacheControl: '31536000' });
+    if (upErr) throw upErr;
+
+    const existing = artRows.get(slot);
+    if (existing) {
+      const { error } = await sb.from('gallery')
+        .update({ storage_path: path }).eq('id', existing.id);
+      if (error) throw error;
+      // The old file is only removed once the row points at the new one, so a
+      // failure halfway through never leaves the page with a dead image.
+      await sb.storage.from(STORAGE_BUCKET).remove([existing.storage_path]);
+    } else {
+      const { error } = await sb.from('gallery')
+        .insert({ storage_path: path, kind: 'art', slot, sort_order: 0 });
+      if (error) throw error;
+    }
+
+    toast('อัปโหลดแล้ว');
+    loadArt();
+  } catch (err) {
+    console.warn(err);
+    msg.textContent = 'อัปโหลดไม่สำเร็จ: ' + (err.message || 'ไม่ทราบสาเหตุ');
+  }
+});
+
+async function removeArt(row) {
+  if (!confirm('ลบรูปในช่องนี้ใช่ไหม')) return;
+  await sb.from('gallery').delete().eq('id', row.id);
+  await sb.storage.from(STORAGE_BUCKET).remove([row.storage_path]);
+  toast('ลบแล้ว');
+  loadArt();
+}
+
 /* ================= gallery ================= */
 
 async function loadGallery(kind = 'gallery') {
@@ -647,7 +827,6 @@ function bindUploader(inputId, msgId, kind) {
   });
 }
 
-bindUploader('hero-input', 'hero-msg', 'hero');
 bindUploader('file-input', 'upload-msg', 'gallery');
 
 /* ================= wishes ================= */
