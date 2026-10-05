@@ -2,7 +2,7 @@
 // URL; without it there is no guest, so the page says so plainly rather than
 // pretending to work.
 
-import { getClient, publicImageUrl } from './supabase-client.js?v=14';
+import { getClient, publicImageUrl } from './supabase-client.js?v=15';
 
 const $ = id => document.getElementById(id);
 const slug = new URLSearchParams(location.search).get('g');
