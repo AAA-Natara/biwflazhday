@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Italianno&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Sans+Thai:wght@300;400;500&family=Charm:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/collage.css?v=15">
+<link rel="stylesheet" href="assets/css/collage.css?v=16">
 <link rel="stylesheet" href="assets/css/style.css?v=15">
 </head>
 <body>
@@ -48,17 +48,35 @@
       </div>
 
       <div class="seal art" data-art="seal">
-        <svg viewBox="0 0 58 58" aria-hidden="true">
+        <svg viewBox="0 0 72 72" aria-hidden="true">
           <defs>
-            <radialGradient id="waxg" cx="38%" cy="30%" r="78%">
-              <stop offset="0" stop-color="#9A3044"/>
-              <stop offset=".55" stop-color="#6E1F2E"/>
-              <stop offset="1" stop-color="#4E1320"/>
+            <radialGradient id="waxg" cx="34%" cy="26%" r="82%">
+              <stop offset="0" stop-color="#93303F"/>
+              <stop offset=".46" stop-color="#75212F"/>
+              <stop offset=".82" stop-color="#5A1726"/>
+              <stop offset="1" stop-color="#43101C"/>
             </radialGradient>
+            <radialGradient id="waxi" cx="40%" cy="30%" r="80%">
+              <stop offset="0" stop-color="#7E2636"/>
+              <stop offset="1" stop-color="#541625"/>
+            </radialGradient>
+            <filter id="waxdrop" x="-35%" y="-35%" width="170%" height="180%">
+              <feDropShadow dx="0" dy="2.4" stdDeviation="2.2" flood-color="#2A0810" flood-opacity=".46"/>
+            </filter>
           </defs>
-          <path d="M29 4c7 0 8 4 13 6s8 0 10 6-2 8-2 13 4 7 1 12-8 3-12 6-5 7-10 7-6-4-11-6-9 0-11-5 2-8 1-13-4-7-1-12 7-3 11-6S23 4 29 4Z" fill="url(#waxg)"/>
-          <circle cx="29" cy="29" r="19" fill="none" stroke="rgba(255,255,255,.26)" stroke-width="1"/>
-          <text x="29" y="34" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="13.5" fill="#EBC9CF">W&amp;C</text>
+
+          <!-- the poured wax, lit from the upper left -->
+          <path d="M30.6 4.2 Q36.0 2.1 41.3 4.4 Q46.7 6.6 52.4 8.2 Q58.0 9.7 60.5 15.1 Q63.0 20.4 66.2 25.3 Q69.4 30.1 68.1 35.8 Q66.8 41.4 66.0 47.1 Q65.1 52.8 60.6 56.4 Q56.1 59.9 51.8 63.9 Q47.6 68.0 41.8 67.7 Q36.0 67.5 30.3 67.5 Q24.5 67.5 20.3 63.6 Q16.1 59.8 11.5 56.3 Q7.0 52.8 6.0 47.1 Q5.0 41.5 3.7 35.8 Q2.4 30.1 5.9 25.3 Q9.3 20.6 11.6 15.2 Q13.9 9.7 19.6 8.0 Q25.2 6.3 30.6 4.2 Z" fill="url(#waxg)" filter="url(#waxdrop)"/>
+
+          <!-- the disc the stamp pressed: a dark lip above, a lit lip below -->
+          <circle cx="36" cy="36.9" r="23" fill="none" stroke="#B2606E" stroke-width="1.6" opacity=".38"/>
+          <circle cx="36" cy="36" r="23" fill="url(#waxi)"/>
+          <path d="M13 36a23 23 0 0 1 46 0" fill="none" stroke="#3B0E19" stroke-width="1.5" opacity=".5"/>
+          <circle cx="36" cy="36" r="19.5" fill="none" stroke="#C9808C" stroke-width=".7" opacity=".34"/>
+
+          <!-- the monogram, struck into the wax rather than printed on it -->
+          <text x="36" y="41.9" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-size="15.5" letter-spacing=".5" fill="#B96B78" opacity=".5">W&amp;C</text>
+          <text x="36" y="41.1" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-size="15.5" letter-spacing=".5" fill="#48121F">W&amp;C</text>
         </svg>
       </div>
 
