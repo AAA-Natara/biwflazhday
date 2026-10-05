@@ -3,24 +3,26 @@
    denser spacing, plain labels, no ribbon, no motion. */
 
 :root {
-  --paper: #FCEFEC;
-  --paper-2: #F7E1DC;
-  --blush: #F0D2CB;
-  --blush-deep: #DEB2A8;
-  --blush-bg: #F9E5E0;
-  --cream: #F5EFE3;
-  --ribbon: #8C3246;
-  --ribbon-soft: #C08A96;
-  --olive: #7E8750;
-  --olive-soft: #AEB884;
-  --ink: #6B2132;
-  --ink-soft: #8A5560;
-  --ink-faint: #A87B84;
-  --ok: #5C6B3A;        /* olive, for "coming" */
+  /* The same olive, cream and burgundy as the guest site, so the panel
+     stops feeling like a different product from the one it edits. */
+  --paper: #FFFDF9;
+  --paper-2: #F6F1E7;
+  --blush: #E4D9C4;      /* hairlines and borders */
+  --blush-deep: #CFC1A6;
+  --blush-bg: #F2EBDE;
+  --cream: #F2EBDE;
+  --ribbon: #6E1F2E;     /* burgundy, for emphasis */
+  --ribbon-soft: #A87B84;
+  --olive: #7D8456;
+  --olive-soft: #AEB489;
+  --ink: #3C2F26;
+  --ink-soft: #6E6054;
+  --ink-faint: #9A8A79;
+  --ok: #5C6340;        /* olive, for "coming" */
   --warn: #9A3B32;      /* rust, for "can't make it" and destructive actions */
-  --display: 'Fraunces', Georgia, serif;
-  --ui: 'DM Sans', 'Trirong', system-ui, -apple-system, sans-serif;
-  --thai: 'Trirong', Georgia, serif;
+  --display: 'Playfair Display', Georgia, serif;
+  --ui: 'Noto Sans Thai', system-ui, -apple-system, sans-serif;
+  --thai: 'Noto Sans Thai', system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -40,9 +42,10 @@ body {
   margin: 0;
   background: var(--paper-2);
   color: var(--ink);
-  font-family: var(--thai);
-  font-weight: 300;
-  font-size: 16px;
+  font-family: var(--ui);
+  font-weight: 400;
+  font-size: 15.5px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -139,9 +142,10 @@ input[type=text], input[type=email], input[type=password], input[type=datetime-l
   border: 0.5px solid var(--blush-deep);
   border-radius: 3px;
   background: var(--paper);
-  font-family: var(--thai);
-  font-weight: 300;
-  font-size: 16px;
+  font-family: var(--ui);
+  font-weight: 400;
+  font-size: 15.5px;
+  line-height: 1.6;
   color: var(--ink);
   padding: 11px 12px;
   transition: border-color .2s;
@@ -458,7 +462,7 @@ details.group > .field:last-of-type { padding-bottom: 20px; }
 
 .artgrid{
   display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(188px, 1fr));
+  grid-template-columns:repeat(auto-fill, minmax(232px, 1fr));
   gap:14px;
   margin-top:12px;
 }
@@ -504,3 +508,87 @@ details.group > .field:last-of-type { padding-bottom: 20px; }
 .artcard__bar{display:flex;gap:8px;align-items:center;margin-top:10px}
 .artcard__bar .btn{min-height:36px;padding:0 14px;font-size:12px}
 .artcard .dim{margin-top:8px;font-size:12px;min-height:1em}
+
+
+/* ---------------------------------------------------------------
+   Finding one field among fifty
+   --------------------------------------------------------------- */
+
+.findbar{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:12px;
+  margin:12px 0 0;
+}
+.findbar input[type="search"]{
+  flex:1 1 280px;
+  min-height:44px;
+  padding:0 14px;
+  border:1px solid var(--blush);
+  border-radius:8px;
+  background:#fff;
+  color:var(--ink);
+  font-family:var(--ui);
+  font-size:15px;
+}
+.findbar input[type="search"]:focus-visible{outline:2px solid var(--olive);outline-offset:1px}
+.switch{display:inline-flex;flex:0 0 auto;align-items:center;gap:7px;white-space:nowrap;font-size:13px;color:var(--ink-soft);cursor:pointer}
+.switch input{width:17px;height:17px;accent-color:var(--olive)}
+.findbar__hint{margin:8px 0 0;min-height:1.2em;font-size:13px;color:var(--ink-faint)}
+
+/* The raw database key is for debugging, not for the couple. */
+.key{display:none}
+body.show-keys .key{display:inline;font-size:11px;color:var(--ink-faint);font-family:ui-monospace,monospace}
+
+/* ---------------------------------------------------------------
+   Where each picture lands
+   --------------------------------------------------------------- */
+
+.artmap{
+  max-width:330px;
+  margin:12px auto 0;
+  padding:14px;
+  border:1px solid var(--blush);
+  border-radius:10px;
+  background:var(--paper-2);
+}
+.artmap svg{display:block;width:100%;height:auto}
+
+.artcard__num{
+  display:inline-grid;
+  place-items:center;
+  width:20px;
+  height:20px;
+  margin-right:7px;
+  border-radius:50%;
+  background:var(--olive);
+  color:#fff;
+  font-style:normal;
+  font-size:11px;
+  font-weight:700;
+  vertical-align:1px;
+}
+.artcard__where{margin:4px 0 0;font-size:12.5px;line-height:1.6;color:var(--ink-soft)}
+.artcard__spec{margin:6px 0 0;font-size:12px;line-height:1.6;color:var(--ink-faint)}
+
+/* The phrase to paste into Google Images. */
+.artcard__find{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px;
+  margin-top:10px;
+  padding:8px 9px;
+  border-radius:8px;
+  background:var(--blush-bg);
+}
+.artcard__find code{
+  flex:1 1 100%;
+  font-family:ui-monospace,SFMono-Regular,monospace;
+  font-size:11.5px;
+  line-height:1.5;
+  color:var(--ink);
+  word-break:break-word;
+}
+.artcard__find .ghost{min-height:30px;padding:0 10px;font-size:12px}
