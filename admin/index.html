@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;700&family=Trirong:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/admin.css?v=12">
+<link rel="stylesheet" href="../assets/css/admin.css?v=14">
 </head>
 <body>
 
@@ -116,14 +116,15 @@
       <p class="lede">รูปจะถูกย่อให้ด้านยาวไม่เกิน 1600px และแปลงเป็น WebP ในเครื่องก่อนอัปโหลด</p>
 
       <div class="group">
-        <h2>รูปบนหัวเว็บ</h2>
-        <p class="group__hint">แนะนำ 3–4 รูป แนวตั้งอัตราส่วน 3:4 จะหมุนสลับกันอัตโนมัติทุก 5 วินาที</p>
-        <div class="uploader">
-          <label class="btn" for="hero-input">เลือกรูป</label>
-          <input type="file" id="hero-input" accept="image/*" multiple hidden>
-          <span class="dim" id="hero-msg"></span>
-        </div>
-        <div id="hero-list" class="thumbs"><p class="dim">กำลังโหลด…</p></div>
+        <h2>รูปบนการ์ด</h2>
+        <p class="group__hint">
+          แต่ละช่องใส่รูปได้ 1 รูป อัปใหม่ทับรูปเดิมได้เลย
+          ช่องที่ยังว่างจะขึ้นกรอบเส้นประบนหน้าเว็บ พร้อมป้ายบอกว่าต้องใส่รูปอะไร
+          ใส่รูปแล้วกรอบและป้ายจะหายไป เหลือแค่รูป
+          ถ้าอยากซ่อนกรอบที่ยังว่างทั้งหมด ปิดสวิตช์ “แสดงกรอบช่องรูปที่ยังว่าง” ในแท็บตั้งค่า
+        </p>
+        <div id="art-list" class="artgrid"><p class="dim">กำลังโหลด…</p></div>
+        <input type="file" id="art-input" accept="image/*" hidden>
       </div>
 
       <div class="group" style="margin-top:14px">
@@ -158,6 +159,6 @@
   <p class="toast" id="toast" hidden></p>
 </div>
 
-<script type="module" src="../assets/js/admin.js?v=12"></script>
+<script type="module" src="../assets/js/admin.js?v=14"></script>
 </body>
 </html>
