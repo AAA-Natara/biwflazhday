@@ -22,9 +22,12 @@
   --ink-soft:#7D685E;
   --ink-faint:#A79387;
 
-  --script:'Italianno',cursive;
-  --serif:'Cormorant Garamond',Georgia,serif;
-  --body:'Cormorant Garamond','Trirong',Georgia,serif;
+  /* Three jobs, three faces. The script is reserved for the couple's names
+     and nothing else; everything that has to be read uses the other two. */
+  --script:'Italianno','Charm',cursive;
+  --display:'Playfair Display','Noto Sans Thai',Georgia,serif;
+  --serif:'Playfair Display','Noto Sans Thai',Georgia,serif;
+  --body:'EB Garamond','Noto Sans Thai',Georgia,serif;
 
   --strip:452px;
 }
@@ -38,7 +41,7 @@ body{
   color:var(--ink);
   font-family:var(--body);
   font-weight:400;
-  font-size:17px;
+  font-size:18px;
   line-height:1.72;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
@@ -84,8 +87,8 @@ a{color:inherit}
 }
 .slot > span{
   font-family:var(--serif);
-  font-size:9px;
-  letter-spacing:.14em;
+  font-size:10px;
+  letter-spacing:.12em;
   line-height:1.7;
   text-align:center;
   text-transform:uppercase;
@@ -187,8 +190,8 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
    --------------------------------------------------------------- */
 
 .kicker{
-  font-family:var(--serif);
-  font-size:10.5px;
+  font-family:var(--display);
+  font-size:11.5px;
   font-weight:500;
   letter-spacing:.3em;
   text-indent:.3em;
@@ -282,35 +285,38 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 }
 .datecard b{
   display:block;
-  font-family:var(--serif);
-  font-size:10px;
+  font-family:var(--display);
+  font-size:11px;
   font-weight:500;
-  letter-spacing:.24em;
-  text-indent:.24em;
+  letter-spacing:.22em;
+  text-indent:.22em;
   color:var(--wine);
 }
 .datecard .d{
-  font-family:var(--serif);
-  font-size:50px;
+  font-family:var(--display);
+  font-size:52px;
+  font-weight:400;
   line-height:1;
   color:var(--ink);
   margin:2px 0 1px;
 }
 .datecard small{
   display:block;
-  font-family:var(--serif);
-  font-size:10px;
-  letter-spacing:.2em;
-  text-indent:.2em;
+  font-family:var(--display);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-indent:.18em;
   color:var(--ink-soft);
 }
 .datecard .pl{
   display:block;
-  font-family:var(--script);
-  font-size:21px;
-  line-height:1.15;
+  font-family:var(--display);
+  font-size:13.5px;
+  font-weight:500;
+  letter-spacing:.04em;
+  line-height:1.4;
   color:var(--wine);
-  margin-top:9px;
+  margin-top:10px;
 }
 .pearl{
   position:absolute;
@@ -339,10 +345,10 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   padding:24px 12px 26px;
 }
 .greencard .k{
-  font-family:var(--serif);
-  font-size:9px;
+  font-family:var(--display);
+  font-size:10px;
   font-weight:500;
-  letter-spacing:.2em;
+  letter-spacing:.18em;
   line-height:2;
   color:#F2EFE2;
 }
@@ -382,6 +388,15 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   text-align:center;
   color:var(--wine);
 }
+/* The caption slot normally carries the couple's names, which is the one
+   place the script face belongs. A date there is set in the reading face. */
+.polaroid em.plain{
+  font-family:var(--display);
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:.2em;
+  bottom:12px;
+}
 .polaroid--right{margin:-50px 6px 0 auto;rotate:5deg}
 .note + .polaroid{margin-top:-18px}
 
@@ -406,8 +421,8 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   transition:rotate .5s cubic-bezier(.22,1,.36,1), translate .5s cubic-bezier(.22,1,.36,1);
 }
 .badge:hover,.badge:focus-visible{rotate:1deg;translate:0 -3px}
-.badge__t{position:relative;z-index:2;font-family:var(--script);font-size:36px;line-height:.9}
-.badge__c{position:relative;z-index:2;font-family:var(--serif);font-size:8.5px;letter-spacing:.2em;margin-top:9px}
+.badge__t{position:relative;z-index:2;font-family:var(--display);font-weight:500;font-size:19px;letter-spacing:.03em;line-height:1.1}
+.badge__c{position:relative;z-index:2;font-family:var(--display);font-size:9.5px;letter-spacing:.2em;margin-top:9px}
 .badge--left{margin:-58px auto 0 10px;rotate:-4deg}
 
 /* A small reply envelope, used as the way in to the RSVP form. */
@@ -437,8 +452,8 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   background:rgba(40,36,14,.07);
   clip-path:polygon(0 0,100% 0,50% 100%);
 }
-.mini-env__t{position:relative;z-index:2;font-family:var(--script);font-size:32px;line-height:.9;color:#FFFDF6}
-.mini-env__c{position:relative;z-index:2;font-family:var(--serif);font-size:8.5px;letter-spacing:.2em;color:#F6F4E6;margin-top:7px}
+.mini-env__t{position:relative;z-index:2;font-family:var(--display);font-weight:500;font-size:17px;letter-spacing:.03em;line-height:1.2;color:#FFFDF6}
+.mini-env__c{position:relative;z-index:2;font-family:var(--display);font-size:9.5px;letter-spacing:.2em;color:#F6F4E6;margin-top:7px}
 
 /* A torn-off note, for the personal message and anything handwritten. */
 .note{
@@ -457,14 +472,14 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 .note p{
   margin:0;
   font-family:var(--body);
-  font-size:15.5px;
-  line-height:1.95;
+  font-size:16.5px;
+  line-height:1.9;
   color:var(--ink);
 }
 .note .q{
   display:block;
-  font-family:var(--script);
-  font-size:34px;
+  font-family:var(--display);
+  font-size:30px;
   line-height:0;
   color:var(--cream-deep);
   margin-bottom:6px;
@@ -481,19 +496,19 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 }
 .verse p{
   margin:0;
-  font-family:var(--serif);
+  font-family:var(--body);
   font-style:italic;
-  font-size:19px;
-  line-height:1.95;
+  font-size:20px;
+  line-height:1.9;
   color:var(--wine);
 }
 .verse small{
   display:block;
   margin-top:16px;
-  font-family:var(--serif);
-  font-size:10px;
-  letter-spacing:.24em;
-  text-indent:.24em;
+  font-family:var(--display);
+  font-size:11px;
+  letter-spacing:.22em;
+  text-indent:.22em;
   text-transform:uppercase;
   color:var(--ink-soft);
 }
@@ -511,10 +526,10 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 }
 .foot__in{position:relative;z-index:2}
 .foot .n{font-family:var(--script);font-size:38px;line-height:1;color:#FDFBF4}
-.foot .d{font-family:var(--serif);font-size:10px;letter-spacing:.26em;text-indent:.26em;margin-top:8px;color:#E9E7D6}
+.foot .d{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-indent:.24em;margin-top:8px;color:#E9E7D6}
 .foot .note-line{
-  font-family:var(--serif);
-  font-size:12px;
+  font-family:var(--body);
+  font-size:13.5px;
   font-style:italic;
   color:#DCDAC6;
   margin-top:16px;
@@ -535,11 +550,11 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   border-radius:999px;
   background:transparent;
   color:var(--olive-deep);
-  font-family:var(--serif);
-  font-size:11px;
+  font-family:var(--display);
+  font-size:11.5px;
   font-weight:500;
-  letter-spacing:.2em;
-  text-indent:.2em;
+  letter-spacing:.18em;
+  text-indent:.18em;
   text-transform:uppercase;
   text-decoration:none;
   cursor:pointer;
