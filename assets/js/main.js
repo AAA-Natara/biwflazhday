@@ -1,9 +1,9 @@
 // Boot order matters: the ribbon, countdown and reveal must all work with no
 // network at all. Supabase is touched only after the page already looks right.
 
-import { drawRibbon, animateRibbon, bindScrollDraw } from './ribbon.js?v=9';
-import { loadContent, settings } from './content-loader.js?v=9';
-import { getClient } from './supabase-client.js?v=9';
+import { drawRibbon, animateRibbon, bindScrollDraw } from './ribbon.js?v=12';
+import { loadContent, settings } from './content-loader.js?v=12';
+import { getClient } from './supabase-client.js?v=12';
 
 document.documentElement.classList.add('js');
 
@@ -302,7 +302,7 @@ bindPalette();
 bindLightbox();
 // Loaded on its own so a missing or blocked file can never take the rest of
 // the page down with it.
-import('./sparkles.js?v=9')
+import('./sparkles.js?v=12')
   .then(mod => mod.startSparkles())
   .catch(err => console.warn('sparkles unavailable', err));
 buildMap();

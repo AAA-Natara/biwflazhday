@@ -46,7 +46,7 @@ export function drawRibbon() {
   svg.innerHTML = '';
 
   const bands = node('g', {
-    fill: 'none', stroke: 'var(--sky)', 'stroke-width': '1',
+    fill: 'none', stroke: 'var(--ribbon)', 'stroke-width': '1',
     'stroke-linecap': 'round', 'stroke-linejoin': 'round'
   });
 
@@ -61,7 +61,7 @@ export function drawRibbon() {
 
   const bow = node('g', {
     transform: `translate(${W / 2} ${narrow ? 88 : 104}) scale(${scale.toFixed(3)})`,
-    fill: 'var(--paper)', stroke: 'var(--sky)',
+    fill: 'var(--paper)', stroke: 'var(--ribbon)',
     'stroke-width': (1.1 / scale).toFixed(2),
     'stroke-linejoin': 'round', 'stroke-linecap': 'round'
   });
@@ -72,11 +72,11 @@ export function drawRibbon() {
   bow.appendChild(node('path', { d: 'M6 -2C28 -50 66 -72 94 -62C122 -52 118 -14 82 -1C58 7 20 11 6 -2Z' }));
   bow.appendChild(node('path', {
     d: 'M-12 -5C-40 -28 -66 -40 -86 -37', fill: 'none',
-    stroke: 'var(--sky-light)', 'stroke-width': (0.8 / scale).toFixed(2)
+    stroke: 'var(--ribbon-soft)', 'stroke-width': (0.8 / scale).toFixed(2)
   }));
   bow.appendChild(node('path', {
     d: 'M12 -5C40 -28 66 -40 86 -37', fill: 'none',
-    stroke: 'var(--sky-light)', 'stroke-width': (0.8 / scale).toFixed(2)
+    stroke: 'var(--ribbon-soft)', 'stroke-width': (0.8 / scale).toFixed(2)
   }));
   bow.appendChild(node('ellipse', { cx: 0, cy: 2, rx: 12, ry: 10 }));
   svg.appendChild(bow);

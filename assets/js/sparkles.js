@@ -5,7 +5,7 @@
 // something, and past roughly two dozen it starts to read as snow.
 
 const SPARKLE = 'M12 0C13.1 8.2 15.8 10.9 24 12C15.8 13.1 13.1 15.8 12 24C10.9 15.8 8.2 13.1 0 12C8.2 10.9 10.9 8.2 12 0Z';
-const TINTS = ['var(--sky)', 'var(--rose)', 'var(--nude-deep)'];
+const TINTS = ['var(--ribbon)', 'var(--olive)', 'var(--blush-deep)'];
 
 const rand = (min, max) => min + Math.random() * (max - min);
 

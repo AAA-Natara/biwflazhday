@@ -2,7 +2,7 @@
 // URL; without it there is no guest, so the page says so plainly rather than
 // pretending to work.
 
-import { getClient } from './supabase-client.js?v=6';
+import { getClient } from './supabase-client.js?v=12';
 
 const $ = id => document.getElementById(id);
 const slug = new URLSearchParams(location.search).get('g');
@@ -15,7 +15,7 @@ let opened = false;
 /* ---------- the opening ------------------------------------------- */
 
 const SPARK = 'M12 0C13.1 8.2 15.8 10.9 24 12C15.8 13.1 13.1 15.8 12 24C10.9 15.8 8.2 13.1 0 12C8.2 10.9 10.9 8.2 12 0Z';
-const TINTS = ['#AEC6DA', '#D6A2AC', '#D9C3AE'];
+const TINTS = ['#9BA667', '#DEB2A8', '#C08A96'];
 
 // A burst thrown from the mouth of the envelope: random angle, random reach,
 // random life, so no two sparks travel together.
@@ -49,9 +49,9 @@ function burst(originX, originY, count = 34) {
 }
 
 const BALLOON_TINTS = [
-  ['#AEC6DA', '#93B0C9'],   // sky
-  ['#D6A2AC', '#C08D97'],   // rose
-  ['#E5D3C2', '#D0B79E'],   // nude
+  ['#F0D2CB', '#DEB2A8'],   // blush
+  ['#9BA667', '#7E8750'],   // olive
+  ['#8C3246', '#6B2132'],   // burgundy
 ];
 
 // Balloons drawn rather than imaged: a body, a pinched knot, and a slack
@@ -78,7 +78,7 @@ function releaseBalloons(count = 13) {
     b.innerHTML = `
       <svg viewBox="0 0 60 116" xmlns="http://www.w3.org/2000/svg">
         <ellipse cx="30" cy="36" rx="27" ry="34" fill="${body}"/>
-        <path d="M14 20C18 12 25 8 32 8" stroke="#FDFBF7" stroke-width="3" stroke-linecap="round" fill="none" opacity=".55"/>
+        <path d="M14 20C18 12 25 8 32 8" stroke="#FCEFEC" stroke-width="3" stroke-linecap="round" fill="none" opacity=".55"/>
         <path d="M30 70l-6 8h12l-6-8Z" fill="${shade}"/>
         <path d="M30 78C36 88 24 96 30 106C34 112 30 114 28 116" stroke="${shade}" stroke-width="1" fill="none" stroke-linecap="round"/>
       </svg>`;
@@ -161,7 +161,7 @@ function showBlank(message) {
   if (dust) dust.remove();
   document.querySelector('.page').innerHTML = `
     <div class="blank">
-      <svg viewBox="0 0 60 42" width="58" fill="none" stroke="#AEC6DA" stroke-width="1" stroke-linecap="round" aria-hidden="true">
+      <svg viewBox="0 0 60 42" width="58" fill="none" stroke="#8C3246" stroke-width="1" stroke-linecap="round" aria-hidden="true">
         <path d="M28 20C20 8 6 6 4 15C2 23 16 26 28 20Z"/><path d="M32 20C40 8 54 6 56 15C58 23 44 26 32 20Z"/>
         <ellipse cx="30" cy="20" rx="5" ry="4"/><path d="M27 25C24 31 23 36 24 40"/><path d="M33 25C36 31 37 36 36 40"/>
       </svg>
@@ -243,7 +243,7 @@ $('save-btn').addEventListener('click', async (e) => {
     if (document.fonts) await document.fonts.ready;
 
     const canvas = await window.html2canvas($('card'), {
-      backgroundColor: '#FDFBF7',
+      backgroundColor: '#FCEFEC',
       scale: Math.max(2, window.devicePixelRatio || 1),
       useCORS: true,
       logging: false
@@ -308,7 +308,7 @@ $('save-btn').addEventListener('click', async (e) => {
 
   $('cover').addEventListener('click', openCard);
 
-  import('./sparkles.js?v=6')
+  import('./sparkles.js?v=12')
     .then(mod => mod.startSparkles())
     .catch(err => console.warn('sparkles unavailable', err));
   bindRsvp(sb, config);
