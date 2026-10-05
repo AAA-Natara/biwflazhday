@@ -3,19 +3,21 @@
    denser spacing, plain labels, no ribbon, no motion. */
 
 :root {
-  --paper: #FDFBF7;
-  --paper-2: #F7F2E9;
-  --nude: #E5D3C2;
-  --nude-deep: #D9C3AE;
-  --nude-bg: #F4E9DD;
-  --sky: #AEC6DA;
-  --rose: #D6A2AC;
-  --ink: #5E2730;
-  --ink-soft: #8E6B70;
-  --ink-faint: #B09A9C;
-  --ok: #4C6B52;
-  --warn: #9A5B3E;
-
+  --paper: #FCEFEC;
+  --paper-2: #F7E1DC;
+  --blush: #F0D2CB;
+  --blush-deep: #DEB2A8;
+  --blush-bg: #F9E5E0;
+  --cream: #F5EFE3;
+  --ribbon: #8C3246;
+  --ribbon-soft: #C08A96;
+  --olive: #7E8750;
+  --olive-soft: #AEB884;
+  --ink: #6B2132;
+  --ink-soft: #8A5560;
+  --ink-faint: #A87B84;
+  --ok: #5C6B3A;        /* olive, for "coming" */
+  --warn: #9A3B32;      /* rust, for "can't make it" and destructive actions */
   --display: 'Fraunces', Georgia, serif;
   --ui: 'DM Sans', 'Trirong', system-ui, -apple-system, sans-serif;
   --thai: 'Trirong', Georgia, serif;
@@ -53,7 +55,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; }
   width: 100%;
   max-width: 380px;
   background: var(--paper);
-  border: 0.5px solid var(--nude);
+  border: 0.5px solid var(--blush);
   border-radius: 4px;
   padding: 34px 30px;
 }
@@ -70,7 +72,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; }
 
 /* --- shell -------------------------------------------------------- */
 
-.topbar { position: sticky; top: 0; z-index: 4; background: var(--paper); border-bottom: 0.5px solid var(--nude); }
+.topbar { position: sticky; top: 0; z-index: 4; background: var(--paper); border-bottom: 0.5px solid var(--blush); }
 .topbar__in {
   display: flex;
   justify-content: space-between;
@@ -94,7 +96,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; }
   border-bottom: 2px solid transparent;
   white-space: nowrap;
 }
-.tabs button.on { color: var(--ink); border-bottom-color: var(--sky); }
+.tabs button.on { color: var(--ink); border-bottom-color: var(--ribbon); }
 
 .sheet { max-width: 760px; margin: 0 auto; padding: 26px clamp(16px, 4vw, 28px) 140px; }
 .lede { font-size: 15px; color: var(--ink-soft); margin: 0 0 22px; line-height: 1.85; }
@@ -106,7 +108,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; }
 
 .group {
   background: var(--paper);
-  border: 0.5px solid var(--nude);
+  border: 0.5px solid var(--blush);
   border-radius: 4px;
   padding: 20px;
 }
@@ -134,7 +136,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; }
 
 input[type=text], input[type=email], input[type=password], input[type=datetime-local], textarea {
   width: 100%;
-  border: 0.5px solid var(--nude-deep);
+  border: 0.5px solid var(--blush-deep);
   border-radius: 3px;
   background: var(--paper);
   font-family: var(--thai);
@@ -144,9 +146,9 @@ input[type=text], input[type=email], input[type=password], input[type=datetime-l
   padding: 11px 12px;
   transition: border-color .2s;
 }
-input:focus, textarea:focus { outline: none; border-color: var(--sky); }
+input:focus, textarea:focus { outline: none; border-color: var(--ribbon); }
 textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
-.changed input, .changed textarea { border-color: var(--sky); background: #FBFDFE; }
+.changed input, .changed textarea { border-color: var(--ribbon); background: #FFF7F5; }
 
 /* --- toggles ------------------------------------------------------ */
 
@@ -156,7 +158,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   align-items: center;
   gap: 16px;
   background: var(--paper);
-  border: 0.5px solid var(--nude);
+  border: 0.5px solid var(--blush);
   border-radius: 4px;
   padding: 16px 18px;
 }
@@ -167,8 +169,8 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   width: 50px;
   height: 28px;
   border-radius: 14px;
-  border: 0.5px solid var(--nude-deep);
-  background: var(--nude-bg);
+  border: 0.5px solid var(--blush-deep);
+  background: var(--blush-bg);
   position: relative;
   cursor: pointer;
   transition: background .25s, border-color .25s;
@@ -182,7 +184,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   background: var(--paper);
   transition: transform .25s;
 }
-.switch[aria-pressed=true] { background: var(--sky); border-color: var(--sky); }
+.switch[aria-pressed=true] { background: var(--ribbon); border-color: var(--ribbon); }
 .switch[aria-pressed=true]::after { transform: translateX(22px); }
 
 /* --- buttons ------------------------------------------------------ */
@@ -193,7 +195,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   justify-content: center;
   gap: 8px;
   padding: 12px 20px;
-  border: 0.5px solid var(--nude-deep);
+  border: 0.5px solid var(--blush-deep);
   border-radius: 3px;
   background: var(--paper);
   color: var(--ink);
@@ -204,9 +206,9 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   text-decoration: none;
   transition: background .2s, border-color .2s;
 }
-.btn:hover { background: var(--nude-bg); border-color: var(--sky); }
+.btn:hover { background: var(--blush-bg); border-color: var(--ribbon); }
 .btn--solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.btn--solid:hover { background: #4A1D24; border-color: #4A1D24; }
+.btn--solid:hover { background: #541828; border-color: #541828; }
 .btn[disabled] { opacity: .5; pointer-events: none; }
 
 .ghost {
@@ -221,7 +223,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   text-decoration: none;
   border-radius: 3px;
 }
-.ghost:hover { background: var(--nude-bg); color: var(--ink); }
+.ghost:hover { background: var(--blush-bg); color: var(--ink); }
 .ghost--danger { color: var(--warn); }
 
 /* --- save bar ----------------------------------------------------- */
@@ -235,7 +237,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   align-items: center;
   gap: 14px;
   background: var(--paper);
-  border-top: 0.5px solid var(--nude-deep);
+  border-top: 0.5px solid var(--blush-deep);
   padding: 13px clamp(16px, 4vw, 28px);
 }
 .savebar span { font-family: var(--thai); font-weight: 400; font-size: 15px; color: var(--ink-soft); }
@@ -245,14 +247,14 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
 
 .uploader { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; flex-wrap: wrap; }
 .thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; }
-.thumb { background: var(--paper); border: 0.5px solid var(--nude); border-radius: 4px; overflow: hidden; }
+.thumb { background: var(--paper); border: 0.5px solid var(--blush); border-radius: 4px; overflow: hidden; }
 .thumb img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
 .thumb__bar { display: flex; justify-content: space-between; align-items: center; padding: 5px 6px; }
 
 /* --- wishes ------------------------------------------------------- */
 
-.wish { background: var(--paper); border: 0.5px solid var(--nude); border-radius: 4px; padding: 16px 18px; }
-.wish.pending { border-left: 3px solid var(--rose); }
+.wish { background: var(--paper); border: 0.5px solid var(--blush); border-radius: 4px; padding: 16px 18px; }
+.wish.pending { border-left: 3px solid var(--olive); }
 .wish__who { font-family: var(--thai); font-weight: 400; font-size: 16px; }
 .wish__when { font-family: var(--thai); font-size: 13px; color: var(--ink-faint); margin-left: 8px; }
 .wish__msg { font-size: 15px; line-height: 1.9; margin: 10px 0 14px; color: var(--ink-soft); }
@@ -285,7 +287,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   gap: 10px 14px;
   align-items: center;
   padding: 14px 0;
-  border-bottom: 0.5px solid var(--nude);
+  border-bottom: 0.5px solid var(--blush);
 }
 .guest:last-child { border-bottom: 0; }
 .guest__name { font-family: var(--thai); font-weight: 400; font-size: 16px; }
@@ -300,8 +302,8 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   border-radius: 11px;
   margin-left: 7px;
 }
-.pill--yes { background: #E4EDE5; color: var(--ok); }
-.pill--no  { background: var(--nude-bg); color: var(--warn); }
+.pill--yes { background: #ECEFDC; color: var(--ok); }
+.pill--no  { background: var(--blush-bg); color: var(--warn); }
 .pill--wait{ background: var(--paper-2); color: var(--ink-faint); }
 
 /* Tab counters: a reply that arrived while the panel was open should be
@@ -311,7 +313,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   margin-left: 7px;
   padding: 1px 8px;
   border-radius: 10px;
-  background: var(--nude-bg);
+  background: var(--blush-bg);
   color: var(--ink);
   font-family: var(--ui);
   font-weight: 500;
@@ -320,14 +322,14 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   vertical-align: 1px;
 }
 .badge:empty { display: none; }
-.tabs button.on .badge { background: var(--sky); color: var(--paper); }
+.tabs button.on .badge { background: var(--ribbon); color: var(--paper); }
 
 /* --- attendance ---------------------------------------------------- */
 
 .tally { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 22px; }
 .tally div {
   background: var(--paper);
-  border: 0.5px solid var(--nude);
+  border: 0.5px solid var(--blush);
   border-radius: 4px;
   padding: 18px 14px;
   text-align: center;
@@ -352,8 +354,8 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   margin: 0 0 10px;
   color: var(--ink-soft);
 }
-.rgroup ul { list-style: none; margin: 0; padding: 0; background: var(--paper); border: 0.5px solid var(--nude); border-radius: 4px; }
-.rgroup li { padding: 14px 18px; border-bottom: 0.5px solid var(--nude); }
+.rgroup ul { list-style: none; margin: 0; padding: 0; background: var(--paper); border: 0.5px solid var(--blush); border-radius: 4px; }
+.rgroup li { padding: 14px 18px; border-bottom: 0.5px solid var(--blush); }
 .rgroup li:last-child { border-bottom: 0; }
 .rgroup .who { font-family: var(--thai); font-size: 16px; }
 .rgroup .when { font-family: var(--thai); font-size: 12px; color: var(--ink-faint); margin-left: 8px; }
@@ -364,7 +366,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   color: var(--ink-soft);
   margin: 7px 0 0;
   padding-left: 12px;
-  border-left: 2px solid var(--nude);
+  border-left: 2px solid var(--blush);
 }
 
 .src {
@@ -373,7 +375,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   font-size: 11px;
   padding: 2px 8px;
   border-radius: 10px;
-  background: var(--nude-bg);
+  background: var(--blush-bg);
   color: var(--ink-soft);
   margin-left: 8px;
 }
@@ -384,7 +386,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
 .toolbar input[type=search] { flex: 1; min-width: 0; }
 .toolbar .btn { flex: none; }
 
-.rows { background: var(--paper); border: 0.5px solid var(--nude); border-radius: 4px; }
+.rows { background: var(--paper); border: 0.5px solid var(--blush); border-radius: 4px; }
 .rows:empty { display: none; }
 
 .row {
@@ -393,7 +395,7 @@ textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
   gap: 8px 14px;
   align-items: center;
   padding: 14px 18px;
-  border-bottom: 0.5px solid var(--nude);
+  border-bottom: 0.5px solid var(--blush);
 }
 .row:last-child { border-bottom: 0; }
 .row__name { font-family: var(--thai); font-size: 16px; }
