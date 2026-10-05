@@ -6,100 +6,140 @@ const dirty = new Map();          // key -> new value, for site_content only
 let sb = null;
 
 const SECTION_TITLES = {
-  hero:      ['ชื่อบ่าวสาว',     'ใช้ทุกจุดบนเว็บและบนการ์ด'],
-  opening:   ['หน้าเปิด',       'บรรทัดบนสุดและคำชวนให้เลื่อนลง'],
-  maincard:  ['การ์ดสีเขียว',    'บรรทัดเหนือชื่อบนการ์ดใบใหญ่'],
-  datecard:  ['ป้ายวันที่',      'วัน เลขวันที่ เดือน และสถานที่'],
-  verse:     ['ข้อพระคัมภีร์',    'ข้อความและที่มา'],
-  details:   ['รายละเอียดงาน',   'พิธี การแต่งกาย ที่จอดรถ และการเดินทาง'],
-  schedule2: ['กำหนดการ',       'เวลาและรายละเอียดแต่ละช่วง'],
-  labels:    ['ป้ายและหัวข้อ',    'คำบนปุ่มและหัวข้อแต่ละส่วน'],
-  cardpage:  ['การ์ดเชิญส่วนตัว', 'ข้อความบนหน้าการ์ดที่ส่งให้แขกรายคน'],
-  footer:    ['ท้ายหน้า',        'บรรทัดปิดท้าย'],
-  event:     ['ข้อมูลเดิม',       'ยังใช้กับลิงก์แผนที่และปฏิทิน'],
-  headings:  ['หัวข้อเดิม',       'ไม่ได้ใช้บนดีไซน์ใหม่แล้ว'],
-  theme:     ['ข้อความเดิม',      'ไม่ได้ใช้บนดีไซน์ใหม่แล้ว'],
-  travel:    ['ข้อความเดิม',      'ไม่ได้ใช้บนดีไซน์ใหม่แล้ว'],
-  story:     ['ข้อความเดิม',      'ไม่ได้ใช้บนดีไซน์ใหม่แล้ว'],
-  rsvp:      ['ข้อความเดิม',      'ไม่ได้ใช้บนดีไซน์ใหม่แล้ว'],
-  card:      ['การ์ดเชิญส่วนตัว', 'ข้อความบนหน้าการ์ดที่ส่งให้แขกรายคน']
+  hero:      ['ชื่อบ่าวสาว',              'ใช้ทุกจุด ทั้งหน้าแรกและการ์ดส่วนตัว'],
+  opening:   ['หน้าแรก · จอแรกสุด',       'บรรทัดเหนือชื่อ และคำชวนให้เลื่อนลง'],
+  maincard:  ['การ์ดใบใหญ่สีเขียว',        'บรรทัดเล็กเหนือชื่อบ่าวสาว'],
+  datecard:  ['ป้ายวันที่ (กระดาษขาวมุมมน)', 'วัน เลขวันที่ เดือน ชื่อโบสถ์ และเวลา'],
+  verse:     ['ข้อพระคัมภีร์',             'ข้อความและที่มา'],
+  details:   ['หน้าแรก · การ์ดรายละเอียด 4 ใบ', 'พิธี การแต่งกาย ที่จอดรถ การเดินทาง และลิงก์แผนที่'],
+  schedule2: ['หน้าแรก · กำหนดการ',        'เวลาและรายละเอียด 3 ช่วง'],
+  labels:    ['หัวข้อและป้ายกด',           'คำบนป้ายกลม ป้ายซอง และหัวข้อแต่ละส่วน'],
+  cardpage:  ['การ์ดส่วนตัว (หน้า /card)',  'ทุกข้อความบนการ์ดที่ส่งให้แขกรายคน'],
+  footer:    ['ท้ายหน้าแรก',              'บรรทัดใต้ชื่อบ่าวสาว']
 };
 
-// The order the groups appear in, so the panel reads like the site rather
-// than like the database. Anything not listed falls in after these.
 const SECTION_ORDER = ['hero', 'opening', 'maincard', 'datecard', 'verse',
   'details', 'schedule2', 'labels', 'cardpage', 'footer'];
 
 const FIELD_LABELS = {
-  'card.hint': 'ข้อความบนซองก่อนเปิด',
-  'card.to': 'คำขึ้นต้นก่อนชื่อแขก',
-  'card.save': 'ปุ่มบันทึกการ์ด',
-  'card.home': 'ปุ่มไปหน้ารายละเอียด',
+  'hero.bride_first': 'ชื่อเจ้าสาว',
+  'hero.groom_first': 'ชื่อเจ้าบ่าว',
+
+  'open.eyebrow':  'บรรทัดบนสุด',
+  'open.cue':      'คำชวนให้เลื่อนลง',
+
+  'card.kicker':   'บรรทัดเหนือชื่อ',
+
+  'date.weekday':  'วันในสัปดาห์',
+  'date.day':      'เลขวันที่',
+  'date.month':    'เดือนและปี',
+  'date.place':    'ชื่อสถานที่',
+  'date.hour':     'เวลา',
+
+  'verse.en':      'ข้อความ',
+  'verse.en_ref':  'อ้างอิง',
+
+  'det.ceremony_head': 'พิธี (ใบที่ 1) · หัวข้อ',
+  'det.ceremony_body': 'พิธี (ใบที่ 1) · เนื้อหา',
+  'det.dress_head':    'การแต่งกาย (ใบที่ 2) · หัวข้อ',
+  'det.dress_body':    'การแต่งกาย (ใบที่ 2) · เนื้อหา',
+  'det.parking_head':  'ที่จอดรถ (ใบที่ 3) · หัวข้อ',
+  'det.parking_body':  'ที่จอดรถ (ใบที่ 3) · เนื้อหา',
+  'det.transit_head':  'การเดินทาง (ใบที่ 4) · หัวข้อ',
+  'det.transit_body':  'การเดินทาง (ใบที่ 4) · เนื้อหา',
+  'event.map_url':     'ลิงก์แผนที่ (ปุ่ม OPEN IN MAPS)',
+
+  'lbl.details':   'ป้ายกลมสีแดง',
+  'lbl.rsvp':      'ป้ายซองตอบรับ',
+  'lbl.click':     'บรรทัดเล็กใต้ป้ายทั้งสอง',
+  'lbl.schedule':  'หัวข้อกำหนดการ',
+  'lbl.gallery':   'หัวข้อแกลเลอรี',
+  'lbl.wishes':    'หัวข้อคำอวยพร',
+
+  'foot.note':     'บรรทัดท้ายหน้าแรก',
+
+  'card.hint':         'ข้อความบนซองก่อนเปิด',
+  'card.to':           'คำขึ้นต้นก่อนชื่อแขก',
+  'card.save':         'ปุ่มบันทึกการ์ด',
+  'card.home':         'ปุ่มไปหน้ารายละเอียด',
   'card.rsvp_heading': 'หัวข้อส่วนตอบรับ',
-  'card.deadline': 'บรรทัดกำหนดตอบรับ',
-  'card.question': 'คำถาม',
-  'card.yes': 'ปุ่มตอบว่ามา',
-  'card.no': 'ปุ่มตอบว่าไม่สะดวก',
-  'card.note_label': 'ป้ายช่องข้อความถึงบ่าวสาว',
-  'card.submit': 'ปุ่มส่งคำตอบ',
-  'open.eyebrow': 'บรรทัดบนสุด',
-  'open.cue': 'คำชวนให้เลื่อนลง',
-  'card.kicker': 'บรรทัดเหนือชื่อบนการ์ด',
-  'date.weekday': 'วันในสัปดาห์',
-  'date.day': 'เลขวันที่',
-  'date.month': 'เดือนและปี',
-  'date.place': 'สถานที่',
-  'date.hour': 'เวลา',
-  'verse.en': 'ข้อความ (อังกฤษ)',
-  'verse.en_ref': 'อ้างอิง (อังกฤษ)',
-  'det.ceremony_head': 'พิธี · หัวข้อ',
-  'det.ceremony_body': 'พิธี · เนื้อหา',
-  'det.dress_head': 'การแต่งกาย · หัวข้อ',
-  'det.dress_body': 'การแต่งกาย · เนื้อหา',
-  'det.parking_head': 'ที่จอดรถ · หัวข้อ',
-  'det.parking_body': 'ที่จอดรถ · เนื้อหา',
-  'det.transit_head': 'การเดินทาง · หัวข้อ',
-  'det.transit_body': 'การเดินทาง · เนื้อหา',
-  'lbl.details': 'ป้าย Details',
-  'lbl.rsvp': 'ป้ายตอบรับ',
-  'lbl.click': 'บรรทัดเล็กใต้ป้าย',
-  'lbl.wishes': 'หัวข้อคำอวยพร',
-  'lbl.schedule': 'หัวข้อกำหนดการ',
-  'lbl.gallery': 'หัวข้อแกลเลอรี',
-  'foot.note': 'บรรทัดขออภัย (ท้ายหน้าแรกเท่านั้น)',
-  'hero.eyebrow': 'คำนำเหนือชื่อ',
-  'hero.bride_first': 'ชื่อเจ้าสาว', 'hero.bride_last': 'นามสกุลเจ้าสาว',
-  'hero.groom_first': 'ชื่อเจ้าบ่าว', 'hero.groom_last': 'นามสกุลเจ้าบ่าว',
-  'verse.text': 'ข้อความ', 'verse.ref': 'อ้างอิง',
-  'event.weekday': 'วันในสัปดาห์ (อังกฤษ)', 'event.day_num': 'เลขวันที่',
-  'event.month': 'เดือนและปี (อังกฤษ)', 'event.date': 'วันที่แบบไทย',
-  'event.venue': 'ชื่อสถานที่', 'event.address': 'ที่อยู่',
-  'event.time': 'เวลาและพิธี', 'event.map_url': 'ลิงก์แผนที่',
-  'theme.note': 'คำอธิบาย', 'story.body': 'เนื้อหา', 'rsvp.note': 'ข้อความ',
-  'footer.apology': 'บรรทัดขออภัย', 'footer.signoff': 'บรรทัดปิดท้าย'
+  'card.deadline':     'บรรทัดกำหนดตอบรับ',
+  'card.question':     'คำถาม',
+  'card.yes':          'ปุ่มตอบว่ามา',
+  'card.no':           'ปุ่มตอบว่าไม่สะดวก',
+  'card.note_label':   'ป้ายช่องข้อความถึงบ่าวสาว',
+  'card.submit':       'ปุ่มส่งคำตอบ'
 };
 
 // Order matters here: the list follows the order the sections appear on the
 // page, not the alphabet, so the panel reads like the site.
-const SETTING_ORDER = ['event_datetime', 'rsvp_deadline', 'show_slot_hints',
-  'show_gallery', 'show_wishes'];
+// Only switches that move something on the page. event_datetime and
+// rsvp_deadline stay in the database but control nothing today, and a
+// control that does nothing is how a panel stops being trusted. The reply
+// deadline is edited as ordinary text under the card group.
+const SETTING_ORDER = ['show_slot_hints', 'show_gallery', 'show_wishes'];
 
 const SETTING_LABELS = {
-  event_datetime:['วันเวลาจัดงาน',        'ใช้กับนาฬิกานับถอยหลังและปุ่มบันทึกลงปฏิทิน'],
   show_slot_hints:['แสดงกรอบช่องรูปที่ยังว่าง', 'เปิดไว้ตอนทำเว็บ จะเห็นว่าต้องใส่รูปอะไรตรงไหน ปิดก่อนส่งลิงก์ให้แขก แล้วช่องที่ยังว่างจะหายไปทั้งหมด'],
-  show_gallery:  ['แสดงแกลเลอรี',         'ส่วน Gallery บนหน้าแรก ต้องมีรูปในแท็บรูปภาพอย่างน้อยหนึ่งรูป'],
-  rsvp_deadline: ['กำหนดตอบรับ',           'รูปแบบ ปี-เดือน-วัน เช่น 2026-11-07'],
-  show_wishes:   ['แสดงคำอวยพร',          'ส่วนรับคำอวยพรบนหน้าแรก']
+  show_gallery:  ['แสดงแกลเลอรีบนหน้าแรก',  'ต้องมีรูปในแท็บรูปภาพ > แกลเลอรี อย่างน้อยหนึ่งรูป'],
+  show_wishes:   ['แสดงคำอวยพรบนหน้าแรก',  'เฉพาะคำอวยพรที่กดอนุมัติแล้วเท่านั้นที่จะขึ้น']
 };
+
+// The site reads in English; whoever is editing it is thinking in Thai. A
+// search for "ที่จอดรถ" has to find a field whose label, value and key are
+// all English, so each one carries both languages in its search text.
+const SEARCH_WORDS = {
+  'hero.bride_first': 'ชื่อ เจ้าสาว bride',
+  'hero.groom_first': 'ชื่อ เจ้าบ่าว groom',
+  'open.eyebrow': 'หน้าแรก บนสุด',
+  'open.cue': 'เลื่อนลง scroll',
+  'card.kicker': 'การ์ดเขียว',
+  'date.weekday': 'วันที่ วัน เสาร์ saturday',
+  'date.day': 'วันที่ เลข 21',
+  'date.month': 'เดือน ปี พฤศจิกายน november',
+  'date.place': 'สถานที่ โบสถ์ คริสตจักร church venue',
+  'date.hour': 'เวลา บ่ายสองโมง time',
+  'verse.en': 'ข้อพระคัมภีร์ พระคัมภีร์ verse bible',
+  'verse.en_ref': 'ข้อพระคัมภีร์ อ้างอิง verse',
+  'det.ceremony_head': 'พิธี พิธีสมรส ceremony',
+  'det.ceremony_body': 'พิธี พิธีสมรส ceremony',
+  'det.dress_head': 'การแต่งกาย ชุด สีงาน dress code',
+  'det.dress_body': 'การแต่งกาย ชุด สีงาน dress code',
+  'det.parking_head': 'ที่จอดรถ จอดรถ parking',
+  'det.parking_body': 'ที่จอดรถ จอดรถ parking',
+  'det.transit_head': 'การเดินทาง รถไฟฟ้า เดินทาง transit',
+  'det.transit_body': 'การเดินทาง รถไฟฟ้า เดินทาง transit',
+  'event.map_url': 'แผนที่ map ลิงก์ google',
+  'lbl.details': 'ป้าย รายละเอียด details',
+  'lbl.rsvp': 'ป้าย ตอบรับ rsvp',
+  'lbl.click': 'ป้าย กด tap',
+  'lbl.schedule': 'กำหนดการ หัวข้อ schedule',
+  'lbl.gallery': 'แกลเลอรี รูป gallery',
+  'lbl.wishes': 'คำอวยพร อวยพร wishes',
+  'foot.note': 'ท้ายหน้า ขออภัย footer',
+  'card.hint': 'การ์ด ซอง แตะเปิด',
+  'card.to': 'การ์ด เรียน ชื่อแขก',
+  'card.save': 'การ์ด ปุ่ม บันทึก save',
+  'card.home': 'การ์ด ปุ่ม รายละเอียด',
+  'card.rsvp_heading': 'การ์ด ตอบรับ rsvp',
+  'card.deadline': 'การ์ด ตอบรับ กำหนด วันสุดท้าย deadline',
+  'card.question': 'การ์ด ตอบรับ คำถาม rsvp',
+  'card.yes': 'การ์ด ตอบรับ มา yes rsvp',
+  'card.no': 'การ์ด ตอบรับ ไม่มา ไม่สะดวก no rsvp',
+  'card.note_label': 'การ์ด ข้อความ อวยพร note',
+  'card.submit': 'การ์ด ปุ่ม ส่ง submit rsvp'
+};
+
+function searchWords(key) {
+  if (SEARCH_WORDS[key]) return SEARCH_WORDS[key];
+  if (key.startsWith('sch.')) return 'กำหนดการ เวลา ตาราง schedule';
+  return '';
+}
 
 function labelFor(key) {
   if (FIELD_LABELS[key]) return FIELD_LABELS[key];
-  const m = key.match(/^schedule\.(\d)_(time|text)$/);
+  const m = key.match(/^sch\.(\d)_(time|text)$/);
   if (m) return `ช่วงที่ ${m[1]} · ${m[2] === 'time' ? 'เวลา' : 'รายละเอียด'}`;
-  const t = key.match(/^travel\.(\d)_(head|text)$/);
-  if (t) return `รายการที่ ${t[1]} · ${t[2] === 'head' ? 'หัวข้อ' : 'รายละเอียด'}`;
-  const s = key.match(/^sec\.(\d)_(num|en|th)$/);
-  if (s) return `ส่วนที่ ${s[1]} · ${{ num: 'เลขลำดับ', en: 'ชื่ออังกฤษ', th: 'ชื่อไทย' }[s[2]]}`;
   return key;
 }
 
@@ -229,6 +269,7 @@ async function loadContent() {
 
   box.innerHTML = '';
   const sections = Object.keys(groups).sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
+  wrapGroups = [];
 
   for (const [i, name] of sections.entries()) {
     const [title, hint] = SECTION_TITLES[name] || [name, ''];
@@ -238,6 +279,7 @@ async function loadContent() {
     const wrap = document.createElement('details');
     wrap.className = 'group';
     wrap.open = i === 0;
+    wrapGroups.push(wrap);
 
     const sum = document.createElement('summary');
     const h = document.createElement('h2');
@@ -247,6 +289,10 @@ async function loadContent() {
     p.textContent = hint;
     sum.append(h, p);
     wrap.appendChild(sum);
+
+    // The group heading is searchable too, so "กำหนดการ" finds every
+    // field inside the schedule group even when the field itself is a time.
+    const groupWords = title;
 
     for (const row of groups[name]) {
       const field = document.createElement('div');
@@ -259,6 +305,9 @@ async function loadContent() {
       key.className = 'key';
       key.textContent = row.key;
       label.appendChild(key);
+      // The field's own words are what someone searches by, so the filter
+      // matches the label, the key and whatever is currently written in it.
+      field.dataset.find = `${labelFor(row.key)} ${searchWords(row.key)} ${groupWords} ${row.key} ${row.value_th || ''}`.toLowerCase();
 
       const input = row.field_type === 'textarea'
         ? document.createElement('textarea')
@@ -304,6 +353,48 @@ $('discard').addEventListener('click', () => {
   dirty.clear();
   syncSaveBar();
   loadContent();
+});
+
+/* ---- finding one field among fifty ---- */
+
+let wrapGroups = [];
+
+// Typing anything opens every group that still has a match and hides the
+// rest, so a field is found by its words rather than by remembering which
+// heading it was filed under.
+function filterContent(term) {
+  const q = term.trim().toLowerCase();
+  const hint = $('content-found');
+
+  if (!q) {
+    for (const [i, wrap] of wrapGroups.entries()) {
+      wrap.hidden = false;
+      wrap.open = i === 0;
+      wrap.querySelectorAll('.field').forEach(f => { f.hidden = false; });
+    }
+    hint.textContent = '';
+    return;
+  }
+
+  let total = 0;
+  for (const wrap of wrapGroups) {
+    let hits = 0;
+    for (const f of wrap.querySelectorAll('.field')) {
+      const match = (f.dataset.find || '').includes(q);
+      f.hidden = !match;
+      if (match) hits++;
+    }
+    wrap.hidden = hits === 0;
+    wrap.open = hits > 0;
+    total += hits;
+  }
+  hint.textContent = total ? `เจอ ${total} ช่อง` : 'ไม่เจอช่องที่ตรงกับคำนี้';
+}
+
+$('content-search')?.addEventListener('input', (e) => filterContent(e.target.value));
+
+$('show-keys')?.addEventListener('change', (e) => {
+  document.body.classList.toggle('show-keys', e.target.checked);
 });
 
 /* ================= settings ================= */
@@ -602,16 +693,36 @@ async function loadReplies() {
 
 // A slot holds exactly one picture. Uploading again replaces what was there,
 // so the couple can never end up with two wax seals arguing over one spot.
+// Each slot names the picture in English first, because that is what you
+// type into Google Images to find one; the Thai line says where it lands on
+// the page. "ตราครั่ง" is a wax seal — nobody finds one by searching in Thai.
 const ART_SLOTS = [
-  ['env_closed', 'ซองจดหมาย (ปิดผนึก)', 'ถ่ายซองจริงแนวนอน 3:2 ถ้าไม่ใส่ เว็บจะวาดซองให้เอง', false],
-  ['env_open',   'ซองจดหมาย (เปิดแล้ว)', 'ซองใบเดิม ถ่ายตอนเปิด แนวนอน 3:2', false],
-  ['seal',       'ตราครั่ง',             'PNG พื้นหลังโปร่งใส ถ้าไม่ใส่ เว็บจะวาดตราให้เอง', true],
-  ['floral_1',   'ช่อดอกไม้ 1',          'PNG โปร่งใส วางมุมซ้ายล่างของซอง', true],
-  ['floral_2',   'ช่อดอกไม้ 2',          'PNG โปร่งใส วางมุมขวาบนของซอง', true],
-  ['floral_3',   'ช่อดอกไม้ใหญ่',        'PNG โปร่งใส วางท้ายหน้า', true],
-  ['liner',      'รูปในฝาซอง',           'รูปคู่แนวนอน 4:3', false],
-  ['couple_1',   'รูปคู่ในกรอบโพลารอยด์', 'แนวตั้ง 4:5', false],
-  ['couple_2',   'รูปคู่ใบที่สอง',        'แนวตั้ง 4:5 อยู่ใต้กำหนดการ', false]
+  ['env_closed', 'Envelope — closed', 'ซองจดหมายปิดผนึก ใบที่มีตราครั่งอยู่กลางซอง',
+   'olive green envelope mockup front', 'แนวนอน 3:2 · ถ้าไม่ใส่ เว็บจะวาดซองให้เอง', false],
+
+  ['env_open', 'Envelope — open', 'ซองใบเดิม ถ่ายตอนเปิดฝาแล้ว มีรูปโผล่ออกมา',
+   'open envelope mockup top view', 'แนวนอน 3:2 · ถ้าไม่ใส่ เว็บจะวาดซองให้เอง', false],
+
+  ['seal', 'Wax Seal', 'ตราครั่ง — ก้อนครั่งสีแดงที่ปิดปากซอง',
+   'burgundy wax seal png transparent', 'PNG พื้นหลังโปร่งใส · ถ้าไม่ใส่ เว็บจะวาดตราอักษร W&C ให้', true],
+
+  ['floral_1', 'Floral — bottom left', 'ช่อดอกไม้ วางทับมุมซ้ายล่างของซอง',
+   'watercolor eucalyptus bouquet png transparent', 'PNG พื้นหลังโปร่งใส', true],
+
+  ['floral_2', 'Floral — top right', 'ช่อดอกไม้ วางทับมุมขวาบนของซอง',
+   'watercolor greenery sprig png transparent', 'PNG พื้นหลังโปร่งใส', true],
+
+  ['floral_3', 'Floral — large', 'ช่อดอกไม้ใหญ่ วางท้ายหน้า ก่อนแถบสีเขียว',
+   'watercolor wedding bouquet png transparent', 'PNG พื้นหลังโปร่งใส', true],
+
+  ['liner', 'Photo in the envelope', 'รูปที่โผล่ออกมาจากปากซองที่เปิดแล้ว',
+   '', 'รูปถ่ายแนวนอน 4:3', false],
+
+  ['couple_1', 'Polaroid photo 1', 'รูปคู่ในกรอบโพลารอยด์ ใต้การ์ดสีเขียว',
+   '', 'รูปถ่ายแนวตั้ง 4:5', false],
+
+  ['couple_2', 'Polaroid photo 2', 'รูปคู่ใบที่สอง อยู่ใต้กำหนดการ (หน้าแรกเท่านั้น)',
+   '', 'รูปถ่ายแนวตั้ง 4:5', false]
 ];
 
 let artRows = new Map();
@@ -624,7 +735,7 @@ async function loadArt() {
   artRows = new Map((data || []).filter(r => r.slot).map(r => [r.slot, r]));
 
   box.innerHTML = '';
-  for (const [slot, title, hint, cut] of ART_SLOTS) {
+  for (const [i, [slot, name, where, search, spec, cut]] of ART_SLOTS.entries()) {
     const row = artRows.get(slot);
 
     const card = document.createElement('div');
@@ -645,9 +756,52 @@ async function loadArt() {
     }
 
     const h = document.createElement('h3');
-    h.textContent = title;
-    const p = document.createElement('p');
-    p.textContent = hint;
+    const num = document.createElement('i');
+    num.className = 'artcard__num';
+    num.textContent = i + 1;
+    h.append(num, document.createTextNode(name));
+
+    const w = document.createElement('p');
+    w.className = 'artcard__where';
+    w.textContent = where;
+
+    const sp = document.createElement('p');
+    sp.className = 'artcard__spec';
+    sp.textContent = spec;
+
+    card.append(frame, h, w, sp);
+
+    // A ready-made search phrase, because hunting for "ตราครั่ง" in Google
+    // Images returns nothing useful and "wax seal" returns everything.
+    if (search) {
+      const find = document.createElement('div');
+      find.className = 'artcard__find';
+
+      const code = document.createElement('code');
+      code.textContent = search;
+
+      const copy = document.createElement('button');
+      copy.type = 'button';
+      copy.className = 'ghost';
+      copy.textContent = 'คัดลอก';
+      copy.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(search);
+          copy.textContent = 'คัดลอกแล้ว';
+          setTimeout(() => { copy.textContent = 'คัดลอก'; }, 1800);
+        } catch { copy.textContent = 'คัดลอกไม่ได้'; }
+      });
+
+      const go = document.createElement('a');
+      go.className = 'ghost';
+      go.target = '_blank';
+      go.rel = 'noopener';
+      go.href = 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(search);
+      go.textContent = 'ค้นรูป';
+
+      find.append(code, copy, go);
+      card.appendChild(find);
+    }
 
     const bar = document.createElement('div');
     bar.className = 'artcard__bar';
@@ -672,7 +826,7 @@ async function loadArt() {
     msg.className = 'dim';
     msg.id = `art-msg-${slot}`;
 
-    card.append(frame, h, p, bar, msg);
+    card.append(bar, msg);
     box.appendChild(card);
   }
 }
