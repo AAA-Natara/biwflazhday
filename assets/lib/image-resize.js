@@ -15,7 +15,10 @@ function loadImage(file) {
   });
 }
 
-export async function shrink(file) {
+// Cut-outs — the bouquets, the wax seal — are uploaded as transparent PNGs.
+// Re-encoding one as JPEG fills the transparency with black, so those go out
+// as WebP, or as PNG where WebP encoding is unavailable.
+export async function shrink(file, { keepAlpha = false } = {}) {
   const img = await loadImage(file);
   const scale = Math.min(1, MAX_EDGE / Math.max(img.naturalWidth, img.naturalHeight));
   const w = Math.round(img.naturalWidth * scale);
@@ -29,13 +32,13 @@ export async function shrink(file) {
   ctx.drawImage(img, 0, 0, w, h);
 
   // Safari only got WebP encoding in 14; fall back rather than upload nothing.
-  const type = canvas.toDataURL('image/webp').startsWith('data:image/webp')
-    ? 'image/webp' : 'image/jpeg';
+  const webp = canvas.toDataURL('image/webp').startsWith('data:image/webp');
+  const type = webp ? 'image/webp' : (keepAlpha ? 'image/png' : 'image/jpeg');
 
   const blob = await new Promise(res => canvas.toBlob(res, type, QUALITY));
   if (!blob) throw new Error('แปลงไฟล์รูปไม่สำเร็จ');
 
-  const ext = type === 'image/webp' ? 'webp' : 'jpg';
+  const ext = type === 'image/webp' ? 'webp' : (type === 'image/png' ? 'png' : 'jpg');
   const name = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
   return { blob, name, type, width: w, height: h };
 }
