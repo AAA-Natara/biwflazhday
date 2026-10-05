@@ -2,7 +2,7 @@
 // in the HTML. This module swaps in whatever the couple has edited. If
 // Supabase is slow, unconfigured, or down, the page still reads correctly.
 
-import { getClient, publicImageUrl } from './supabase-client.js?v=15';
+import { getClient, publicImageUrl } from './supabase-client.js?v=16';
 
 const CACHE_KEY = 'bf-content-v3';
 
@@ -25,10 +25,37 @@ function toggle(id, on) {
 
 /* ---------- text -------------------------------------------------- */
 
+// The dress-code swatches are one field holding a list of colours, so they
+// are built rather than substituted. Anything malformed leaves the colours
+// already in the HTML alone instead of emptying the row.
+function applyPalette(raw) {
+  const box = document.querySelector('[data-palette]');
+  if (!box || !raw) return;
+
+  let list;
+  try { list = JSON.parse(raw); } catch { return; }
+  if (!Array.isArray(list) || !list.length) return;
+
+  const clean = list.filter(c => c && /^#[0-9a-f]{6}$/i.test(String(c.hex || '').trim()));
+  if (!clean.length) return;
+
+  box.innerHTML = '';
+  for (const colour of clean) {
+    const cell = document.createElement('div');
+    const dot = document.createElement('i');
+    dot.style.background = colour.hex;
+    const label = document.createElement('span');
+    label.textContent = colour.name || '';
+    cell.append(dot, label);
+    box.appendChild(cell);
+  }
+}
+
 function applyText(rows) {
   for (const row of rows) {
     const value = row.value_th || row.value_en;
     if (!value) continue;
+    if (row.key === 'theme.palette') { applyPalette(value); continue; }
     document.querySelectorAll(`[data-key="${row.key}"]`).forEach(el => {
       if (el.tagName === 'A') el.href = value;
       else el.textContent = value;

@@ -47,6 +47,7 @@ const FIELD_LABELS = {
   'det.parking_body':  'ที่จอดรถ (ใบที่ 3) · เนื้อหา',
   'det.transit_head':  'การเดินทาง (ใบที่ 4) · หัวข้อ',
   'det.transit_body':  'การเดินทาง (ใบที่ 4) · เนื้อหา',
+  'theme.palette':     'สีของงาน (วงกลมใต้ Dress Code)',
   'event.map_url':     'ลิงก์แผนที่ (ปุ่ม OPEN IN MAPS)',
 
   'lbl.details':   'ป้ายกลมสีแดง',
@@ -109,6 +110,7 @@ const SEARCH_WORDS = {
   'det.parking_body': 'ที่จอดรถ จอดรถ parking',
   'det.transit_head': 'การเดินทาง รถไฟฟ้า เดินทาง transit',
   'det.transit_body': 'การเดินทาง รถไฟฟ้า เดินทาง transit',
+  'theme.palette': 'สี สีงาน จานสี โทนสี การแต่งกาย palette color dress code',
   'event.map_url': 'แผนที่ map ลิงก์ google',
   'lbl.details': 'ป้าย รายละเอียด details',
   'lbl.rsvp': 'ป้าย ตอบรับ rsvp',
@@ -309,6 +311,12 @@ async function loadContent() {
       // matches the label, the key and whatever is currently written in it.
       field.dataset.find = `${labelFor(row.key)} ${searchWords(row.key)} ${groupWords} ${row.key} ${row.value_th || ''}`.toLowerCase();
 
+      if (row.field_type === 'palette') {
+        field.append(label, paletteEditor(row, field));
+        wrap.appendChild(field);
+        continue;
+      }
+
       const input = row.field_type === 'textarea'
         ? document.createElement('textarea')
         : Object.assign(document.createElement('input'), { type: 'text' });
@@ -354,6 +362,144 @@ $('discard').addEventListener('click', () => {
   syncSaveBar();
   loadContent();
 });
+
+
+/* ---- the dress-code palette ---- */
+
+// Stored as one JSON string so it needs no table of its own, and read back
+// defensively: a hand-edited field must never take the whole panel down.
+function parsePalette(raw) {
+  try {
+    const list = JSON.parse(raw || '[]');
+    if (!Array.isArray(list)) return [];
+    return list
+      .filter(c => c && typeof c.hex === 'string')
+      .map(c => ({ hex: normaliseHex(c.hex), name: String(c.name || '') }));
+  } catch {
+    return [];
+  }
+}
+
+// Accepts "#7D8456", "7d8456" and "#7d8" — whatever gets pasted in.
+function normaliseHex(value) {
+  let v = String(value).trim().replace(/^#/, '');
+  if (/^[0-9a-f]{3}$/i.test(v)) v = v.split('').map(c => c + c).join('');
+  if (!/^[0-9a-f]{6}$/i.test(v)) return null;
+  return '#' + v.toUpperCase();
+}
+
+function paletteEditor(row, field) {
+  const initial = row.value_th || '';
+  let colours = parsePalette(initial);
+  if (!colours.length) colours = [{ hex: '#7D8456', name: '' }];
+
+  const box = document.createElement('div');
+  box.className = 'pal';
+
+  const list = document.createElement('div');
+  list.className = 'pal__list';
+
+  const add = document.createElement('button');
+  add.type = 'button';
+  add.className = 'btn';
+  add.textContent = 'เพิ่มสี';
+
+  const note = document.createElement('p');
+  note.className = 'pal__note';
+  note.textContent = 'พิมพ์โค้ดสีเองได้ หรือกดช่องสีซ้ายมือเพื่อเลือกจากจานสี · ชื่อสีคือคำที่ขึ้นใต้วงกลมบนหน้าเว็บ';
+
+  function commit() {
+    const value = JSON.stringify(colours.filter(c => c.hex));
+    if (value === initial) dirty.delete(row.key);
+    else dirty.set(row.key, value);
+    field.classList.toggle('changed', value !== initial);
+    syncSaveBar();
+  }
+
+  function draw() {
+    list.innerHTML = '';
+
+    colours.forEach((colour, i) => {
+      const line = document.createElement('div');
+      line.className = 'pal__row';
+
+      // The native picker and a plain text box edit the same value, because
+      // a designer pastes a hex code and everyone else wants to point at it.
+      const dot = document.createElement('input');
+      dot.type = 'color';
+      dot.className = 'pal__dot';
+      dot.value = colour.hex || '#7D8456';
+      dot.setAttribute('aria-label', `เลือกสีที่ ${i + 1}`);
+
+      const hex = document.createElement('input');
+      hex.type = 'text';
+      hex.className = 'pal__hex';
+      hex.value = colour.hex || '';
+      hex.placeholder = '#7D8456';
+      hex.spellcheck = false;
+      hex.setAttribute('aria-label', `โค้ดสีที่ ${i + 1}`);
+
+      hex.autocomplete = 'off';
+
+      const name = document.createElement('input');
+      name.type = 'text';
+      name.className = 'pal__name';
+      name.value = colour.name || '';
+      name.placeholder = 'ชื่อสี เช่น Olive';
+      name.setAttribute('aria-label', `ชื่อสีที่ ${i + 1}`);
+
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'ghost ghost--danger';
+      del.textContent = 'ลบ';
+      del.disabled = colours.length < 2;
+
+      dot.addEventListener('input', () => {
+        colour.hex = dot.value.toUpperCase();
+        hex.value = colour.hex;
+        hex.classList.remove('bad');
+        commit();
+      });
+
+      // Typing is validated but never rewritten mid-keystroke, which would
+      // fight the cursor; the field only snaps to a clean value on blur.
+      hex.addEventListener('input', () => {
+        const ok = normaliseHex(hex.value);
+        hex.classList.toggle('bad', !ok && hex.value.trim() !== '');
+        if (!ok) return;
+        colour.hex = ok;
+        dot.value = ok;
+        commit();
+      });
+      hex.addEventListener('blur', () => {
+        const ok = normaliseHex(hex.value);
+        if (ok) { hex.value = ok; hex.classList.remove('bad'); }
+      });
+
+      name.addEventListener('input', () => { colour.name = name.value; commit(); });
+
+      del.addEventListener('click', () => {
+        colours.splice(i, 1);
+        draw();
+        commit();
+      });
+
+      line.append(dot, hex, name, del);
+      list.appendChild(line);
+    });
+  }
+
+  add.addEventListener('click', () => {
+    colours.push({ hex: '#AEB489', name: '' });
+    draw();
+    commit();
+    list.querySelector('.pal__row:last-child .pal__name')?.focus();
+  });
+
+  draw();
+  box.append(list, add, note);
+  return box;
+}
 
 /* ---- finding one field among fifty ---- */
 
