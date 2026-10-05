@@ -152,7 +152,7 @@ input[type=text], input[type=email], input[type=password], input[type=datetime-l
 }
 input:focus, textarea:focus { outline: none; border-color: var(--ribbon); }
 textarea { resize: vertical; min-height: 88px; line-height: 1.85; }
-.changed input, .changed textarea { border-color: var(--ribbon); background: #FFF7F5; }
+.changed input, .changed textarea { border-color: var(--ribbon); background: #FBF6EC; }
 
 /* --- toggles ------------------------------------------------------ */
 
@@ -609,3 +609,59 @@ body.show-keys .key{display:inline;font-size:11px;color:var(--ink-faint);font-fa
   word-break:break-word;
 }
 .artcard__find .ghost{min-height:30px;padding:0 10px;font-size:12px}
+
+/* ---------------------------------------------------------------
+   The dress-code palette
+   --------------------------------------------------------------- */
+
+.pal__list{display:grid;gap:8px;margin-bottom:10px}
+.pal__row{display:flex;align-items:center;gap:8px}
+
+/* A native colour well, trimmed down to just the swatch. */
+.pal__dot{
+  flex:0 0 auto;
+  width:44px;
+  height:40px;
+  padding:3px;
+  border:1px solid var(--blush);
+  border-radius:8px;
+  background:#fff;
+  cursor:pointer;
+}
+.pal__dot::-webkit-color-swatch-wrapper{padding:0}
+.pal__dot::-webkit-color-swatch{border:0;border-radius:5px}
+.pal__dot::-moz-color-swatch{border:0;border-radius:5px}
+
+.pal__hex{
+  flex:0 0 110px;
+  min-height:40px;
+  padding:0 10px;
+  border:1px solid var(--blush);
+  border-radius:8px;
+  background:#fff;
+  color:var(--ink);
+  font-family:ui-monospace,SFMono-Regular,monospace;
+  font-size:13px;
+  text-transform:uppercase;
+}
+.pal__hex.bad{border-color:var(--warn);color:var(--warn)}
+
+.pal__name{
+  flex:1 1 120px;
+  min-width:0;
+  min-height:40px;
+  padding:0 10px;
+  border:1px solid var(--blush);
+  border-radius:8px;
+  background:#fff;
+  color:var(--ink);
+  font-family:var(--ui);
+  font-size:14px;
+}
+.pal__row .ghost{flex:0 0 auto;min-height:36px;padding:0 10px;font-size:12px}
+.pal__note{margin:8px 0 0;font-size:12px;line-height:1.6;color:var(--ink-faint)}
+
+@media (max-width: 520px){
+  .pal__row{flex-wrap:wrap}
+  .pal__name{flex:1 1 100%;order:3}
+}

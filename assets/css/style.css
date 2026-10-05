@@ -171,7 +171,9 @@
    5. Dress code · the palette
    --------------------------------------------------------------- */
 
-.palette{display:flex;justify-content:center;gap:14px;margin:22px 0 0}
+/* The couple can add a sixth colour, so the row wraps rather than
+   running off the side of a phone. */
+.palette{display:flex;flex-wrap:wrap;justify-content:center;gap:16px 14px;margin:22px 0 0}
 .palette div{text-align:center}
 .palette i{
   display:block;
