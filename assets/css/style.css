@@ -138,33 +138,37 @@
   width:1px;
   background:linear-gradient(transparent, var(--olive-pale) 12%, var(--olive-pale) 88%, transparent);
 }
-.timeline li{position:relative;padding:0 0 26px}
+.timeline li{position:relative;padding:0 0 30px}
 .timeline li:last-child{padding-bottom:0}
 .timeline li::before{
   content:'';
   position:absolute;
-  left:-29px;
-  top:9px;
-  width:11px;
-  height:11px;
+  left:-30px;
+  top:12px;
+  width:13px;
+  height:13px;
   border-radius:50%;
   background:var(--paper);
   border:1px solid var(--olive);
 }
 .timeline b{
   display:block;
-  font-family:var(--display);
-  font-size:13.5px;
-  font-weight:500;
-  letter-spacing:.2em;
+  /* Playfair has no Thai, so "14:00 น." was being set in two faces at
+     once. Charm carries both scripts, which lets the time be one thing
+     and be large enough to lead the line. */
+  font-family:'Charm','Playfair Display',serif;
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:0;
+  line-height:1.25;
   color:var(--wine);
 }
 .timeline span{
   display:block;
-  font-size:18px;
+  font-size:19px;
   line-height:1.8;
   color:var(--ink-soft);
-  margin-top:2px;
+  margin-top:3px;
 }
 
 /* ---------------------------------------------------------------
@@ -173,21 +177,22 @@
 
 /* The couple can add a sixth colour, so the row wraps rather than
    running off the side of a phone. */
-.palette{display:flex;flex-wrap:wrap;justify-content:center;gap:16px 14px;margin:22px 0 0}
-.palette div{text-align:center}
-.palette i{
+.palette{margin:24px 0 0}
+.palette__dots{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.palette__dots i{
   display:block;
-  width:58px;
-  height:58px;
+  width:42px;
+  height:42px;
   border-radius:50%;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 4px 10px -4px rgba(67,48,42,.3);
 }
-.palette span{
-  display:block;
-  margin-top:8px;
+.palette__names{
+  margin:14px 0 0;
+  text-align:center;
   font-family:var(--display);
-  font-size:10.5px;
-  letter-spacing:.16em;
+  font-size:11.5px;
+  letter-spacing:.14em;
+  line-height:1.9;
   text-transform:uppercase;
   color:var(--ink-faint);
 }
@@ -326,15 +331,17 @@
   .strip{max-width:560px}
   .opening__names{font-size:92px}
   .env{width:340px}
-  .env-open{width:368px}
-  .env-open .liner{width:326px}
+  .env-open{width:500px;margin-inline:auto}
   .datecard{width:252px}
   .greencard{width:290px}
-  .polaroid{width:244px}
+  .polaroid{width:366px}
   .badge{width:192px}
   .head__t{font-size:42px}
   .slip h3{font-size:28px}
-  .slip p,.timeline span,.wish p{font-size:19.5px}
+  .slip p,.timeline span,.wish p{font-size:20.5px}
+  .timeline b{font-size:32px}
+  .palette__dots i{width:54px;height:54px}
+  .palette__names{font-size:12.5px}
   .verse p{font-size:25px}
   .bloom--bl{width:202px;left:-62px;bottom:-60px}
   .bloom--tr{width:168px;right:-56px;top:-62px}

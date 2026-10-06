@@ -254,14 +254,22 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 /* The open envelope: a landscape photograph showing above the
    pocket, as though it were slipped inside. */
-.env-open{display:block;position:relative;width:296px;margin:0 auto}
-.env-open .liner{width:262px;aspect-ratio:4/3;margin:0 auto;rotate:-1.5deg}
+/* Forty per cent bigger than the column it sits in. Negative margins
+   exactly cancel the strip's padding, so it spans the full column width
+   without pushing the page sideways. */
+.env-open{
+  display:block;
+  position:relative;
+  width:auto;
+  margin:0 -20px;
+}
+.env-open .liner{width:88%;aspect-ratio:4/3;margin:0 auto;rotate:-1.5deg}
 .env-open__pocket{
   display:block;
   position:relative;
   aspect-ratio:3/2;
   border-radius:3px;
-  margin-top:-38px;
+  margin-top:-44px;
   z-index:2;
 }
 .env-open__pocket > svg{position:absolute;inset:0;width:100%;height:100%}
@@ -371,9 +379,9 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 .polaroid{
   position:relative;
-  width:200px;
-  padding:11px 11px 40px;
-  margin:-46px 0 0 4px;
+  width:300px;
+  padding:14px 14px 54px;
+  margin:-52px 0 0 2px;
   rotate:-7deg;
   z-index:9;
 }
@@ -382,10 +390,10 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   position:absolute;
   left:0;
   right:0;
-  bottom:10px;
+  bottom:14px;
   font-family:var(--script);
   font-style:normal;
-  font-size:24px;
+  font-size:32px;
   line-height:1;
   text-align:center;
   color:var(--wine);
@@ -394,12 +402,12 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
    place the script face belongs. A date there is set in the reading face. */
 .polaroid em.plain{
   font-family:var(--display);
-  font-size:13px;
+  font-size:15px;
   font-weight:500;
   letter-spacing:.2em;
   bottom:12px;
 }
-.polaroid--right{margin:-50px 6px 0 auto;rotate:5deg}
+.polaroid--right{margin:-56px 2px 0 auto;rotate:5deg}
 .note + .polaroid{margin-top:-18px}
 
 /* A hand-torn badge. The uneven border-radius is doing the tearing. */
@@ -425,6 +433,9 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 .badge:hover,.badge:focus-visible{rotate:1deg;translate:0 -3px}
 .badge__t{position:relative;z-index:2;font-family:var(--display);font-weight:500;font-size:22px;letter-spacing:.03em;line-height:1.15}
 .badge__c{position:relative;z-index:2;font-family:var(--display);font-size:10.5px;letter-spacing:.2em;margin-top:10px}
+/* The polaroid grew, and a badge lapped over its bottom edge was cutting
+   through the couple's names on the print. This pair sits clear. */
+.polaroid + .badge{margin-top:14px}
 .badge--left{margin:-58px auto 0 10px;rotate:-4deg}
 
 /* A small reply envelope, used as the way in to the RSVP form. */
