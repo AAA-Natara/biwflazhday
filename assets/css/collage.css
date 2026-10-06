@@ -33,7 +33,10 @@
 }
 
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+/* A tilted piece or a bouquet reaching past the edge must never let the
+   page be dragged sideways. clip does that without making the document a
+   scroll container; hidden is the fallback for older Safari. */
+html{-webkit-text-size-adjust:100%;overflow-x:hidden;overflow-x:clip}
 
 body{
   margin:0;
@@ -252,6 +255,14 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 .bloom--bl{left:-52px;bottom:-52px;width:166px;aspect-ratio:1;rotate:-8deg}
 .bloom--tr{right:-46px;top:-54px;width:138px;aspect-ratio:1;rotate:12deg}
 
+/* On a small phone the envelope already fills the column, so the flowers
+   pull in rather than losing a quarter of themselves off the edge. */
+@media (max-width: 400px){
+  .env{width:min(272px, 100%)}
+  .bloom--bl{left:-26px;bottom:-38px;width:134px}
+  .bloom--tr{right:-22px;top:-40px;width:112px}
+}
+
 /* The open envelope: a landscape photograph showing above the
    pocket, as though it were slipped inside. */
 /* Forty per cent bigger than the column it sits in. Negative margins
@@ -284,7 +295,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 .datecard{
   position:relative;
-  width:208px;
+  width:min(208px, calc(100% - 14px));
   padding:24px 16px 22px;
   margin:-38px 0 0 2px;
   rotate:-5deg;
@@ -339,7 +350,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 .greencard{
   position:relative;
-  width:238px;
+  width:min(238px, calc(100% - 14px));
   margin:-58px 0 0 auto;
   padding:32px 22px 36px;
   rotate:3deg;
@@ -379,7 +390,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 .polaroid{
   position:relative;
-  width:300px;
+  width:min(300px, calc(100% - 26px));
   padding:14px 14px 54px;
   margin:-52px 0 0 2px;
   rotate:-7deg;
@@ -415,7 +426,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   position:relative;
   display:grid;
   place-content:center;
-  width:162px;
+  width:min(162px, calc(100% - 14px));
   aspect-ratio:1;
   margin:-58px 8px 0 auto;
   rotate:4deg;
@@ -442,7 +453,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 .mini-env{
   position:relative;
   display:block;
-  width:202px;
+  width:min(202px, calc(100% - 14px));
   margin:-34px auto 0 2px;
   rotate:-3deg;
   z-index:11;
@@ -472,7 +483,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 .note{
   display:block;
   position:relative;
-  width:280px;
+  width:min(280px, calc(100% - 14px));
   margin:-30px auto 0;
   padding:28px 26px 30px;
   rotate:-1.5deg;
