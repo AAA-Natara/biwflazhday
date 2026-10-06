@@ -83,8 +83,8 @@
    paragraph. They alternate their tilt so the stack stays alive.
    --------------------------------------------------------------- */
 
-.info{margin-top:76px}
-.info__list{display:grid;gap:18px;margin-top:4px}
+.info{margin-top:92px}
+.info__list{display:grid;gap:22px;margin-top:4px}
 .slip{
   position:relative;
   padding:26px 26px 28px;
@@ -122,7 +122,7 @@
    4. The day · a vertical timeline
    --------------------------------------------------------------- */
 
-.day{margin-top:76px}
+.day{margin-top:92px}
 .timeline{
   position:relative;
   margin:0;
@@ -242,7 +242,7 @@
    7. Gallery
    --------------------------------------------------------------- */
 
-.gallery{margin-top:76px}
+.gallery{margin-top:92px}
 .gallery__grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .gallery__grid button{
   padding:0;
@@ -285,7 +285,7 @@
    8. Wishes
    --------------------------------------------------------------- */
 
-.wishes{margin-top:76px}
+.wishes{margin-top:92px}
 .wishes__list{display:grid;gap:14px}
 .wish{
   padding:20px 22px;
@@ -337,6 +337,7 @@
   .opening__names{font-size:92px}
   .env{width:340px}
   .env-open{width:500px;margin-inline:auto}
+  .env-open__pocket{aspect-ratio:5/2}
   .datecard{width:252px}
   .greencard{width:290px}
   .polaroid{width:366px}

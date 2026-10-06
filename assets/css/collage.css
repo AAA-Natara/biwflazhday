@@ -67,7 +67,7 @@ a{color:inherit}
 .strip{
   max-width:var(--strip);
   margin:0 auto;
-  padding:0 20px;
+  padding:0 22px;
   position:relative;
 }
 
@@ -265,20 +265,19 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 /* The open envelope: a landscape photograph showing above the
    pocket, as though it were slipped inside. */
-/* Forty per cent bigger than the column it sits in. Negative margins
-   exactly cancel the strip's padding, so it spans the full column width
-   without pushing the page sideways. */
+/* Big, but not edge to edge. Running the full width of the screen left
+   no air at the sides and the page felt boxed in. */
 .env-open{
   display:block;
   position:relative;
   width:auto;
-  margin:0 -20px;
+  margin:0 -6px;
 }
 .env-open .liner{width:88%;aspect-ratio:4/3;margin:0 auto;rotate:-1.5deg}
 .env-open__pocket{
   display:block;
   position:relative;
-  aspect-ratio:3/2;
+  aspect-ratio:7/3;
   border-radius:3px;
   margin-top:-44px;
   z-index:2;
@@ -390,7 +389,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 .polaroid{
   position:relative;
-  width:min(300px, calc(100% - 26px));
+  width:min(300px, calc(100% - 40px));
   padding:14px 14px 54px;
   margin:-52px 0 0 2px;
   rotate:-7deg;
