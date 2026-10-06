@@ -28,7 +28,7 @@
 .cover__names{
   display:block;
   font-family:var(--script);
-  font-size:clamp(54px, 16vw, 68px);
+  font-size:clamp(60px, 17vw, 78px);
   line-height:.9;
   color:var(--wine);
   margin:10px 0 0;
@@ -48,9 +48,9 @@
   display:block;
   position:relative;
   z-index:6;
-  width:234px;
+  width:262px;
   margin:-26px auto 0;
-  padding:18px 18px 20px;
+  padding:20px 20px 22px;
   rotate:-3deg;
   border-radius:3px;
   border:1px solid rgba(228,217,196,.9);
@@ -58,7 +58,7 @@
 .cover__to{
   display:block;
   font-family:var(--display);
-  font-size:10px;
+  font-size:11px;
   letter-spacing:.24em;
   text-indent:.24em;
   text-transform:uppercase;
@@ -68,7 +68,7 @@
   display:block;
   margin-top:7px;
   font-family:var(--display);
-  font-size:20px;
+  font-size:23px;
   font-weight:500;
   letter-spacing:.02em;
   line-height:1.4;
@@ -83,7 +83,7 @@
   display:block;
   margin:30px 0 0;
   font-family:var(--display);
-  font-size:10.5px;
+  font-size:11.5px;
   letter-spacing:.3em;
   text-indent:.3em;
   text-transform:uppercase;
@@ -114,7 +114,7 @@
 
 .ask{
   margin:58px auto 0;
-  padding:30px 24px 32px;
+  padding:32px 26px 34px;
   border-radius:3px;
   border:1px solid rgba(228,217,196,.9);
   scroll-margin-top:24px;
@@ -122,7 +122,7 @@
 .ask h2{
   margin:0;
   font-family:var(--display);
-  font-size:26px;
+  font-size:30px;
   font-weight:500;
   letter-spacing:.02em;
   line-height:1.25;
@@ -132,7 +132,7 @@
 .ask__sub{
   margin:10px 0 26px;
   font-family:var(--body);
-  font-size:14.5px;
+  font-size:16px;
   letter-spacing:.02em;
   text-align:center;
   color:var(--ink-faint);
@@ -140,7 +140,7 @@
 .ask fieldset{border:0;padding:0;margin:0}
 .ask legend{
   font-family:var(--display);
-  font-size:10.5px;
+  font-size:11.5px;
   letter-spacing:.22em;
   text-indent:.22em;
   text-transform:uppercase;
@@ -149,14 +149,14 @@
 }
 .choice{display:grid;gap:10px}
 .choice button{
-  min-height:52px;
-  padding:0 16px;
+  min-height:58px;
+  padding:0 18px;
   border:1px solid var(--cream-deep);
   border-radius:3px;
   background:transparent;
   color:var(--ink-soft);
   font-family:var(--display);
-  font-size:13px;
+  font-size:14.5px;
   font-weight:500;
   letter-spacing:.12em;
   text-transform:uppercase;
@@ -173,7 +173,7 @@
   display:block;
   margin:22px 0 8px;
   font-family:var(--display);
-  font-size:10.5px;
+  font-size:11.5px;
   letter-spacing:.22em;
   text-indent:.22em;
   text-transform:uppercase;
@@ -188,7 +188,7 @@
   background:#FFFDF9;
   color:var(--ink);
   font-family:var(--body);
-  font-size:16px;
+  font-size:17.5px;
   line-height:1.8;
   resize:vertical;
 }
@@ -198,7 +198,7 @@
   margin:14px 0 0;
   min-height:1.4em;
   font-family:var(--body);
-  font-size:14.5px;
+  font-size:16px;
   font-style:italic;
   text-align:center;
   color:var(--olive-deep);
@@ -208,7 +208,7 @@
    3. Actions
    --------------------------------------------------------------- */
 
-.actions{display:grid;gap:10px;margin:34px auto 0;max-width:290px}
+.actions{display:grid;gap:10px;margin:34px auto 0;max-width:320px}
 
 /* ---------------------------------------------------------------
    4. Nothing to show
@@ -226,15 +226,15 @@
 .blank h2{
   margin:0;
   font-family:var(--script);
-  font-size:50px;
+  font-size:54px;
   font-weight:400;
   line-height:1;
   color:var(--wine);
 }
 .blank p{
   margin:0;
-  max-width:300px;
-  font-size:16.5px;
+  max-width:330px;
+  font-size:18px;
   line-height:1.9;
   color:var(--ink-soft);
 }
@@ -291,4 +291,21 @@
   letter-spacing:.14em;
   color:#F0EEE1;
   margin-top:48px;
+}
+
+
+/* ---------------------------------------------------------------
+   6. Laptops and desktops
+   Matches the step the landing page takes at the same width, so
+   the two pages never look like different sizes of the same thing.
+   --------------------------------------------------------------- */
+
+@media (min-width: 820px){
+  .cover__names{font-size:86px}
+  .cover__slip{width:300px}
+  .cover__who{font-size:26px}
+  .ask h2{font-size:36px}
+  .ask__sub{font-size:17.5px}
+  .choice button{font-size:16px;min-height:62px}
+  .ask textarea{font-size:19px}
 }

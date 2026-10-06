@@ -41,7 +41,7 @@ body{
   color:var(--ink);
   font-family:var(--body);
   font-weight:400;
-  font-size:18px;
+  font-size:19.5px;
   line-height:1.72;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
@@ -87,7 +87,7 @@ a{color:inherit}
 }
 .slot > span{
   font-family:var(--serif);
-  font-size:10px;
+  font-size:10.5px;
   letter-spacing:.12em;
   line-height:1.7;
   text-align:center;
@@ -191,7 +191,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 .kicker{
   font-family:var(--display);
-  font-size:11.5px;
+  font-size:12.5px;
   font-weight:500;
   letter-spacing:.3em;
   text-indent:.3em;
@@ -249,19 +249,19 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 /* Bouquets tucked under the corners of whatever they decorate. */
 .bloom{display:block;position:absolute;z-index:5;pointer-events:none}
-.bloom--bl{left:-34px;bottom:-30px;width:96px;aspect-ratio:1;rotate:-8deg}
-.bloom--tr{right:-28px;top:-32px;width:82px;aspect-ratio:1;rotate:12deg}
+.bloom--bl{left:-52px;bottom:-52px;width:166px;aspect-ratio:1;rotate:-8deg}
+.bloom--tr{right:-46px;top:-54px;width:138px;aspect-ratio:1;rotate:12deg}
 
 /* The open envelope: a landscape photograph showing above the
    pocket, as though it were slipped inside. */
-.env-open{display:block;position:relative;width:286px;margin:0 auto}
-.env-open .liner{width:252px;aspect-ratio:4/3;margin:0 auto;rotate:-1.5deg}
+.env-open{display:block;position:relative;width:296px;margin:0 auto}
+.env-open .liner{width:262px;aspect-ratio:4/3;margin:0 auto;rotate:-1.5deg}
 .env-open__pocket{
   display:block;
   position:relative;
   aspect-ratio:3/2;
   border-radius:3px;
-  margin-top:-56px;
+  margin-top:-38px;
   z-index:2;
 }
 .env-open__pocket > svg{position:absolute;inset:0;width:100%;height:100%}
@@ -276,8 +276,8 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 .datecard{
   position:relative;
-  width:190px;
-  padding:22px 14px 20px;
+  width:208px;
+  padding:24px 16px 22px;
   margin:-38px 0 0 2px;
   rotate:-5deg;
   z-index:7;
@@ -288,7 +288,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 .datecard b{
   display:block;
   font-family:var(--display);
-  font-size:11px;
+  font-size:12px;
   font-weight:500;
   letter-spacing:.22em;
   text-indent:.22em;
@@ -296,7 +296,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 }
 .datecard .d{
   font-family:var(--display);
-  font-size:52px;
+  font-size:58px;
   font-weight:400;
   line-height:1;
   color:var(--ink);
@@ -305,7 +305,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 .datecard small{
   display:block;
   font-family:var(--display);
-  font-size:11px;
+  font-size:12px;
   letter-spacing:.18em;
   text-indent:.18em;
   color:var(--ink-soft);
@@ -313,7 +313,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 .datecard .pl{
   display:block;
   font-family:var(--display);
-  font-size:13.5px;
+  font-size:15px;
   font-weight:500;
   letter-spacing:.04em;
   line-height:1.4;
@@ -331,9 +331,9 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 
 .greencard{
   position:relative;
-  width:214px;
+  width:238px;
   margin:-58px 0 0 auto;
-  padding:30px 20px 34px;
+  padding:32px 22px 36px;
   rotate:3deg;
   z-index:6;
   border-radius:4px;
@@ -348,7 +348,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 }
 .greencard .k{
   font-family:var(--display);
-  font-size:10px;
+  font-size:11px;
   font-weight:500;
   letter-spacing:.18em;
   line-height:2;
@@ -356,7 +356,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 }
 .greencard .n{
   font-family:var(--script);
-  font-size:48px;
+  font-size:54px;
   line-height:.96;
   color:#FCFAF4;
   margin:10px 0 0;
@@ -364,16 +364,16 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 .greencard .amp{
   font-family:var(--serif);
   font-style:italic;
-  font-size:18px;
+  font-size:20px;
   color:#E4E1CE;
   line-height:1.4;
 }
 
 .polaroid{
   position:relative;
-  width:158px;
-  padding:9px 9px 32px;
-  margin:-46px 0 0 6px;
+  width:200px;
+  padding:11px 11px 40px;
+  margin:-46px 0 0 4px;
   rotate:-7deg;
   z-index:9;
 }
@@ -382,10 +382,10 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   position:absolute;
   left:0;
   right:0;
-  bottom:8px;
+  bottom:10px;
   font-family:var(--script);
   font-style:normal;
-  font-size:20px;
+  font-size:24px;
   line-height:1;
   text-align:center;
   color:var(--wine);
@@ -394,7 +394,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
    place the script face belongs. A date there is set in the reading face. */
 .polaroid em.plain{
   font-family:var(--display);
-  font-size:12px;
+  font-size:13px;
   font-weight:500;
   letter-spacing:.2em;
   bottom:12px;
@@ -407,9 +407,9 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   position:relative;
   display:grid;
   place-content:center;
-  width:142px;
+  width:162px;
   aspect-ratio:1;
-  margin:-58px 10px 0 auto;
+  margin:-58px 8px 0 auto;
   rotate:4deg;
   z-index:10;
   text-align:center;
@@ -423,16 +423,16 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   transition:rotate .5s cubic-bezier(.22,1,.36,1), translate .5s cubic-bezier(.22,1,.36,1);
 }
 .badge:hover,.badge:focus-visible{rotate:1deg;translate:0 -3px}
-.badge__t{position:relative;z-index:2;font-family:var(--display);font-weight:500;font-size:19px;letter-spacing:.03em;line-height:1.1}
-.badge__c{position:relative;z-index:2;font-family:var(--display);font-size:9.5px;letter-spacing:.2em;margin-top:9px}
+.badge__t{position:relative;z-index:2;font-family:var(--display);font-weight:500;font-size:22px;letter-spacing:.03em;line-height:1.15}
+.badge__c{position:relative;z-index:2;font-family:var(--display);font-size:10.5px;letter-spacing:.2em;margin-top:10px}
 .badge--left{margin:-58px auto 0 10px;rotate:-4deg}
 
 /* A small reply envelope, used as the way in to the RSVP form. */
 .mini-env{
   position:relative;
   display:block;
-  width:178px;
-  margin:-34px auto 0 4px;
+  width:202px;
+  margin:-34px auto 0 2px;
   rotate:-3deg;
   z-index:11;
   border:0;
@@ -454,16 +454,16 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   background:rgba(40,36,14,.07);
   clip-path:polygon(0 0,100% 0,50% 100%);
 }
-.mini-env__t{position:relative;z-index:2;font-family:var(--display);font-weight:500;font-size:17px;letter-spacing:.03em;line-height:1.2;color:#FFFDF6}
-.mini-env__c{position:relative;z-index:2;font-family:var(--display);font-size:9.5px;letter-spacing:.2em;color:#F6F4E6;margin-top:7px}
+.mini-env__t{position:relative;z-index:2;font-family:var(--display);font-weight:500;font-size:19.5px;letter-spacing:.03em;line-height:1.2;color:#FFFDF6}
+.mini-env__c{position:relative;z-index:2;font-family:var(--display);font-size:10.5px;letter-spacing:.2em;color:#F6F4E6;margin-top:8px}
 
 /* A torn-off note, for the personal message and anything handwritten. */
 .note{
   display:block;
   position:relative;
-  width:252px;
+  width:280px;
   margin:-30px auto 0;
-  padding:26px 24px 28px;
+  padding:28px 26px 30px;
   rotate:-1.5deg;
   text-align:center;
   /* The guest's own message is the one thing on this page that must never
@@ -474,7 +474,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
 .note p{
   margin:0;
   font-family:var(--body);
-  font-size:16.5px;
+  font-size:18px;
   line-height:1.9;
   color:var(--ink);
 }
@@ -492,7 +492,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
    --------------------------------------------------------------- */
 
 .verse{
-  max-width:296px;
+  max-width:320px;
   margin:64px auto 0;
   text-align:center;
 }
@@ -500,7 +500,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   margin:0;
   font-family:var(--body);
   font-style:italic;
-  font-size:20px;
+  font-size:22px;
   line-height:1.9;
   color:var(--wine);
 }
@@ -508,7 +508,7 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   display:block;
   margin-top:16px;
   font-family:var(--display);
-  font-size:11px;
+  font-size:12px;
   letter-spacing:.22em;
   text-indent:.22em;
   text-transform:uppercase;
@@ -527,11 +527,11 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   color:#F7F3E8;
 }
 .foot__in{position:relative;z-index:2}
-.foot .n{font-family:var(--script);font-size:38px;line-height:1;color:#FDFBF4}
-.foot .d{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-indent:.24em;margin-top:8px;color:#E9E7D6}
+.foot .n{font-family:var(--script);font-size:44px;line-height:1;color:#FDFBF4}
+.foot .d{font-family:var(--display);font-size:12px;letter-spacing:.24em;text-indent:.24em;margin-top:8px;color:#E9E7D6}
 .foot .note-line{
   font-family:var(--body);
-  font-size:13.5px;
+  font-size:15px;
   font-style:italic;
   color:#DCDAC6;
   margin-top:16px;
@@ -546,14 +546,14 @@ html[data-hints="off"] .slot:not(.is-filled){display:none}
   align-items:center;
   justify-content:center;
   gap:9px;
-  min-height:46px;
-  padding:0 22px;
+  min-height:50px;
+  padding:0 24px;
   border:1px solid var(--olive);
   border-radius:999px;
   background:transparent;
   color:var(--olive-deep);
   font-family:var(--display);
-  font-size:11.5px;
+  font-size:12.5px;
   font-weight:500;
   letter-spacing:.18em;
   text-indent:.18em;

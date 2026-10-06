@@ -10,16 +10,16 @@
    --------------------------------------------------------------- */
 
 .opening{
-  min-height:94svh;
+  min-height:82svh;
   display:grid;
   place-content:center;
   text-align:center;
-  padding:40px 0 30px;
+  padding:30px 0 20px;
 }
 .opening__eyebrow{margin:0}
 .opening__names{
   font-family:var(--script);
-  font-size:clamp(58px, 17vw, 74px);
+  font-size:clamp(62px, 18vw, 84px);
   line-height:.9;
   color:var(--wine);
   margin:10px 0 0;
@@ -36,7 +36,7 @@
 .opening__cue{
   margin:0;
   font-family:var(--display);
-  font-size:10.5px;
+  font-size:11.5px;
   letter-spacing:.3em;
   text-indent:.3em;
   text-transform:uppercase;
@@ -61,7 +61,7 @@
 .head__num{
   display:block;
   font-family:var(--display);
-  font-size:10.5px;
+  font-size:11.5px;
   letter-spacing:.3em;
   text-indent:.3em;
   color:var(--ink-faint);
@@ -69,7 +69,7 @@
 .head__t{
   display:block;
   font-family:var(--display);
-  font-size:30px;
+  font-size:35px;
   font-weight:500;
   letter-spacing:.02em;
   line-height:1.2;
@@ -87,7 +87,7 @@
 .info__list{display:grid;gap:18px;margin-top:4px}
 .slip{
   position:relative;
-  padding:24px 24px 26px;
+  padding:26px 26px 28px;
   border-radius:3px;
   border:1px solid rgba(228,217,196,.9);
 }
@@ -96,7 +96,7 @@
 .slip h3{
   margin:0 0 8px;
   font-family:var(--display);
-  font-size:21px;
+  font-size:24px;
   font-weight:500;
   letter-spacing:.01em;
   line-height:1.3;
@@ -104,14 +104,14 @@
 }
 .slip p{
   margin:0;
-  font-size:16.5px;
+  font-size:18px;
   line-height:1.85;
   color:var(--ink-soft);
 }
 .slip__k{
   display:block;
   font-family:var(--display);
-  font-size:10px;
+  font-size:11px;
   letter-spacing:.24em;
   text-transform:uppercase;
   color:var(--ink-faint);
@@ -154,14 +154,14 @@
 .timeline b{
   display:block;
   font-family:var(--display);
-  font-size:12px;
+  font-size:13.5px;
   font-weight:500;
   letter-spacing:.2em;
   color:var(--wine);
 }
 .timeline span{
   display:block;
-  font-size:16.5px;
+  font-size:18px;
   line-height:1.8;
   color:var(--ink-soft);
   margin-top:2px;
@@ -177,8 +177,8 @@
 .palette div{text-align:center}
 .palette i{
   display:block;
-  width:50px;
-  height:50px;
+  width:58px;
+  height:58px;
   border-radius:50%;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 4px 10px -4px rgba(67,48,42,.3);
 }
@@ -186,7 +186,7 @@
   display:block;
   margin-top:8px;
   font-family:var(--display);
-  font-size:9.5px;
+  font-size:10.5px;
   letter-spacing:.16em;
   text-transform:uppercase;
   color:var(--ink-faint);
@@ -203,7 +203,7 @@
   overflow:hidden;
   background:var(--cream);
 }
-.mapbox iframe{display:block;width:100%;height:230px;border:0;filter:saturate(.72) contrast(.96)}
+.mapbox iframe{display:block;width:100%;height:270px;border:0;filter:saturate(.72) contrast(.96)}
 .mapbox__foot{
   display:flex;
   align-items:center;
@@ -214,14 +214,14 @@
 }
 .mapbox__foot b{
   font-family:var(--display);
-  font-size:14px;
+  font-size:15.5px;
   font-weight:500;
   letter-spacing:.04em;
   color:var(--ink);
 }
 .mapbox__foot a{
   font-family:var(--display);
-  font-size:10.5px;
+  font-size:11.5px;
   letter-spacing:.2em;
   text-transform:uppercase;
   color:var(--olive-deep);
@@ -286,7 +286,7 @@
 .wish:nth-child(even){rotate:.8deg}
 .wish p{
   margin:0;
-  font-size:16.5px;
+  font-size:18px;
   line-height:1.85;
   color:var(--ink);
 }
@@ -294,7 +294,7 @@
   display:block;
   margin-top:12px;
   font-family:var(--display);
-  font-size:14px;
+  font-size:15.5px;
   font-weight:500;
   letter-spacing:.04em;
   color:var(--wine);
@@ -303,7 +303,7 @@
   text-align:center;
   font-family:var(--body);
   font-style:italic;
-  font-size:16px;
+  font-size:17.5px;
   color:var(--ink-faint);
 }
 
@@ -311,4 +311,33 @@
    9. Bottom bouquet and spacing
    --------------------------------------------------------------- */
 
-.bouquet{width:200px;margin:38px auto 0;aspect-ratio:3/2}
+.bouquet{width:260px;margin:40px auto 0;aspect-ratio:3/2}
+
+
+/* ---------------------------------------------------------------
+   10. Laptops and desktops
+   The collage is built as one narrow column, which is right on a
+   phone and too small on a 15-inch screen. Everything grows with
+   one scale rather than being re-laid-out.
+   --------------------------------------------------------------- */
+
+@media (min-width: 820px){
+  body{font-size:21px}
+  .strip{max-width:560px}
+  .opening__names{font-size:92px}
+  .env{width:340px}
+  .env-open{width:368px}
+  .env-open .liner{width:326px}
+  .datecard{width:252px}
+  .greencard{width:290px}
+  .polaroid{width:244px}
+  .badge{width:192px}
+  .head__t{font-size:42px}
+  .slip h3{font-size:28px}
+  .slip p,.timeline span,.wish p{font-size:19.5px}
+  .verse p{font-size:25px}
+  .bloom--bl{width:202px;left:-62px;bottom:-60px}
+  .bloom--tr{width:168px;right:-56px;top:-62px}
+  .bouquet{width:320px}
+  .mapbox iframe{height:320px}
+}
