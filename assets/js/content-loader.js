@@ -2,7 +2,7 @@
 // in the HTML. This module swaps in whatever the couple has edited. If
 // Supabase is slow, unconfigured, or down, the page still reads correctly.
 
-import { getClient, publicImageUrl } from './supabase-client.js?v=16';
+import { getClient, publicImageUrl } from './supabase-client.js?v=17';
 
 const CACHE_KEY = 'bf-content-v3';
 
@@ -39,15 +39,26 @@ function applyPalette(raw) {
   const clean = list.filter(c => c && /^#[0-9a-f]{6}$/i.test(String(c.hex || '').trim()));
   if (!clean.length) return;
 
+  // The names sit on one line under the row rather than under each
+  // circle: six labelled circles cannot fit across a phone, and the
+  // couple can add as many colours as they like.
   box.innerHTML = '';
+
+  const dots = document.createElement('div');
+  dots.className = 'palette__dots';
   for (const colour of clean) {
-    const cell = document.createElement('div');
     const dot = document.createElement('i');
     dot.style.background = colour.hex;
-    const label = document.createElement('span');
-    label.textContent = colour.name || '';
-    cell.append(dot, label);
-    box.appendChild(cell);
+    dots.appendChild(dot);
+  }
+  box.appendChild(dots);
+
+  const named = clean.map(c => (c.name || '').trim()).filter(Boolean);
+  if (named.length) {
+    const line = document.createElement('p');
+    line.className = 'palette__names';
+    line.textContent = named.join(' \u00B7 ');
+    box.appendChild(line);
   }
 }
 

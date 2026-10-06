@@ -2,7 +2,7 @@
 // down as it scrolls into view, open a photograph full size, and pull the
 // couple's edits in from Supabase.
 
-import { loadContent } from './content-loader.js?v=16';
+import { loadContent } from './content-loader.js?v=17';
 
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
